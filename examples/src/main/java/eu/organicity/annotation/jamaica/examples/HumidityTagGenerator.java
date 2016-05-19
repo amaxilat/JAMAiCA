@@ -1,4 +1,4 @@
-package eu.organicity.annotation.jamaica.utils;
+package eu.organicity.annotation.jamaica.examples;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

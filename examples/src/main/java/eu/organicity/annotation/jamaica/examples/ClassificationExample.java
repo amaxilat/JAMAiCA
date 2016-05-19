@@ -1,5 +1,6 @@
-package eu.organicity.annotation.jamaica.utils;
+package eu.organicity.annotation.jamaica.examples;
 
+import eu.organicity.annotation.jamaica.examples.utils.Utils;
 import us.jubat.classifier.ClassifierClient;
 import us.jubat.classifier.EstimateResult;
 import us.jubat.classifier.LabeledDatum;
@@ -11,15 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClassificationExample {
-
-
-    private static Datum makeDatum(double height) {
-        return new Datum().addNumber("value", height);
-    }
-
-    private static LabeledDatum makeTrainDatum(String label, double height) {
-        return new LabeledDatum(label, makeDatum(height));
-    }
 
     public static void main(String[] args) throws Exception {
         //Connect to the server
@@ -36,7 +28,7 @@ public class ClassificationExample {
             while ((line = br.readLine()) != null) {
                 String label = line.split(",")[0];
                 Double value = Double.valueOf(line.split(",")[1]);
-                trainData.add(makeTrainDatum(label, value));
+                trainData.add(Utils.makeTrainDatum(label, value));
                 br.readLine();
                 br.readLine();
                 br.readLine();
@@ -72,7 +64,7 @@ public class ClassificationExample {
                 final Double value = Double.valueOf(line.split(",")[1]);
 
                 final List<Datum> testData = new ArrayList<>();
-                testData.add(makeDatum(value));
+                testData.add(Utils.makeDatum(value));
                 List<List<EstimateResult>> results = client.classify(testData);
                 double maxScore = Double.MIN_NORMAL;
                 String maxLabel = "";
