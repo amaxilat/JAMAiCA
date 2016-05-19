@@ -1,6 +1,3 @@
-/**
- * Created by amaxilatis on 1/10/15.
- */
 package eu.organicity.annotation.jamaica.examples;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +12,9 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Example that retrieves data from the london AQN nodes and trains a jubatus anomaly detection instance and then tests this instance with the same values to extract success score.
+ */
 public class AnomalyExample {
 
     /**

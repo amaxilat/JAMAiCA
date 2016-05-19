@@ -11,6 +11,9 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Example that retrieves data from a local file and trains a jubatus classification instance and then tests this instance with the same values to extract success score.
+ */
 public class ClassificationExample {
 
     public static void main(String[] args) throws Exception {
