@@ -1,6 +1,7 @@
 package eu.organicity.annotation.jamaica.examples;
 
 import eu.organicity.annotation.jamaica.examples.utils.Utils;
+import org.apache.log4j.Logger;
 import us.jubat.classifier.ClassifierClient;
 import us.jubat.classifier.EstimateResult;
 import us.jubat.classifier.LabeledDatum;
@@ -16,11 +17,20 @@ import java.util.List;
  */
 public class ClassificationExample {
 
+    private static final int SKIP_LINES = 10;
+
+    /**
+     * a log4j logger to print messages.
+     */
+    protected static final Logger LOGGER = Logger.getLogger(ClassificationExample.class);
+
     public static void main(String[] args) throws Exception {
         //Connect to the server
         String host = "150.140.5.98";
         int port = 9199;
         String name = "test";
+
+        final Process p = Utils.launchJubaclassifier(port);
 
         ClassifierClient client = new ClassifierClient(host, port, name, 1);
 
@@ -32,20 +42,9 @@ public class ClassificationExample {
                 String label = line.split(",")[0];
                 Double value = Double.valueOf(line.split(",")[1]);
                 trainData.add(Utils.makeTrainDatum(label, value));
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
-                br.readLine();
+                for (int i = 0; i < SKIP_LINES; i++) {
+                    br.readLine();
+                }
                 //train in batches to avoid timeouts
                 if (trainData.size() == 100) {
                     client.train(trainData);
@@ -54,12 +53,13 @@ public class ClassificationExample {
             }
 
         } catch (Exception e) {
+            LOGGER.error(e, e);
         }
 
 
         double correct = 0;
         double total = 0;
-        //test data
+        //test data fromt he original dataset agains the trained data to validate the correctness of the trained data
         try (BufferedReader br = new BufferedReader(new FileReader("humidity.classified"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -88,8 +88,8 @@ public class ClassificationExample {
                 }
             }
         } catch (Exception e) {
+            LOGGER.error(e, e);
         }
-
 
         System.exit(0);
     }

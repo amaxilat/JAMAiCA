@@ -32,6 +32,8 @@ public class AnomalyExample {
         final int port = 9199;
         final String name = "test";
 
+        final Process p = Utils.launchJubaanomaly(port);
+
         final AnomalyClient client = new AnomalyClient(host, port, name, 1);
 
         long start = System.currentTimeMillis();
