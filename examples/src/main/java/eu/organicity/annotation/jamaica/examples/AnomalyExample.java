@@ -28,7 +28,7 @@ public class AnomalyExample {
 
     public static void main(String[] args) throws IOException {
         //Connect to the server
-        final String host = "150.140.5.98";
+        final String host = "150.140.5.27";
         final int port = 9199;
         final String name = "test";
 

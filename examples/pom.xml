@@ -73,8 +73,21 @@
                         <configuration>
                             <mainClass>eu.organicity.annotation.jamaica.examples.ClassificationExample</mainClass>
                             <onejarVersion>0.97</onejarVersion>
-                            <attachToBuild>true</attachToBuild>
+                            <filename>classification.jar</filename>
                         </configuration>
+                        <id>classification</id>
+                        <goals>
+                            <goal>one-jar</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <configuration>
+
+                            <mainClass>eu.organicity.annotation.jamaica.examples.AnomalyExample</mainClass>
+                            <onejarVersion>0.97</onejarVersion>
+                            <filename>anomaly.jar</filename>
+                        </configuration>
+                        <id>anomaly</id>
                         <goals>
                             <goal>one-jar</goal>
                         </goals>

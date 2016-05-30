@@ -26,7 +26,7 @@ public class ClassificationExample {
 
     public static void main(String[] args) throws Exception {
         //Connect to the server
-        String host = "150.140.5.98";
+        String host = "150.140.5.27";
         int port = 9199;
         String name = "test";
 
@@ -59,7 +59,7 @@ public class ClassificationExample {
 
         double correct = 0;
         double total = 0;
-        //test data fromt he original dataset agains the trained data to validate the correctness of the trained data
+        //test data from the original dataset against the trained data to validate the correctness of the trained data
         try (BufferedReader br = new BufferedReader(new FileReader("humidity.classified"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -82,11 +82,10 @@ public class ClassificationExample {
                         correct++;
                     }
                     total++;
-                    System.out.println("correct : " + correct);
-                    System.out.println("total : " + total);
-                    System.out.println("score : " + correct / total);
+
                 }
             }
+            LOGGER.info("correct: " + correct + "\ttotal: " + total + "\tscore : " + correct / total);
         } catch (Exception e) {
             LOGGER.error(e, e);
         }
