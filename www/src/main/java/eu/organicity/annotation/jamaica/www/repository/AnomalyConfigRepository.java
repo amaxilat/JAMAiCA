@@ -8,9 +8,12 @@ package eu.organicity.annotation.jamaica.www.repository;
 
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import org.springframework.data.repository.CrudRepository;
+
 import java.util.List;
 
 public interface AnomalyConfigRepository extends CrudRepository<AnomalyConfig, Long> {
+
+    AnomalyConfig findById(long id);
 
     List<AnomalyConfig> findByTags(String tags);
 }
