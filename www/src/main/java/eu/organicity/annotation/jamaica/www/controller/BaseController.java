@@ -1,5 +1,7 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
+import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
+import eu.organicity.annotation.jamaica.www.repository.ClassifConfigRepository;
 import eu.organicity.annotation.jamaica.www.service.JubatusService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,12 @@ public class BaseController {
      * a log4j logger to print messages.
      */
     protected static final Logger LOGGER = Logger.getLogger(BaseController.class);
+
+    @Autowired
+    AnomalyConfigRepository anomalyConfigRepository;
+
+    @Autowired
+    ClassifConfigRepository classifConfigRepository;
 
     @Autowired
     JubatusService jubatusService;
