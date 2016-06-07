@@ -1,2 +1,9 @@
 application:
   version: "1"
+# DataSource
+spring.datasource.url: jdbc:hsqldb:file:hsqldb
+spring.jpa.hibernate.ddl-auto: update
+# hibernate.X
+hibernate.dialect: org.hibernate.dialect.HSQLDialect
+hibernate.show_sql: false
+hibernate.hbm2ddl.auto: update
