@@ -1,4 +1,4 @@
-package eu.organicity.annotation.jamaica.www.Utils;
+package eu.organicity.annotation.jamaica.www.utils;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

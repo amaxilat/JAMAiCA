@@ -1,4 +1,4 @@
-package eu.organicity.annotation.jamaica.www.Utils;
+package eu.organicity.annotation.jamaica.www.utils;
 
 /**
  * Created by katdel on 06-Jun-16.

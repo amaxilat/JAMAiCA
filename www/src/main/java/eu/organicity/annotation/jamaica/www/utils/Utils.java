@@ -1,4 +1,4 @@
-package eu.organicity.annotation.jamaica.www.Utils;
+package eu.organicity.annotation.jamaica.www.utils;
 
 
 import org.apache.log4j.Logger;
