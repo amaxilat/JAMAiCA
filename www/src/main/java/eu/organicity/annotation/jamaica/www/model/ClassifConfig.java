@@ -47,6 +47,14 @@ public class ClassifConfig {
                 id, type_pat, id_pat, tags, url_ext, url_orion, jubatus_port, jubatus_config,subscription_id);
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getJubatus_config(){
         return jubatus_config;
     }
