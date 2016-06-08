@@ -1,5 +1,8 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
+import com.amaxilatis.orion.model.OrionContextElement;
+import com.amaxilatis.orion.model.OrionContextElementWrapper;
+import com.amaxilatis.orion.model.SubscriptionUpdate;
 import eu.organicity.annotation.jamaica.www.dto.AnomalyConfigDTO;
 import eu.organicity.annotation.jamaica.www.dto.ClassifConfigDTO;
 import eu.organicity.annotation.jamaica.www.dto.VersionDTO;
@@ -80,4 +83,34 @@ public class RestController extends BaseController {
     }
 
 //    TODO: implement the getClassificationConfig like the getAnomalyConfig
+
+
+    /**
+     * A method that handles subscription updates from Orion or users and starts the data validation against Jubatus.
+     *
+     * TODO : find the attributes of interest.
+     * TODO : find the concerning subscription.
+     * TODO : forward the request to Jubatus using Jubatus Service - should be ASYNC.
+     *
+     * @param subscriptionUpdate the {@see SubscriptionUpdate} received from the Orion Context Broker.
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/api/v1/notifyContext/{contextConnectionId}", method = RequestMethod.POST, produces = "application/json")
+    SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate) {
+        LOGGER.debug("[call] notifyContext");
+        try {
+            LOGGER.info(subscriptionUpdate);
+            for (final OrionContextElementWrapper wrapper : subscriptionUpdate.getContextResponses()) {
+                final OrionContextElement element = wrapper.getContextElement();
+                LOGGER.info(element.getId());
+                LOGGER.info(element.getType());
+                LOGGER.info(element.getIsPattern());
+                LOGGER.info(element.getAttributes());
+            }
+        } catch (Exception e) {
+            LOGGER.error(e, e);
+        }
+        return subscriptionUpdate;
+    }
 }
