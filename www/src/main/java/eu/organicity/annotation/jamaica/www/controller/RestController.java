@@ -71,7 +71,7 @@ public class RestController extends BaseController {
      * @return the added {@see ClassifConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/api/v1/config/anomaly", method = RequestMethod.PUT, produces = "application/json")
+    @RequestMapping(value = "/api/v1/config/classification", method = RequestMethod.PUT, produces = "application/json")
     ClassifConfigDTO putClassificationConfig(final HttpServletResponse response, @ModelAttribute ClassifConfigDTO classificationConfig) {
         LOGGER.debug("[call] putClassificationConfig");
 
