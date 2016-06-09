@@ -65,6 +65,24 @@ public class RestController extends BaseController {
     }
 
     /**
+     * Removes the information of an existing Anomaly Detection Job.
+     *
+     * @param response the {@see HttpServletResponse} object.
+     * @param id       the id of the requested {@see AnomalyConfigDTO}.
+     * @return the existing {@see AnomalyConfigDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/api/v1/config/anomaly/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    AnomalyConfigDTO deleteAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
+        LOGGER.debug("[call] getAnomalyConfig");
+
+        AnomalyConfig config = anomalyConfigRepository.findById(id);
+        anomalyConfigRepository.delete(id);
+
+        return new AnomalyConfigDTO(config);
+    }
+
+    /**
      * Adds a new Classification Job to the service.
      * <p>
      * TODO: implement this.
@@ -87,7 +105,7 @@ public class RestController extends BaseController {
 
     /**
      * A method that handles subscription updates from Orion or users and starts the data validation against Jubatus.
-     *
+     * <p>
      * TODO : find the attributes of interest.
      * TODO : find the concerning subscription.
      * TODO : forward the request to Jubatus using Jubatus Service - should be ASYNC.
