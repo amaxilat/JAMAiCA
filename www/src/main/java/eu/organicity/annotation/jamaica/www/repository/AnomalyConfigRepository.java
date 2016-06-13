@@ -16,4 +16,6 @@ public interface AnomalyConfigRepository extends CrudRepository<AnomalyConfig, L
     AnomalyConfig findById(long id);
 
     List<AnomalyConfig> findByTags(String tags);
+
+    AnomalyConfig findTopByJubatusPortDesc();
 }

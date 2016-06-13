@@ -15,4 +15,7 @@ public interface ClassifConfigRepository extends CrudRepository<ClassifConfig, L
     ClassifConfig findById(long id);
 
     List<ClassifConfig> findByTags(String tags);
+
+    ClassifConfig findTopByJubatusPortDesc();
+
 }

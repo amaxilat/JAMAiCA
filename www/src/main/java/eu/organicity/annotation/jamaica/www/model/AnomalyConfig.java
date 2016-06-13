@@ -6,6 +6,8 @@ package eu.organicity.annotation.jamaica.www.model;
  */
 
 
+import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
