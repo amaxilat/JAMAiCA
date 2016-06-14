@@ -1,5 +1,6 @@
 application:
   version: "1"
+  baseUrl: "http://150.140.5.32:8080/"
 # DataSource
 spring.datasource.url: jdbc:hsqldb:file:hsqldb
 spring.jpa.hibernate.ddl-auto: update
@@ -13,3 +14,7 @@ orion:
   token: ""
   service: "organicity"
   servicePath: "/"
+
+jubatus:
+  host: "localhost"
+  basePort: 9000
