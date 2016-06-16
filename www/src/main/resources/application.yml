@@ -1,15 +1,42 @@
 application:
   version: "1"
-# DataSource
-spring.datasource.url: jdbc:hsqldb:file:hsqldb
-spring.jpa.hibernate.ddl-auto: update
-# hibernate.X
-hibernate.dialect: org.hibernate.dialect.HSQLDialect
-hibernate.show_sql: false
-hibernate.hbm2ddl.auto: update
 
 orion:
   serverUrl: "http://195.220.224.30:1026/"
   token: ""
   service: "organicity"
   servicePath: "/"
+
+---
+spring:
+  profiles: develop
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    generate-ddl: true
+    hibernate.ddl-auto: update
+  datasource:
+    driverClassName: org.postgresql.Driver
+
+---
+spring:
+  profiles: production
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    generate-ddl: true
+    hibernate.ddl-auto: update
+  datasource:
+    driverClassName: org.postgresql.Driver
+
+---
+spring:
+  profiles: local
+  datasource.url: jdbc:hsqldb:file:hsqldb
+  jpa.hibernate.ddl-auto: update
+
+# hibernate.X
+hibernate:
+  dialect: org.hibernate.dialect.HSQLDialect
+  show_sql: false
+  hbm2ddl.auto: update

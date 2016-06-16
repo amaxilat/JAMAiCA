@@ -1,0 +1,7 @@
+#spring.profiles.active=local
+#spring.profiles.active=develop
+spring.profiles.active=production
+#db connection settings
+spring.datasource.username=
+spring.datasource.password=
+spring.datasource.url=
