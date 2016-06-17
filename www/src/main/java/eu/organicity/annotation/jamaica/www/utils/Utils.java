@@ -20,21 +20,4 @@ public class Utils {
         return new LabeledDatum(label, makeDatum(height));
     }
 
-    public static Process launchJubaclassifier(int port) {
-        try {
-            return Runtime.getRuntime().exec("jubaclassifier -p " + port + " -f generic.json");
-        } catch (Exception e) {
-            LOGGER.error(e, e);
-            return null;
-        }
-    }
-
-    public static Process launchJubaanomaly(int port) {
-        try {
-            return Runtime.getRuntime().exec("jubaanomaly -p " + port + " -f anomaly.json");
-        } catch (Exception e) {
-            LOGGER.error(e, e);
-            return null;
-        }
-    }
 }
