@@ -11,11 +11,8 @@ import eu.organicity.annotation.jamaica.www.dto.ClassifConfigDTO;
 import eu.organicity.annotation.jamaica.www.dto.VersionDTO;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
-import eu.organicity.annotation.jamaica.www.service.JubatusService;
-import eu.organicity.annotation.jamaica.www.service.OrionService;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +20,6 @@ import us.jubat.anomaly.AnomalyClient;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @Controller
 public class RestController extends BaseController {
@@ -53,7 +49,7 @@ public class RestController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/api/v1/config/anomaly", method = RequestMethod.PUT, produces = "application/json")
-    AnomalyConfigDTO putAnomalyConfig(final HttpServletResponse response, @ModelAttribute AnomalyConfigDTO anomalyConfig) {
+    AnomalyConfigDTO putAnomalyConfig(final HttpServletResponse response, @RequestBody AnomalyConfigDTO anomalyConfig) {
         LOGGER.debug("[call] putAnomalyConfig");
 
 
@@ -75,24 +71,27 @@ public class RestController extends BaseController {
             final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
             LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
 
-            if(anomalyConfigRepository.count() > 0) {
+            if (anomalyConfigRepository.count() > 0) {
                 // get max jubatus port entry
-                AnomalyConfig maxJubatusPortEntry = anomalyConfigRepository.findTopByJubatusPortDesc();
+                Integer maxJubatusPortEntry = anomalyConfigRepository.findMaxJubatusPort();
+                if (maxJubatusPortEntry == null) {
+                    maxJubatusPortEntry = 1;
+                }
                 // add 1 to create next port number
-                basePort = maxJubatusPortEntry.getJubatus_port() + 1;
-        }
+                basePort = maxJubatusPortEntry + 1;
+            }
 
             // save anomaly config entry
-           AnomalyConfig storedConfig =  anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(),"tags",randomStringGenerator.getUuid(),  randUiid, basePort, jubatusHost, subscriptionId));
-           LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
+            AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), "tags", randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId));
+            LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
 
-           return new AnomalyConfigDTO(storedConfig);
+            return new AnomalyConfigDTO(storedConfig);
 
         } catch (IOException er) {
-            LOGGER.error(er,er);
+            LOGGER.error(er, er);
 
         } catch (DataAccessException er) {
-            LOGGER.error(er,er);
+            LOGGER.error(er, er);
 
         }
         return null;
@@ -145,7 +144,7 @@ public class RestController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/api/v1/config/classification", method = RequestMethod.PUT, produces = "application/json")
-    ClassifConfigDTO putClassificationConfig(final HttpServletResponse response, @ModelAttribute ClassifConfigDTO classificationConfig) {
+    ClassifConfigDTO putClassificationConfig(final HttpServletResponse response, @RequestBody ClassifConfigDTO classificationConfig) {
         LOGGER.debug("[call] putClassificationConfig");
 
         OrionEntity e = new OrionEntity();
@@ -166,24 +165,27 @@ public class RestController extends BaseController {
             final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
             LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
 
-            if(anomalyConfigRepository.count() > 0) {
+            if (anomalyConfigRepository.count() > 0) {
                 // get max jubatus port entry
-                ClassifConfig maxJubatusPortEntry = classifConfigRepository.findTopByJubatusPortDesc();
+                Integer maxJubatusPortEntry = classifConfigRepository.findMaxJubatusPort();
+                if (maxJubatusPortEntry == null) {
+                    maxJubatusPortEntry = 1;
+                }
                 // add 1 to create next port number
-                basePort = maxJubatusPortEntry.getJubatus_port() + 1;
+                basePort = maxJubatusPortEntry + 1;
             }
 
             // save anomaly config entry
-            ClassifConfig storedConfig =  classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), "tags",randomStringGenerator.getUuid(),  randUiid, basePort, jubatusHost, subscriptionId));
+            ClassifConfig storedConfig = classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), "tags", randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId));
             LOGGER.info("successful save new classification job. Returned id: " + storedConfig.getId());
 
             return new ClassifConfigDTO(storedConfig);
 
         } catch (IOException er) {
-            LOGGER.error(er,er);
+            LOGGER.error(er, er);
 
         } catch (DataAccessException er) {
-            LOGGER.error(er,er);
+            LOGGER.error(er, er);
 
         }
         return null;
@@ -253,10 +255,9 @@ public class RestController extends BaseController {
                 for (final Attribute contextElementAttribute : element.getAttributes()) {
 
                     if ((anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
-                        if (contextElementAttribute.getType() .equals(anomalyConfig.getAttribute())) {
-
+                        if (contextElementAttribute.getType().equals(anomalyConfig.getAttribute())) {
                             // start jubatus training for anomaly detection
-                            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatus_config(), anomalyConfig.getJubatus_port(), "test", 1);
+                            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatus_config(), anomalyConfig.getJubatusPort(), "test", 1);
                             jubatusService.calcScore(client, contextElementAttribute.getValue());
                         }
 
@@ -267,7 +268,6 @@ public class RestController extends BaseController {
 
 
                     } else if ((classifConfig = classifConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
-
 
 
                     } else {

@@ -6,9 +6,11 @@ package eu.organicity.annotation.jamaica.www.repository;
 
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ClassifConfigRepository extends CrudRepository<ClassifConfig, Long> {
 
@@ -16,8 +18,9 @@ public interface ClassifConfigRepository extends CrudRepository<ClassifConfig, L
 
     List<ClassifConfig> findByTags(String tags);
 
-    ClassifConfig findTopByJubatusPortDesc();
+    @Query("SELECT max(p.jubatusPort) FROM ClassifConfig p")
+    Integer findMaxJubatusPort();
 
-    ClassifConfig findBySubscriptionId(String subscription_id);
+    ClassifConfig findBySubscriptionId(String subscriptionId);
 
 }

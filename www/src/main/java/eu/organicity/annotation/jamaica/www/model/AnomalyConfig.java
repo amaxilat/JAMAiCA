@@ -24,30 +24,30 @@ public class AnomalyConfig {
     private String tags;
     private String url_ext;
     private String url_orion;
-    private int jubatus_port;
+    private int jubatusPort;
     private String jubatus_config;
-    private String subscription_id;
+    private String subscriptionId;
 
     protected AnomalyConfig() {}
 
-    public AnomalyConfig(String type_pat, String id_pat, String attribute, String tags, String url_ext, String url_orion, int jubatus_port, String jubatus_config, String subscription_id) {
+    public AnomalyConfig(String type_pat, String id_pat, String attribute, String tags, String url_ext, String url_orion, int jubatusPort, String jubatus_config, String subscriptionId) {
         this.type_pat = type_pat;
         this.id_pat = id_pat;
         this.attribute = attribute;
         this.tags = tags;
         this.url_ext = url_ext;
         this.url_orion = url_orion;
-        this.jubatus_port = jubatus_port;
+        this.jubatusPort = jubatusPort;
         this.jubatus_config = jubatus_config;
-        this.subscription_id = subscription_id;
+        this.subscriptionId = subscriptionId;
 
     }
 
     @Override
     public String toString() {
         return String.format(
-                "AnomalyConfig[id=%d, type_pat='%s', id_pat='%s',attribute='%s', tags='%s', url_ext='%s', url_orion='%s', jubatus_port='%d', jubatus_config='%s', subscription_id='%s']",
-                id, type_pat, id_pat, attribute, tags, url_ext, url_orion, jubatus_port, jubatus_config,subscription_id);
+                "AnomalyConfig[id=%d, type_pat='%s', id_pat='%s',attribute='%s', tags='%s', url_ext='%s', url_orion='%s', jubatusPort='%d', jubatus_config='%s', subscriptionId='%s']",
+                id, type_pat, id_pat, attribute, tags, url_ext, url_orion, jubatusPort, jubatus_config, subscriptionId);
     }
 
     public long getId() {
@@ -90,11 +90,11 @@ public class AnomalyConfig {
         return url_orion;
     }
 
-    public int getJubatus_port(){
-        return jubatus_port;
+    public int getJubatusPort(){
+        return jubatusPort;
     }
 
-    public String getSubscription_id(){
-        return subscription_id;
+    public String getSubscriptionId(){
+        return subscriptionId;
     }
 }

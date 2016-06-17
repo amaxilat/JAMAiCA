@@ -1,9 +1,8 @@
 application:
   version: "1"
-  baseUrl: "http://150.140.5.32:8080/"
 
 orion:
-  serverUrl: "http://195.220.224.30:1026/"
+  serverUrl: "http://52.40.19.99:1026/"
   token: ""
   service: "organicity"
   servicePath: "/"
@@ -22,6 +21,8 @@ spring:
     hibernate.ddl-auto: update
   datasource:
     driverClassName: org.postgresql.Driver
+application:
+  baseUrl: "http://150.140.5.27:8080/"
 
 ---
 spring:
@@ -33,6 +34,8 @@ spring:
     hibernate.ddl-auto: update
   datasource:
     driverClassName: org.postgresql.Driver
+application:
+  baseUrl: "http://150.140.5.27:8080/"
 
 ---
 spring:
@@ -40,8 +43,8 @@ spring:
   datasource.url: jdbc:hsqldb:file:hsqldb
   jpa.hibernate.ddl-auto: update
 
-# hibernate.X
 hibernate:
   dialect: org.hibernate.dialect.HSQLDialect
   show_sql: false
-  hbm2ddl.auto: update
+application:
+  baseUrl: "http://150.140.5.32:8080/"
