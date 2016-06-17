@@ -41,7 +41,7 @@ public class AnomalyController extends BaseController {
         OrionEntity e = new OrionEntity();
         e.setId(anomalyConfig.getIdPat());
         e.setIsPattern("true");
-        e.setType("urn:oc:entitytype:iotdevice");
+        e.setType(anomalyConfig.getTypePat());
         String[] cond = new String[1];
         cond[0] = "TimeInstant";
 

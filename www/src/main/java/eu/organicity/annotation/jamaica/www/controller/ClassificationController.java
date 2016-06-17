@@ -40,7 +40,7 @@ public class ClassificationController extends BaseController {
         OrionEntity e = new OrionEntity();
         e.setId(classificationConfig.getIdPat());
         e.setIsPattern("true");
-        e.setType("urn:oc:entitytype:iotdevice");
+        e.setType(classificationConfig.getTypePat());
         String[] cond = new String[1];
         cond[0] = "TimeInstant";
 
