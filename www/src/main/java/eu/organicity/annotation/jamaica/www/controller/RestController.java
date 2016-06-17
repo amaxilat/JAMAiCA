@@ -1,5 +1,6 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
+import com.amaxilatis.orion.model.Attribute;
 import com.amaxilatis.orion.model.OrionContextElement;
 import com.amaxilatis.orion.model.OrionContextElementWrapper;
 import com.amaxilatis.orion.model.SubscriptionUpdate;
@@ -10,6 +11,7 @@ import eu.organicity.annotation.jamaica.www.dto.ClassifConfigDTO;
 import eu.organicity.annotation.jamaica.www.dto.VersionDTO;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
+import eu.organicity.annotation.jamaica.www.service.JubatusService;
 import eu.organicity.annotation.jamaica.www.service.OrionService;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import org.apache.log4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import us.jubat.anomaly.AnomalyClient;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -80,7 +83,7 @@ public class RestController extends BaseController {
         }
 
             // save anomaly config entry
-           AnomalyConfig storedConfig =  anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), "tags",randomStringGenerator.getUuid(),  randUiid, basePort, jubatusHost, subscriptionId));
+           AnomalyConfig storedConfig =  anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(),"tags",randomStringGenerator.getUuid(),  randUiid, basePort, jubatusHost, subscriptionId));
            LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
 
            return new AnomalyConfigDTO(storedConfig);
@@ -171,7 +174,7 @@ public class RestController extends BaseController {
             }
 
             // save anomaly config entry
-            ClassifConfig storedConfig =  classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), "tags",randomStringGenerator.getUuid(),  randUiid, basePort, jubatusHost, subscriptionId));
+            ClassifConfig storedConfig =  classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), "tags",randomStringGenerator.getUuid(),  randUiid, basePort, jubatusHost, subscriptionId));
             LOGGER.info("successful save new classification job. Returned id: " + storedConfig.getId());
 
             return new ClassifConfigDTO(storedConfig);
@@ -235,17 +238,47 @@ public class RestController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/api/v1/notifyContext/{contextConnectionId}", method = RequestMethod.POST, produces = "application/json")
-    SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate) {
+    SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate, @PathVariable("contextConnectionId") String subscriptionId) {
         LOGGER.debug("[call] notifyContext");
         try {
             LOGGER.info(subscriptionUpdate);
+
+            AnomalyConfig anomalyConfig;
+            ClassifConfig classifConfig;
+
+
             for (final OrionContextElementWrapper wrapper : subscriptionUpdate.getContextResponses()) {
+
                 final OrionContextElement element = wrapper.getContextElement();
-                LOGGER.info(element.getId());
-                LOGGER.info(element.getType());
-                LOGGER.info(element.getIsPattern());
-                LOGGER.info(element.getAttributes());
+                for (final Attribute contextElementAttribute : element.getAttributes()) {
+
+                    if ((anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
+                        if (contextElementAttribute.getType() .equals(anomalyConfig.getAttribute())) {
+
+                            // start jubatus training for anomaly detection
+                            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatus_config(), anomalyConfig.getJubatus_port(), "test", 1);
+                            jubatusService.calcScore(client, contextElementAttribute.getValue());
+                        }
+
+                        LOGGER.info(element.getId());
+                        LOGGER.info(element.getType());
+                        LOGGER.info(element.getIsPattern());
+                        LOGGER.info(element.getAttributes());
+
+
+                    } else if ((classifConfig = classifConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
+
+
+
+                    } else {
+
+                        LOGGER.error("SubscriptionId: " + subscriptionId + " Not Found.");
+                        return null;
+                    }
+                }
             }
+
+
         } catch (Exception e) {
             LOGGER.error(e, e);
         }

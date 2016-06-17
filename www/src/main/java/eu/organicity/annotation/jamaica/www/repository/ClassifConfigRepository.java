@@ -18,4 +18,6 @@ public interface ClassifConfigRepository extends CrudRepository<ClassifConfig, L
 
     ClassifConfig findTopByJubatusPortDesc();
 
+    ClassifConfig findBySubscriptionId(String subscription_id);
+
 }

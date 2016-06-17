@@ -7,6 +7,7 @@ public class ClassifConfigDTO {
     private long id;
     private String typePat;
     private String idPat;
+    private String attribute;
     private String tags;
     private String urlExt;
 
@@ -43,6 +44,14 @@ public class ClassifConfigDTO {
 
     public void setIdPat(String idPat) {
         this.idPat = idPat;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     public String getTags() {
