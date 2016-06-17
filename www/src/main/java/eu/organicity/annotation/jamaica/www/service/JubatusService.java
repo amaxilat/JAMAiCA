@@ -1,8 +1,11 @@
 package eu.organicity.annotation.jamaica.www.service;
 
 
+import eu.organicity.annotation.jamaica.www.utils.Utils;
 import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import us.jubat.anomaly.AnomalyClient;
 
 import javax.annotation.PostConstruct;
 
@@ -46,6 +49,27 @@ public class JubatusService {
             LOGGER.error(e, e);
             return null;
         }
+    }
+
+    @Async
+    public void calcScore(AnomalyClient client, String attributeValue){
+        double correct = 0;
+        double total = 0;
+
+        float score = client.calcScore(Utils.makeDatum(Double.parseDouble(attributeValue)));
+        if (Double.parseDouble(attributeValue) < 50) {
+            if (score <= 5) {
+                correct++;
+            }
+        } else {
+            if (score > 5) {
+                correct++;
+            }
+        }
+
+        total++;
+        LOGGER.info("score so far: " + correct + "/" + total + ", score: " + correct / total);
+
     }
 
 }

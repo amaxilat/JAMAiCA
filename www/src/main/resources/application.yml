@@ -1,11 +1,16 @@
 application:
   version: "1"
+  baseUrl: "http://150.140.5.32:8080/"
 
 orion:
   serverUrl: "http://195.220.224.30:1026/"
   token: ""
   service: "organicity"
   servicePath: "/"
+
+jubatus:
+  host: "localhost"
+  basePort: 9000
 
 ---
 spring:

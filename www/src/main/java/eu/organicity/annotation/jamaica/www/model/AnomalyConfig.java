@@ -20,6 +20,7 @@ public class AnomalyConfig {
     private long id;
     private String type_pat;
     private String id_pat;
+    private String attribute;
     private String tags;
     private String url_ext;
     private String url_orion;
@@ -29,9 +30,10 @@ public class AnomalyConfig {
 
     protected AnomalyConfig() {}
 
-    public AnomalyConfig(String type_pat, String id_pat, String tags, String url_ext, String url_orion, int jubatus_port, String jubatus_config, String subscription_id) {
+    public AnomalyConfig(String type_pat, String id_pat, String attribute, String tags, String url_ext, String url_orion, int jubatus_port, String jubatus_config, String subscription_id) {
         this.type_pat = type_pat;
         this.id_pat = id_pat;
+        this.attribute = attribute;
         this.tags = tags;
         this.url_ext = url_ext;
         this.url_orion = url_orion;
@@ -44,8 +46,8 @@ public class AnomalyConfig {
     @Override
     public String toString() {
         return String.format(
-                "AnomalyConfig[id=%d, type_pat='%s', id_pat='%s', tags='%s', url_ext='%s', url_orion='%s', jubatus_port='%d', jubatus_config='%s', subscription_id='%s']",
-                id, type_pat, id_pat, tags, url_ext, url_orion, jubatus_port, jubatus_config,subscription_id);
+                "AnomalyConfig[id=%d, type_pat='%s', id_pat='%s',attribute='%s', tags='%s', url_ext='%s', url_orion='%s', jubatus_port='%d', jubatus_config='%s', subscription_id='%s']",
+                id, type_pat, id_pat, attribute, tags, url_ext, url_orion, jubatus_port, jubatus_config,subscription_id);
     }
 
     public long getId() {
@@ -66,6 +68,14 @@ public class AnomalyConfig {
 
     public String getId_pat(){
         return id_pat;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     public String getTags(){

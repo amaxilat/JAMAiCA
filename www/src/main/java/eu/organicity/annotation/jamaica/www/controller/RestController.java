@@ -1,17 +1,29 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
+import com.amaxilatis.orion.model.Attribute;
 import com.amaxilatis.orion.model.OrionContextElement;
 import com.amaxilatis.orion.model.OrionContextElementWrapper;
 import com.amaxilatis.orion.model.SubscriptionUpdate;
+import com.amaxilatis.orion.model.subscribe.OrionEntity;
+import com.amaxilatis.orion.model.subscribe.SubscriptionResponse;
 import eu.organicity.annotation.jamaica.www.dto.AnomalyConfigDTO;
 import eu.organicity.annotation.jamaica.www.dto.ClassifConfigDTO;
 import eu.organicity.annotation.jamaica.www.dto.VersionDTO;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
+import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
+import eu.organicity.annotation.jamaica.www.service.JubatusService;
+import eu.organicity.annotation.jamaica.www.service.OrionService;
+import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import us.jubat.anomaly.AnomalyClient;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
 
 @Controller
 public class RestController extends BaseController {
@@ -19,8 +31,10 @@ public class RestController extends BaseController {
     /**
      * a log4j logger to print messages.
      */
-    protected static final Logger LOGGER = Logger.getLogger(RestController.class);
 
+
+    protected static final Logger LOGGER = Logger.getLogger(RestController.class);
+    final RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
 
     @ResponseBody
     @RequestMapping(value = "/api/v1/version", method = RequestMethod.GET, produces = "application/json")
@@ -32,7 +46,6 @@ public class RestController extends BaseController {
     /**
      * Adds a new Anomaly Detection Job to the service.
      * <p>
-     * TODO: implement this.
      *
      * @param response      the {@see HttpServletResponse} object.
      * @param anomalyConfig the {@see AnomalyConfigDTO} that describes the job to add.
@@ -44,7 +57,47 @@ public class RestController extends BaseController {
         LOGGER.debug("[call] putAnomalyConfig");
 
 
-        return anomalyConfig;
+        OrionEntity e = new OrionEntity();
+        e.setId(anomalyConfig.getIdPat());
+        e.setIsPattern("true");
+        e.setType("urn:oc:entitytype:iotdevice");
+        String[] cond = new String[1];
+        cond[0] = "TimeInstant";
+
+        final String randUiid = randomStringGenerator.getUuid();
+
+
+        try {
+            // subscribe to Orion
+            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "notifyContext/" + randUiid, cond, "P1D");
+
+
+            final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
+            LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
+
+            if(anomalyConfigRepository.count() > 0) {
+                // get max jubatus port entry
+                AnomalyConfig maxJubatusPortEntry = anomalyConfigRepository.findTopByJubatusPortDesc();
+                // add 1 to create next port number
+                basePort = maxJubatusPortEntry.getJubatus_port() + 1;
+        }
+
+            // save anomaly config entry
+           AnomalyConfig storedConfig =  anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(),"tags",randomStringGenerator.getUuid(),  randUiid, basePort, jubatusHost, subscriptionId));
+           LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
+
+           return new AnomalyConfigDTO(storedConfig);
+
+        } catch (IOException er) {
+            LOGGER.error(er,er);
+
+        } catch (DataAccessException er) {
+            LOGGER.error(er,er);
+
+        }
+        return null;
+
+
     }
 
     /**
@@ -85,7 +138,6 @@ public class RestController extends BaseController {
     /**
      * Adds a new Classification Job to the service.
      * <p>
-     * TODO: implement this.
      *
      * @param response             the {@see HttpServletResponse} object.
      * @param classificationConfig the {@see ClassifConfigDTO} that describes the job to add.
@@ -96,12 +148,83 @@ public class RestController extends BaseController {
     ClassifConfigDTO putClassificationConfig(final HttpServletResponse response, @ModelAttribute ClassifConfigDTO classificationConfig) {
         LOGGER.debug("[call] putClassificationConfig");
 
+        OrionEntity e = new OrionEntity();
+        e.setId(classificationConfig.getIdPat());
+        e.setIsPattern("true");
+        e.setType("urn:oc:entitytype:iotdevice");
+        String[] cond = new String[1];
+        cond[0] = "TimeInstant";
 
-        return classificationConfig;
+        final String randUiid = randomStringGenerator.getUuid();
+
+
+        try {
+            // subscribe to Orion
+            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "notifyContext/" + randUiid, cond, "P1D");
+
+
+            final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
+            LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
+
+            if(anomalyConfigRepository.count() > 0) {
+                // get max jubatus port entry
+                ClassifConfig maxJubatusPortEntry = classifConfigRepository.findTopByJubatusPortDesc();
+                // add 1 to create next port number
+                basePort = maxJubatusPortEntry.getJubatus_port() + 1;
+            }
+
+            // save anomaly config entry
+            ClassifConfig storedConfig =  classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), "tags",randomStringGenerator.getUuid(),  randUiid, basePort, jubatusHost, subscriptionId));
+            LOGGER.info("successful save new classification job. Returned id: " + storedConfig.getId());
+
+            return new ClassifConfigDTO(storedConfig);
+
+        } catch (IOException er) {
+            LOGGER.error(er,er);
+
+        } catch (DataAccessException er) {
+            LOGGER.error(er,er);
+
+        }
+        return null;
+
+
     }
 
-//    TODO: implement the getClassificationConfig like the getAnomalyConfig
+    /**
+     * Gets the information of an existing Classification Job.
+     *
+     * @param response the {@see HttpServletResponse} object.
+     * @param id       the id of the requested {@see ClassifConfigDTO}.
+     * @return the existing {@see ClassifConfigDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/api/v1/config/classification/{id}", method = RequestMethod.GET, produces = "application/json")
+    ClassifConfigDTO getClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
+        LOGGER.debug("[call] getClassificationConfig");
 
+        ClassifConfig config = classifConfigRepository.findById(id);
+
+        return new ClassifConfigDTO(config);
+    }
+
+    /**
+     * Removes the information of an existing Classification Job.
+     *
+     * @param response the {@see HttpServletResponse} object.
+     * @param id       the id of the requested {@see ClassifConfigDTO}.
+     * @return the existing {@see ClassifConfigDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/api/v1/config/classification/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    ClassifConfigDTO deleteClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
+        LOGGER.debug("[call] getClassificationConfig");
+
+        ClassifConfig config = classifConfigRepository.findById(id);
+        classifConfigRepository.delete(id);
+
+        return new ClassifConfigDTO(config);
+    }
 
     /**
      * A method that handles subscription updates from Orion or users and starts the data validation against Jubatus.
@@ -115,17 +238,47 @@ public class RestController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/api/v1/notifyContext/{contextConnectionId}", method = RequestMethod.POST, produces = "application/json")
-    SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate) {
+    SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate, @PathVariable("contextConnectionId") String subscriptionId) {
         LOGGER.debug("[call] notifyContext");
         try {
             LOGGER.info(subscriptionUpdate);
+
+            AnomalyConfig anomalyConfig;
+            ClassifConfig classifConfig;
+
+
             for (final OrionContextElementWrapper wrapper : subscriptionUpdate.getContextResponses()) {
+
                 final OrionContextElement element = wrapper.getContextElement();
-                LOGGER.info(element.getId());
-                LOGGER.info(element.getType());
-                LOGGER.info(element.getIsPattern());
-                LOGGER.info(element.getAttributes());
+                for (final Attribute contextElementAttribute : element.getAttributes()) {
+
+                    if ((anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
+                        if (contextElementAttribute.getType() .equals(anomalyConfig.getAttribute())) {
+
+                            // start jubatus training for anomaly detection
+                            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatus_config(), anomalyConfig.getJubatus_port(), "test", 1);
+                            jubatusService.calcScore(client, contextElementAttribute.getValue());
+                        }
+
+                        LOGGER.info(element.getId());
+                        LOGGER.info(element.getType());
+                        LOGGER.info(element.getIsPattern());
+                        LOGGER.info(element.getAttributes());
+
+
+                    } else if ((classifConfig = classifConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
+
+
+
+                    } else {
+
+                        LOGGER.error("SubscriptionId: " + subscriptionId + " Not Found.");
+                        return null;
+                    }
+                }
             }
+
+
         } catch (Exception e) {
             LOGGER.error(e, e);
         }
