@@ -12,12 +12,25 @@ public class Utils {
      */
     protected static final Logger LOGGER = Logger.getLogger(Utils.class);
 
+    /**
+     * Creates a {@see Datum} to be used in queries to a Jubatus instance.
+     *
+     * @param value the value of the {@see Datum}.
+     * @return the created {@see Datum}.
+     */
     public static Datum makeDatum(double value) {
         return new Datum().addNumber("value", value);
     }
 
-    public static LabeledDatum makeTrainDatum(String label, double height) {
-        return new LabeledDatum(label, makeDatum(height));
+    /**
+     * Creates a {@see LabeledDatum} to be used in queries to a Jubatus instance.
+     *
+     * @param label the label of the {@see Datum}.
+     * @param value the value of the {@see Datum}.
+     * @return the created {@see LabeledDatum}.
+     */
+    public static LabeledDatum makeTrainDatum(String label, double value) {
+        return new LabeledDatum(label, makeDatum(value));
     }
 
 }
