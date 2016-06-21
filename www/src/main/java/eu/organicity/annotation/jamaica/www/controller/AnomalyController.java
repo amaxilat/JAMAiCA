@@ -50,7 +50,7 @@ public class AnomalyController extends BaseController {
 
         try {
             // subscribe to Orion
-            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "notifyContext/" + randUiid, cond, "P1D");
+            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "api/v1/notifyContext/" + randUiid, cond, "P1D");
 
 
             final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
