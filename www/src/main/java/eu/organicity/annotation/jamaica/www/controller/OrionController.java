@@ -51,7 +51,7 @@ public class OrionController extends BaseController {
                     if ((anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
                         if (contextElementAttribute.getType().equals(anomalyConfig.getAttribute())) {
                             // start jubatus training for anomaly detection
-                            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatus_config(), anomalyConfig.getJubatusPort(), "test", 1);
+                            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(), "test", 1);
                             jubatusService.calcScore(client, contextElementAttribute.getValue());
                         }
 

@@ -17,27 +17,27 @@ public class ClassifConfig {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
-    private String type_pat;
-    private String id_pat;
+    private String typePat;
+    private String idPat;
     private String attribute;
     private String tags;
-    private String url_ext;
-    private String url_orion;
+    private String urlExt;
+    private String urlOrion;
     private int jubatusPort;
-    private String jubatus_config;
+    private String jubatusConfig;
     private String subscriptionId;
 
     protected ClassifConfig() {}
 
-    public ClassifConfig(String type_pat, String id_pat, String attribute, String tags, String url_ext, String url_orion, int jubatusPort, String jubatus_config, String subscriptionId) {
-        this.type_pat = type_pat;
-        this.id_pat = id_pat;
+    public ClassifConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion, int jubatusPort, String jubatusConfig, String subscriptionId) {
+        this.typePat = typePat;
+        this.idPat = idPat;
         this.attribute = attribute;
         this.tags = tags;
-        this.url_ext = url_ext;
-        this.url_orion = url_orion;
+        this.urlExt = urlExt;
+        this.urlOrion = urlOrion;
         this.jubatusPort = jubatusPort;
-        this.jubatus_config = jubatus_config;
+        this.jubatusConfig = jubatusConfig;
         this.subscriptionId = subscriptionId;
 
     }
@@ -45,8 +45,8 @@ public class ClassifConfig {
     @Override
     public String toString() {
         return String.format(
-                "ClassifConfig[id=%d, type_pat='%s', id_pat='%s', attribute='%s', tags='%s', url_ext='%s', url_orion='%s', jubatusPort='%d', jubatus_config='%s', subscriptionId='%s']",
-                id, type_pat, id_pat, attribute, tags, url_ext, url_orion, jubatusPort, jubatus_config, subscriptionId);
+                "ClassifConfig[id=%d, typePat='%s', idPat='%s', attribute='%s', tags='%s', urlExt='%s', urlOrion='%s', jubatusPort='%d', jubatusConfig='%s', subscriptionId='%s']",
+                id, typePat, idPat, attribute, tags, urlExt, urlOrion, jubatusPort, jubatusConfig, subscriptionId);
     }
 
     public long getId() {
@@ -57,16 +57,16 @@ public class ClassifConfig {
         this.id = id;
     }
 
-    public String getJubatus_config(){
-        return jubatus_config;
+    public String getJubatusConfig(){
+        return jubatusConfig;
     }
 
-    public String getType_pat(){
-        return type_pat;
+    public String getTypePat(){
+        return typePat;
     }
 
-    public String getId_pat(){
-        return id_pat;
+    public String getIdPat(){
+        return idPat;
     }
 
     public String getAttribute() {
@@ -81,12 +81,12 @@ public class ClassifConfig {
         return tags;
     }
 
-    public String getUrl_ext(){
-        return url_ext;
+    public String getUrlExt(){
+        return urlExt;
     }
 
-    public String getUrl_orion(){
-        return url_orion;
+    public String getUrlOrion(){
+        return urlOrion;
     }
 
     public int getJubatusPort(){
