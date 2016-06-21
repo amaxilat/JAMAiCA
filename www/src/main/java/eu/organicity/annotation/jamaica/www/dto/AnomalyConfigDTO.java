@@ -16,11 +16,11 @@ public class AnomalyConfigDTO {
 
     public AnomalyConfigDTO(final AnomalyConfig config) {
         id = config.getId();
-        typePat = config.getType_pat();
-        idPat = config.getId_pat();
+        typePat = config.getTypePat();
+        idPat = config.getIdPat();
         attribute = config.getAttribute();
         tags = config.getTags();
-        urlExt = config.getUrl_ext();
+        urlExt = config.getUrlExt();
     }
 
     public long getId() {

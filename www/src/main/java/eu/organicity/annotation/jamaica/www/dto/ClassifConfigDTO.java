@@ -16,10 +16,10 @@ public class ClassifConfigDTO {
 
     public ClassifConfigDTO(final ClassifConfig config) {
         id = config.getId();
-        typePat = config.getType_pat();
-        idPat = config.getId_pat();
+        typePat = config.getTypePat();
+        idPat = config.getIdPat();
         tags = config.getTags();
-        urlExt = config.getUrl_ext();
+        urlExt = config.getUrlExt();
     }
 
     public long getId() {
