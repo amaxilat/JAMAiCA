@@ -6,7 +6,6 @@ import com.amaxilatis.orion.model.OrionContextElementWrapper;
 import com.amaxilatis.orion.model.SubscriptionUpdate;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
-import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +33,10 @@ public class OrionController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/api/v1/notifyContext/{contextConnectionId}", method = RequestMethod.POST, produces = "application/json")
-    SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate, @PathVariable("contextConnectionId") String subscriptionId) {
+    SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate, @PathVariable("contextConnectionId") String contextConnectionId) {
         LOGGER.debug("[call] notifyContext");
         try {
-            LOGGER.info(subscriptionUpdate);
+            final String subscriptionId = subscriptionUpdate.getSubscriptionId();
 
             AnomalyConfig anomalyConfig;
             ClassifConfig classifConfig;
@@ -51,16 +50,10 @@ public class OrionController extends BaseController {
                     if ((anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
                         if (contextElementAttribute.getType().equals(anomalyConfig.getAttribute())) {
                             // start jubatus training for anomaly detection
+                            LOGGER.info(element.getId() + " value:" + contextElementAttribute.getValue());
                             final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatus_config(), anomalyConfig.getJubatusPort(), "test", 1);
-                            jubatusService.calcScore(client, contextElementAttribute.getValue());
+                            jubatusService.calcScore(client, contextElementAttribute.getValue(), element.getId(), contextElementAttribute.getType(), anomalyConfig.getId());
                         }
-
-                        LOGGER.info(element.getId());
-                        LOGGER.info(element.getType());
-                        LOGGER.info(element.getIsPattern());
-                        LOGGER.info(element.getAttributes());
-
-
                     } else if ((classifConfig = classifConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
 
 
