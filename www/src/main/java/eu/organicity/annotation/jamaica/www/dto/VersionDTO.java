@@ -1,7 +1,9 @@
 package eu.organicity.annotation.jamaica.www.dto;
 
 
-public class VersionDTO {
+import java.io.Serializable;
+
+public class VersionDTO implements Serializable {
 
     private String version;
 
@@ -18,5 +20,21 @@ public class VersionDTO {
 
     public void setVersion(final String version) {
         this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        VersionDTO that = (VersionDTO) o;
+
+        return version.equals(that.version);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return version.hashCode();
     }
 }
