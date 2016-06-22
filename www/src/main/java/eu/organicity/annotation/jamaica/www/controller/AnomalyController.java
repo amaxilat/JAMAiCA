@@ -7,6 +7,7 @@ import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,7 +68,7 @@ public class AnomalyController extends BaseController {
             }
 
             // save anomaly config entry
-            AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), "tags", randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId));
+            AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), "tags", randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId, System.currentTimeMillis()));
             LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
 
             return new AnomalyConfigDTO(storedConfig);
@@ -117,5 +118,40 @@ public class AnomalyController extends BaseController {
         anomalyConfigRepository.delete(id);
 
         return new AnomalyConfigDTO(config);
+    }
+
+    @Scheduled(cron = "0 0 * * * ?")
+    void checkSubscriptions() {
+        LOGGER.info("Checking subscriptions...");
+        for (final AnomalyConfig anomalyConfig : anomalyConfigRepository.findAll()) {
+            if (System.currentTimeMillis() - anomalyConfig.getLastSubscription() > 24 * 60 * 60 * 1000) {
+                LOGGER.info("Re-Subscribing for " + anomalyConfig.getId());
+
+
+                OrionEntity e = new OrionEntity();
+                e.setId(anomalyConfig.getIdPat());
+                e.setIsPattern("true");
+                e.setType(anomalyConfig.getTypePat());
+                String[] cond = new String[1];
+                cond[0] = "TimeInstant";
+
+                try {
+                    // subscribe to Orion
+                    SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "api/v1/notifyContext/" + anomalyConfig.getUrlOrion(), cond, "P1D");
+
+                    final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
+                    LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
+
+                    anomalyConfig.setSubscriptionId(r.getSubscribeResponse().getSubscriptionId());
+                    anomalyConfig.setLastSubscription(System.currentTimeMillis());
+                    // update anomaly config entry
+                    anomalyConfigRepository.save(anomalyConfig);
+                    LOGGER.info("successful updated the subscription for the anomaly detection job " + anomalyConfig.getId() + " new subscriptionId is " + anomalyConfig.getSubscriptionId());
+
+                } catch (IOException | DataAccessException er) {
+                    LOGGER.error(er, er);
+                }
+            }
+        }
     }
 }

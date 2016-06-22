@@ -16,7 +16,7 @@ import javax.persistence.Id;
 public class AnomalyConfig {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String typePat;
     private String idPat;
@@ -27,10 +27,12 @@ public class AnomalyConfig {
     private int jubatusPort;
     private String jubatusConfig;
     private String subscriptionId;
+    private long lastSubscription;
 
-    protected AnomalyConfig() {}
+    protected AnomalyConfig() {
+    }
 
-    public AnomalyConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion, int jubatusPort, String jubatusConfig, String subscriptionId) {
+    public AnomalyConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion, int jubatusPort, String jubatusConfig, String subscriptionId, long lastSubscription) {
         this.typePat = typePat;
         this.idPat = idPat;
         this.attribute = attribute;
@@ -40,7 +42,7 @@ public class AnomalyConfig {
         this.jubatusPort = jubatusPort;
         this.jubatusConfig = jubatusConfig;
         this.subscriptionId = subscriptionId;
-
+        this.lastSubscription = lastSubscription;
     }
 
     @Override
@@ -58,15 +60,15 @@ public class AnomalyConfig {
         this.id = id;
     }
 
-    public String getJubatusConfig(){
+    public String getJubatusConfig() {
         return jubatusConfig;
     }
 
-    public String getTypePat(){
+    public String getTypePat() {
         return typePat;
     }
 
-    public String getIdPat(){
+    public String getIdPat() {
         return idPat;
     }
 
@@ -78,23 +80,35 @@ public class AnomalyConfig {
         this.attribute = attribute;
     }
 
-    public String getTags(){
+    public String getTags() {
         return tags;
     }
 
-    public String getUrlExt(){
+    public String getUrlExt() {
         return urlExt;
     }
 
-    public String getUrlOrion(){
+    public String getUrlOrion() {
         return urlOrion;
     }
 
-    public int getJubatusPort(){
+    public int getJubatusPort() {
         return jubatusPort;
     }
 
-    public String getSubscriptionId(){
+    public String getSubscriptionId() {
         return subscriptionId;
+    }
+
+    public void setSubscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
+    }
+
+    public long getLastSubscription() {
+        return lastSubscription;
+    }
+
+    public void setLastSubscription(long lastSubscription) {
+        this.lastSubscription = lastSubscription;
     }
 }
