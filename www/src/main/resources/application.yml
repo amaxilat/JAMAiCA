@@ -48,3 +48,9 @@ hibernate:
   show_sql: false
 application:
   baseUrl: "http://150.140.5.32:8080/"
+---
+spring:
+  profiles: test
+
+application:
+  baseUrl: "http://150.140.5.32:8080/"

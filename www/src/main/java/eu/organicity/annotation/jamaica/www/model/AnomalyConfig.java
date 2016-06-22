@@ -10,10 +10,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 
 @Entity
-public class AnomalyConfig {
+public class AnomalyConfig implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +30,7 @@ public class AnomalyConfig {
     private String subscriptionId;
     private long lastSubscription;
 
-    protected AnomalyConfig() {
+    public AnomalyConfig() {
     }
 
     public AnomalyConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion, int jubatusPort, String jubatusConfig, String subscriptionId, long lastSubscription) {
@@ -68,8 +69,16 @@ public class AnomalyConfig {
         return typePat;
     }
 
+    public void setTypePat(String typePat) {
+        this.typePat = typePat;
+    }
+
     public String getIdPat() {
         return idPat;
+    }
+
+    public void setIdPat(String idPat) {
+        this.idPat = idPat;
     }
 
     public String getAttribute() {
@@ -110,5 +119,28 @@ public class AnomalyConfig {
 
     public void setLastSubscription(long lastSubscription) {
         this.lastSubscription = lastSubscription;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AnomalyConfig that = (AnomalyConfig) o;
+
+        if (id != that.id) return false;
+        if (!typePat.equals(that.typePat)) return false;
+        if (!idPat.equals(that.idPat)) return false;
+        return attribute.equals(that.attribute);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + typePat.hashCode();
+        result = 31 * result + idPat.hashCode();
+        result = 31 * result + attribute.hashCode();
+        return result;
     }
 }
