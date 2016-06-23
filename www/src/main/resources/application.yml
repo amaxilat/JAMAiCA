@@ -23,6 +23,7 @@ spring:
     driverClassName: org.postgresql.Driver
 application:
   baseUrl: "http://150.140.5.27:8080/"
+  env: dev
 
 ---
 spring:
@@ -36,6 +37,7 @@ spring:
     driverClassName: org.postgresql.Driver
 application:
   baseUrl: "http://150.140.5.27:8080/"
+  env: production
 
 ---
 spring:
@@ -48,9 +50,12 @@ hibernate:
   show_sql: false
 application:
   baseUrl: "http://150.140.5.32:8080/"
+  env: dev
+
 ---
 spring:
   profiles: test
 
 application:
   baseUrl: "http://150.140.5.32:8080/"
+  env: dev
