@@ -1,7 +1,6 @@
 package eu.organicity.annotation.jamaica.www.service;
 
 
-import eu.organicity.annotation.jamaica.www.model.Anomaly;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
 import org.apache.log4j.Logger;
@@ -22,6 +21,9 @@ public class JubatusService {
 
     @Autowired
     AnomalyRepository anomalyRepository;
+
+    @Autowired
+    AnnotationService annotationService;
 
     @Value("${application.env}")
     private String env;
@@ -86,13 +88,7 @@ public class JubatusService {
             LOGGER.info("Value is normal! score: " + score);
         } else {
             LOGGER.info("Value is abnormal! score: " + score);
-            Anomaly anomaly = new Anomaly();
-            anomaly.setEntityId(entityId);
-            anomaly.setEntityAttribute(attribute);
-            anomaly.setAttributeValue(value);
-            anomaly.setScore(score);
-            anomaly.setAnomalyConfigId(anomalyConfigId);
-            anomalyRepository.save(anomaly);
+            annotationService.storeAnomaly(entityId, attribute, value, anomalyConfigId, score);
         }
     }
 
