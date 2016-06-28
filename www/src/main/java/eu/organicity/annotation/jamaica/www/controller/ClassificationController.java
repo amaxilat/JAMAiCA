@@ -33,7 +33,7 @@ public class ClassificationController extends BaseController {
      * @return the added {@see ClassifConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/api/v1/config/classification", method = RequestMethod.PUT, produces = "application/json")
+    @RequestMapping(value = "/v1/config/classification", method = RequestMethod.PUT, produces = "application/json")
     ClassifConfigDTO putClassificationConfig(final HttpServletResponse response, @RequestBody ClassifConfigDTO classificationConfig) {
         LOGGER.debug("[call] putClassificationConfig");
 
@@ -91,7 +91,7 @@ public class ClassificationController extends BaseController {
      * @return the existing {@see ClassifConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/api/v1/config/classification/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/v1/config/classification/{id}", method = RequestMethod.GET, produces = "application/json")
     ClassifConfigDTO getClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getClassificationConfig");
 
@@ -108,7 +108,7 @@ public class ClassificationController extends BaseController {
      * @return the existing {@see ClassifConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/api/v1/config/classification/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    @RequestMapping(value = "/v1/config/classification/{id}", method = RequestMethod.DELETE, produces = "application/json")
     ClassifConfigDTO deleteClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getClassificationConfig");
 

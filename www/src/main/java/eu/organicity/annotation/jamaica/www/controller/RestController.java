@@ -20,7 +20,7 @@ public class RestController extends BaseController {
     protected static final Logger LOGGER = Logger.getLogger(RestController.class);
 
     @ResponseBody
-    @RequestMapping(value = "/api/v1/version", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/v1/version", method = RequestMethod.GET, produces = "application/json")
     VersionDTO getVersion(final HttpServletResponse response) {
         LOGGER.debug("[call] getVersion");
         return new VersionDTO(applicationVersion);

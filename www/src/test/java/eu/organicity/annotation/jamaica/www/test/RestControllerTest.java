@@ -32,7 +32,7 @@ public class RestControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        this.base = new URL("http://localhost:" + port + "/api/v1/version");
+        this.base = new URL("http://localhost:" + port + "/v1/version");
         template = new TestRestTemplate();
     }
 

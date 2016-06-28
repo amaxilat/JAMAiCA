@@ -44,7 +44,7 @@ public class AnomalyControllerTest {
         newConfig.setTypePat("urn:oc:entityType:smartphone");
         newConfig.setAttribute("temperature");
         config = anomalyConfigRepository.save(newConfig);
-        this.base = new URL("http://localhost:" + port + "/api/v1/config/anomaly/" + config.getId());
+        this.base = new URL("http://localhost:" + port + "/v1/config/anomaly/" + config.getId());
         template = new TestRestTemplate();
     }
 

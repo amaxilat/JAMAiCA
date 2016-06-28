@@ -21,7 +21,7 @@ public class SwaggerConfiguration {
                 .groupName("Version 1")
                 .apiInfo(apiInfo())
                 .select()
-                .paths(regex("/api/v1/.*"))
+                .paths(regex("/v1/.*"))
                 .build();
     }
 

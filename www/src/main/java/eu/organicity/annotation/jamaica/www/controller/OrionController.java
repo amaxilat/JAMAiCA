@@ -32,7 +32,7 @@ public class OrionController extends BaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/api/v1/notifyContext/{contextConnectionId}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/v1/notifyContext/{contextConnectionId}", method = RequestMethod.POST, produces = "application/json")
     SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate, @PathVariable("contextConnectionId") String contextConnectionId) {
         LOGGER.debug("[call] notifyContext");
         try {
