@@ -3,6 +3,8 @@ package eu.organicity.annotation.jamaica.www.controller;
 import com.amaxilatis.orion.model.subscribe.OrionEntity;
 import com.amaxilatis.orion.model.subscribe.SubscriptionResponse;
 import eu.organicity.annotation.jamaica.www.dto.ClassifConfigDTO;
+import eu.organicity.annotation.jamaica.www.dto.TrainDataDTO;
+import eu.organicity.annotation.jamaica.www.dto.TrainDataListDTO;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import org.apache.log4j.Logger;
@@ -98,6 +100,27 @@ public class ClassificationController extends BaseController {
         ClassifConfig config = classifConfigRepository.findById(id);
 
         return new ClassifConfigDTO(config);
+    }
+
+
+    /**
+     * Train a Jubatus instance for an existing Classification Job with the supplied data.
+     *
+     * @param trainDataDTO the {@see TrainDataListDTO } object to use as input for training the Jubatus instance.
+     * @param id           the id of the requested {@see AnomalyConfigDTO}.
+     * @return the used {@see TrainDataListDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/v1/config/classification/{id}/{tag}/train", method = RequestMethod.GET, produces = "application/json")
+    TrainDataListDTO trainClassification(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id, @PathVariable("tag") String tag) {
+        LOGGER.debug("[call] trainClassification");
+        //TODO: find here the classification
+        //TODO: create instance for the jubatus classification client
+        for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
+            LOGGER.info(singleTrainData);
+            //TODO: train for each of the data
+        }
+        return trainDataDTO;
     }
 
     /**
