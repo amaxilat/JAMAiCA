@@ -23,6 +23,7 @@ spring:
     driverClassName: org.postgresql.Driver
 application:
   baseUrl: "http://150.140.5.27:8080/"
+  annotationUrl: "http://146.169.46.162:8084/"
   env: dev
 
 ---
@@ -37,6 +38,7 @@ spring:
     driverClassName: org.postgresql.Driver
 application:
   baseUrl: "http://150.140.5.27:8080/"
+  annotationUrl: "http://146.169.46.162:8084/"
   env: production
 
 ---
@@ -50,6 +52,7 @@ hibernate:
   show_sql: false
 application:
   baseUrl: "http://150.140.5.32:8080/"
+  annotationUrl: "http://146.169.46.162:8084/"
   env: dev
 
 ---
@@ -58,4 +61,5 @@ spring:
 
 application:
   baseUrl: "http://150.140.5.32:8080/"
+  annotationUrl: "http://146.169.46.162:8084/"
   env: dev
