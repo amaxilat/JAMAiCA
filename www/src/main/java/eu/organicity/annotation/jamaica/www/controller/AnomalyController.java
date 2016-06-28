@@ -3,7 +3,7 @@ package eu.organicity.annotation.jamaica.www.controller;
 import com.amaxilatis.orion.model.subscribe.OrionEntity;
 import com.amaxilatis.orion.model.subscribe.SubscriptionResponse;
 import eu.organicity.annotation.jamaica.www.dto.AnomalyConfigDTO;
-import eu.organicity.annotation.jamaica.www.dto.AnomalyTrainDataDTO;
+import eu.organicity.annotation.jamaica.www.dto.TrainDataListDTO;
 import eu.organicity.annotation.jamaica.www.dto.TrainDataDTO;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
@@ -127,19 +127,19 @@ public class AnomalyController extends BaseController {
     /**
      * Train a Jubatus instance for an existing Anomaly Detection Job with the supplied data.
      *
-     * @param anomalyTrainDataDTO the {@see AnomalyTrainDataDTO } object to use as input for training the Jubatus instance.
+     * @param trainDataDTO the {@see TrainDataListDTO } object to use as input for training the Jubatus instance.
      * @param id                  the id of the requested {@see AnomalyConfigDTO}.
-     * @return the existing {@see AnomalyConfigDTO}.
+     * @return the used {@see TrainDataListDTO}.
      */
     @ResponseBody
     @RequestMapping(value = "/v1/config/anomaly/{id}/train", method = RequestMethod.GET, produces = "application/json")
-    AnomalyTrainDataDTO trainAnomaly(@RequestBody AnomalyTrainDataDTO anomalyTrainDataDTO, @PathVariable("id") long id) {
+    TrainDataListDTO trainAnomaly(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id) {
         LOGGER.debug("[call] trainAnomaly");
 
-        for (final TrainDataDTO trainDataDTO : anomalyTrainDataDTO.getData()) {
-            LOGGER.info(trainDataDTO);
+        for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
+            LOGGER.info(singleTrainData);
         }
-        return anomalyTrainDataDTO;
+        return trainDataDTO;
     }
 
 

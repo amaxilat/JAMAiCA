@@ -2,7 +2,7 @@ package eu.organicity.annotation.jamaica.www.dto;
 
 import java.util.List;
 
-public class AnomalyTrainDataDTO {
+public class TrainDataListDTO {
     private List<TrainDataDTO> data;
 
     public List<TrainDataDTO> getData() {
@@ -15,7 +15,7 @@ public class AnomalyTrainDataDTO {
 
     @Override
     public String toString() {
-        return "AnomalyTrainDataDTO{" +
+        return "TrainDataListDTO{" +
                 "data=" + data +
                 '}';
     }
