@@ -8,7 +8,7 @@ public class ClassifConfigDTO {
     private String typePat;
     private String idPat;
     private String attribute;
-    private String tags;
+    private String tagDomain;
     private String urlExt;
 
     public ClassifConfigDTO() {
@@ -18,7 +18,8 @@ public class ClassifConfigDTO {
         id = config.getId();
         typePat = config.getTypePat();
         idPat = config.getIdPat();
-        tags = config.getTags();
+        attribute = config.getAttribute();
+        tagDomain = config.getTags();
         urlExt = config.getUrlExt();
     }
 
@@ -54,12 +55,12 @@ public class ClassifConfigDTO {
         this.attribute = attribute;
     }
 
-    public String getTags() {
-        return tags;
+    public String getTagDomain() {
+        return tagDomain;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setTagDomain(String tagDomain) {
+        this.tagDomain = tagDomain;
     }
 
     public String getUrlExt() {

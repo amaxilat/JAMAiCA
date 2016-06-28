@@ -70,7 +70,7 @@ public class AnomalyController extends BaseController {
             jubatusService.launchJubaanomaly(basePort);
 
             // save anomaly config entry
-            AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), "tags", randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId, System.currentTimeMillis()));
+            AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), anomalyConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId, System.currentTimeMillis()));
             LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
 
             return new AnomalyConfigDTO(storedConfig);

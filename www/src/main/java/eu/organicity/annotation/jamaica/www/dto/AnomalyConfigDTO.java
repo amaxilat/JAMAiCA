@@ -8,7 +8,7 @@ public class AnomalyConfigDTO {
     private String typePat;
     private String idPat;
     private String attribute;
-    private String tags;
+    private String tagDomain;
     private String urlExt;
 
     public AnomalyConfigDTO() {
@@ -19,7 +19,7 @@ public class AnomalyConfigDTO {
         typePat = config.getTypePat();
         idPat = config.getIdPat();
         attribute = config.getAttribute();
-        tags = config.getTags();
+        tagDomain = config.getTags();
         urlExt = config.getUrlExt();
     }
 
@@ -55,12 +55,12 @@ public class AnomalyConfigDTO {
         this.attribute = attribute;
     }
 
-    public String getTags() {
-        return tags;
+    public String getTagDomain() {
+        return tagDomain;
     }
 
-    public void setTags(final String tags) {
-        this.tags = tags;
+    public void setTagDomain(final String tagDomain) {
+        this.tagDomain = tagDomain;
     }
 
     public String getUrlExt() {
