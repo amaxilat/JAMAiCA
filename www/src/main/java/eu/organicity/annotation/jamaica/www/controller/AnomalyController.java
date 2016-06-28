@@ -132,7 +132,7 @@ public class AnomalyController extends BaseController {
      * @return the existing {@see AnomalyConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/v1/config/anomaly/{id}/train", method = RequestMethod.GET, produces = "application/json")
     AnomalyTrainDataDTO trainAnomaly(@RequestBody AnomalyTrainDataDTO anomalyTrainDataDTO, @PathVariable("id") long id) {
         LOGGER.debug("[call] trainAnomaly");
 
