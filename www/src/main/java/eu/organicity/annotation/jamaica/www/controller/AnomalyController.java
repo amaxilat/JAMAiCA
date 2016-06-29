@@ -7,14 +7,17 @@ import eu.organicity.annotation.jamaica.www.dto.TrainDataDTO;
 import eu.organicity.annotation.jamaica.www.dto.TrainDataListDTO;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
+import eu.organicity.annotation.jamaica.www.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import us.jubat.anomaly.AnomalyClient;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 @Controller
 public class AnomalyController extends BaseController {
@@ -135,13 +138,20 @@ public class AnomalyController extends BaseController {
     @RequestMapping(value = "/v1/config/anomaly/{id}/train", method = RequestMethod.GET, produces = "application/json")
     TrainDataListDTO trainAnomaly(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id) {
         LOGGER.debug("[call] trainAnomaly");
-        //TODO: find here the anomalyConfig
-        //TODO: create instance for the jubatus anomaly client
-        for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
-            LOGGER.info(singleTrainData);
-            //TODO: train for each of the data
+        AnomalyConfig anomalyConfig = anomalyConfigRepository.findById(id);
+
+        try {
+            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(),"test", 1);
+            for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
+                LOGGER.info(singleTrainData);
+                client.add(Utils.makeDatum(Double.parseDouble(singleTrainData.getValue())));
+            }
+            return trainDataDTO;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
-        return trainDataDTO;
+        return null;
+
     }
 
 
