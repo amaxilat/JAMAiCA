@@ -7,13 +7,19 @@ import eu.organicity.annotation.jamaica.www.dto.TrainDataDTO;
 import eu.organicity.annotation.jamaica.www.dto.TrainDataListDTO;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
+import eu.organicity.annotation.jamaica.www.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import us.jubat.classifier.ClassifierClient;
+import us.jubat.classifier.LabeledDatum;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ClassificationController extends BaseController {
@@ -114,13 +120,24 @@ public class ClassificationController extends BaseController {
     @RequestMapping(value = "/v1/config/classification/{id}/{tag}/train", method = RequestMethod.GET, produces = "application/json")
     TrainDataListDTO trainClassification(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id, @PathVariable("tag") String tag) {
         LOGGER.debug("[call] trainClassification");
-        //TODO: find here the classification
-        //TODO: create instance for the jubatus classification client
-        for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
-            LOGGER.info(singleTrainData);
-            //TODO: train for each of the data
+        ClassifConfig classification = classifConfigRepository.findById(id);
+
+        try {
+
+            ClassifierClient client = new ClassifierClient(classification.getJubatusConfig(), classification.getJubatusPort(), "test", 1);
+            List<LabeledDatum> trainData = new ArrayList<>();
+
+            for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
+                LOGGER.info(singleTrainData);
+                trainData.add(Utils.makeTrainDatum(tag, Double.parseDouble(singleTrainData.getValue())));
+                client.train(trainData);
+
+            }
+            return trainDataDTO;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
-        return trainDataDTO;
+        return null;
     }
 
     /**
