@@ -117,7 +117,7 @@ public class ClassificationController extends BaseController {
      * @return the used {@see TrainDataListDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/classification/{id}/{tag}/train", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/v1/config/classification/{id}/{tag}/train", method = RequestMethod.POST, produces = "application/json")
     TrainDataListDTO trainClassification(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id, @PathVariable("tag") String tag) {
         LOGGER.debug("[call] trainClassification");
         ClassifConfig classification = classifConfigRepository.findById(id);
