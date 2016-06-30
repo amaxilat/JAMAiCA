@@ -2,8 +2,8 @@ package eu.organicity.annotation.jamaica.www.service;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.organicity.annotation.jamaica.www.dto.AnnotationDTO;
-import eu.organicity.annotation.jamaica.www.dto.TagDomainDTO;
+import eu.organicity.annotation.jamaica.dto.AnnotationDTO;
+import eu.organicity.annotation.jamaica.dto.TagDomainDTO;
 import eu.organicity.annotation.jamaica.www.model.Anomaly;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
