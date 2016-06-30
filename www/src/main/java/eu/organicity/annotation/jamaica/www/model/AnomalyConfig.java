@@ -95,6 +95,10 @@ public class AnomalyConfig implements Serializable {
         return tags;
     }
 
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
     public String getUrlExt() {
         return urlExt;
     }
