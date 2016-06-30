@@ -189,4 +189,42 @@ public class AnomalyController extends BaseController {
             }
         }
     }
+
+    /**
+     * Enable an existing Anomaly Detection Job.
+     *
+     * @param response the {@see HttpServletResponse} object.
+     * @param id       the id of the requested {@see AnomalyConfigDTO}.
+     * @return the existing {@see AnomalyConfigDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/v1/config/anomaly/{id}/enable", method = RequestMethod.POST, produces = "application/json")
+    AnomalyConfigDTO enableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
+        LOGGER.debug("[call] enableAnomalyConfig");
+
+            AnomalyConfig config = anomalyConfigRepository.findById(id);
+            config.setEnable(true);
+            anomalyConfigRepository.save(config);
+            return new AnomalyConfigDTO(config);
+
+    }
+
+    /**
+     * Disable an existing Anomaly Detection Job.
+     *
+     * @param response the {@see HttpServletResponse} object.
+     * @param id       the id of the requested {@see AnomalyConfigDTO}.
+     * @return the existing {@see AnomalyConfigDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/v1/config/anomaly/{id}/disable", method = RequestMethod.POST, produces = "application/json")
+    AnomalyConfigDTO disableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
+        LOGGER.debug("[call] disableAnomalyConfig");
+
+        AnomalyConfig config = anomalyConfigRepository.findById(id);
+        config.setEnable(false);
+        anomalyConfigRepository.save(config);
+        return new AnomalyConfigDTO(config);
+
+    }
 }

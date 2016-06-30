@@ -194,4 +194,42 @@ public class ClassificationController extends BaseController {
             }
         }
     }
+
+    /**
+     * Enables an existing Classification Job.
+     *
+     * @param response the {@see HttpServletResponse} object.
+     * @param id       the id of the requested {@see ClassifConfigDTO}.
+     * @return the existing {@see ClassifConfigDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/v1/config/classification/{id}/enable", method = RequestMethod.GET, produces = "application/json")
+    ClassifConfigDTO enableClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
+        LOGGER.debug("[call] enableClassificationConfig");
+
+        ClassifConfig config = classifConfigRepository.findById(id);
+        config.setEnable(true);
+        classifConfigRepository.save(config);
+
+        return new ClassifConfigDTO(config);
+    }
+
+    /**
+     * Disable an existing Classification Job.
+     *
+     * @param response the {@see HttpServletResponse} object.
+     * @param id       the id of the requested {@see ClassifConfigDTO}.
+     * @return the existing {@see ClassifConfigDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/v1/config/classification/{id}/disable", method = RequestMethod.GET, produces = "application/json")
+    ClassifConfigDTO disableClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
+        LOGGER.debug("[call] enableClassificationConfig");
+
+        ClassifConfig config = classifConfigRepository.findById(id);
+        config.setEnable(false);
+        classifConfigRepository.save(config);
+
+        return new ClassifConfigDTO(config);
+    }
 }
