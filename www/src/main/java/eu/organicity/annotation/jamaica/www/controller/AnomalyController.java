@@ -2,9 +2,9 @@ package eu.organicity.annotation.jamaica.www.controller;
 
 import com.amaxilatis.orion.model.subscribe.OrionEntity;
 import com.amaxilatis.orion.model.subscribe.SubscriptionResponse;
-import eu.organicity.annotation.jamaica.www.dto.AnomalyConfigDTO;
-import eu.organicity.annotation.jamaica.www.dto.TrainDataDTO;
-import eu.organicity.annotation.jamaica.www.dto.TrainDataListDTO;
+import eu.organicity.annotation.jamaica.dto.AnomalyConfigDTO;
+import eu.organicity.annotation.jamaica.dto.TrainDataDTO;
+import eu.organicity.annotation.jamaica.dto.TrainDataListDTO;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
@@ -78,7 +78,7 @@ public class AnomalyController extends BaseController {
             AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), anomalyConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId, System.currentTimeMillis(), false));
             LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
 
-            return new AnomalyConfigDTO(storedConfig);
+            return Utils.newAnomalyConfigDTO(storedConfig);
 
         } catch (IOException er) {
             LOGGER.error(er, er);
@@ -106,7 +106,7 @@ public class AnomalyController extends BaseController {
 
         AnomalyConfig config = anomalyConfigRepository.findById(id);
 
-        return new AnomalyConfigDTO(config);
+        return Utils.newAnomalyConfigDTO(config);
     }
 
     /**
@@ -124,7 +124,7 @@ public class AnomalyController extends BaseController {
         AnomalyConfig config = anomalyConfigRepository.findById(id);
         anomalyConfigRepository.delete(id);
 
-        return new AnomalyConfigDTO(config);
+        return Utils.newAnomalyConfigDTO(config);
     }
 
     /**
@@ -141,7 +141,7 @@ public class AnomalyController extends BaseController {
         AnomalyConfig anomalyConfig = anomalyConfigRepository.findById(id);
 
         try {
-            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(),"test", 1);
+            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(), "test", 1);
             for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
                 LOGGER.info(singleTrainData);
                 client.add(Utils.makeDatum(Double.parseDouble(singleTrainData.getValue())));

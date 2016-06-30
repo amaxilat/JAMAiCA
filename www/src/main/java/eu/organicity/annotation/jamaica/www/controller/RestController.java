@@ -1,6 +1,6 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
-import eu.organicity.annotation.jamaica.www.dto.VersionDTO;
+import eu.organicity.annotation.jamaica.dto.VersionDTO;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

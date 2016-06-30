@@ -1,4 +1,4 @@
-package eu.organicity.annotation.jamaica.www.dto;
+package eu.organicity.annotation.jamaica.dto;
 
 
 import java.io.Serializable;

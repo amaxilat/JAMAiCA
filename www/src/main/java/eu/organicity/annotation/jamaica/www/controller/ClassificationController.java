@@ -2,10 +2,9 @@ package eu.organicity.annotation.jamaica.www.controller;
 
 import com.amaxilatis.orion.model.subscribe.OrionEntity;
 import com.amaxilatis.orion.model.subscribe.SubscriptionResponse;
-import eu.organicity.annotation.jamaica.www.dto.ClassifConfigDTO;
-import eu.organicity.annotation.jamaica.www.dto.TrainDataDTO;
-import eu.organicity.annotation.jamaica.www.dto.TrainDataListDTO;
-import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
+import eu.organicity.annotation.jamaica.dto.ClassifConfigDTO;
+import eu.organicity.annotation.jamaica.dto.TrainDataDTO;
+import eu.organicity.annotation.jamaica.dto.TrainDataListDTO;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
@@ -79,7 +78,7 @@ public class ClassificationController extends BaseController {
             ClassifConfig storedConfig = classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), classificationConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId,System.currentTimeMillis(), false));
             LOGGER.info("successful save new classification job. Returned id: " + storedConfig.getId());
 
-            return new ClassifConfigDTO(storedConfig);
+            return Utils.newClassifConfigDTO(storedConfig);
 
         } catch (IOException er) {
             LOGGER.error(er, er);
@@ -107,7 +106,7 @@ public class ClassificationController extends BaseController {
 
         ClassifConfig config = classifConfigRepository.findById(id);
 
-        return new ClassifConfigDTO(config);
+        return Utils.newClassifConfigDTO(config);
     }
 
 
@@ -157,7 +156,7 @@ public class ClassificationController extends BaseController {
         ClassifConfig config = classifConfigRepository.findById(id);
         classifConfigRepository.delete(id);
 
-        return new ClassifConfigDTO(config);
+        return Utils.newClassifConfigDTO(config);
     }
 
     @Scheduled(cron = "0 0 * * * ?")

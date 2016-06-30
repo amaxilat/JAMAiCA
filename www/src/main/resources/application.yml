@@ -2,7 +2,7 @@ application:
   version: "1"
 
 orion:
-  serverUrl: "http://52.40.19.99:1026/"
+  serverUrl: "http://set.organicity.eu:1026/"
   token: ""
   service: "organicity"
   servicePath: "/"

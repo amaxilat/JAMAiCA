@@ -1,6 +1,10 @@
 package eu.organicity.annotation.jamaica.www.utils;
 
 
+import eu.organicity.annotation.jamaica.dto.AnomalyConfigDTO;
+import eu.organicity.annotation.jamaica.dto.ClassifConfigDTO;
+import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
+import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
 import org.apache.log4j.Logger;
 import us.jubat.classifier.LabeledDatum;
 import us.jubat.common.Datum;
@@ -33,4 +37,25 @@ public class Utils {
         return new LabeledDatum(label, makeDatum(value));
     }
 
+    public static AnomalyConfigDTO newAnomalyConfigDTO(final AnomalyConfig storedConfig) {
+        final AnomalyConfigDTO dto = new AnomalyConfigDTO();
+        dto.setId(storedConfig.getId());
+        dto.setIdPat(storedConfig.getIdPat());
+        dto.setTypePat(storedConfig.getTypePat());
+        dto.setAttribute(storedConfig.getAttribute());
+        dto.setTagDomain(storedConfig.getTags());
+        dto.setUrlExt(storedConfig.getUrlExt());
+        return dto;
+    }
+
+    public static ClassifConfigDTO newClassifConfigDTO(final ClassifConfig storedConfig) {
+        final ClassifConfigDTO dto = new ClassifConfigDTO();
+        dto.setId(storedConfig.getId());
+        dto.setIdPat(storedConfig.getIdPat());
+        dto.setTypePat(storedConfig.getTypePat());
+        dto.setAttribute(storedConfig.getAttribute());
+        dto.setTagDomain(storedConfig.getTags());
+        dto.setUrlExt(storedConfig.getUrlExt());
+        return dto;
+    }
 }

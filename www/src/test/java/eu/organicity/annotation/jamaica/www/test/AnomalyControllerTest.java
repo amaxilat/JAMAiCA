@@ -1,7 +1,6 @@
 package eu.organicity.annotation.jamaica.www.test;
 
 import eu.organicity.annotation.jamaica.www.Application;
-import eu.organicity.annotation.jamaica.www.dto.VersionDTO;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
 import org.junit.Before;

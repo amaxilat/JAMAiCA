@@ -1,7 +1,7 @@
 package eu.organicity.annotation.jamaica.www.test;
 
 import eu.organicity.annotation.jamaica.www.Application;
-import eu.organicity.annotation.jamaica.www.dto.VersionDTO;
+import eu.organicity.annotation.jamaica.dto.VersionDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
