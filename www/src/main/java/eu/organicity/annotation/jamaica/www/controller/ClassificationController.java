@@ -5,11 +5,13 @@ import com.amaxilatis.orion.model.subscribe.SubscriptionResponse;
 import eu.organicity.annotation.jamaica.www.dto.ClassifConfigDTO;
 import eu.organicity.annotation.jamaica.www.dto.TrainDataDTO;
 import eu.organicity.annotation.jamaica.www.dto.TrainDataListDTO;
+import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import us.jubat.classifier.ClassifierClient;
@@ -156,5 +158,40 @@ public class ClassificationController extends BaseController {
         classifConfigRepository.delete(id);
 
         return new ClassifConfigDTO(config);
+    }
+
+    @Scheduled(cron = "0 0 * * * ?")
+    void checkSubscriptions() {
+        LOGGER.info("Checking subscriptions...");
+        for (final ClassifConfig classifConfig : classifConfigRepository.findAll()) {
+            if (System.currentTimeMillis() - classifConfig.getLastSubscription() > 24 * 60 * 60 * 1000) {
+                LOGGER.info("Re-Subscribing for " + classifConfig.getId());
+
+
+                OrionEntity e = new OrionEntity();
+                e.setId(classifConfig.getIdPat());
+                e.setIsPattern("true");
+                e.setType(classifConfig.getTypePat());
+                String[] cond = new String[1];
+                cond[0] = "TimeInstant";
+
+                try {
+                    // subscribe to Orion
+                    SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "api/v1/notifyContext/" + classifConfig.getUrlOrion(), cond, "P1D");
+
+                    final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
+                    LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
+
+                    classifConfig.setSubscriptionId(r.getSubscribeResponse().getSubscriptionId());
+                    classifConfig.setLastSubscription(System.currentTimeMillis());
+                    // update classification config entry
+                    classifConfigRepository.save(classifConfig);
+                    LOGGER.info("successful updated the subscription for the anomaly detection job " + classifConfig.getId() + " new subscriptionId is " + classifConfig.getSubscriptionId());
+
+                } catch (IOException | DataAccessException er) {
+                    LOGGER.error(er, er);
+                }
+            }
+        }
     }
 }

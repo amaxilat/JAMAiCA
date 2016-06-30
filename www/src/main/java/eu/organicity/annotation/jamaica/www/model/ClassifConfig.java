@@ -26,6 +26,7 @@ public class ClassifConfig {
     private int jubatusPort;
     private String jubatusConfig;
     private String subscriptionId;
+    private long lastSubscription;
 
     protected ClassifConfig() {}
 
@@ -39,6 +40,7 @@ public class ClassifConfig {
         this.jubatusPort = jubatusPort;
         this.jubatusConfig = jubatusConfig;
         this.subscriptionId = subscriptionId;
+        this.lastSubscription = lastSubscription;
 
     }
 
@@ -97,4 +99,15 @@ public class ClassifConfig {
         return subscriptionId;
     }
 
+    public void setSubscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
+    }
+
+    public long getLastSubscription() {
+        return lastSubscription;
+    }
+
+    public void setLastSubscription(long lastSubscription) {
+        this.lastSubscription = lastSubscription;
+    }
 }
