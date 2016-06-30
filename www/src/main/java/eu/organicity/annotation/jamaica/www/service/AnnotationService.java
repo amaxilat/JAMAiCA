@@ -1,11 +1,13 @@
 package eu.organicity.annotation.jamaica.www.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.organicity.annotation.jamaica.dto.AnnotationDTO;
 import eu.organicity.annotation.jamaica.dto.TagDomainDTO;
 import eu.organicity.annotation.jamaica.www.model.Anomaly;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
+import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class AnnotationService {
 
     @Autowired
     AnomalyRepository anomalyRepository;
+    @Autowired
+    AnomalyConfigRepository anomalyConfigRepository;
 
     @Value("${application.env}")
     private String env;
@@ -46,6 +50,7 @@ public class AnnotationService {
     @Async
     public void storeAnomaly(final String entityId, final String attribute, final String value, final long anomalyConfigId, final double score) {
         storeAnomalyLocaly(entityId, attribute, value, anomalyConfigId, score);
+        storeAnomaly2Annotation(entityId, attribute, value, anomalyConfigRepository.findById(anomalyConfigId), score);
     }
 
     public void storeAnomalyLocaly(final String entityId, final String attribute, final String value, final long anomalyConfigId, final double score) {
@@ -67,21 +72,20 @@ public class AnnotationService {
      * @param anomalyConfig
      * @param score
      */
-    public void storeAnomaly2Annotation(final String entityId, final String attribute, final String value, final AnomalyConfig anomalyConfig, final double score) {
+    public AnnotationDTO storeAnomaly2Annotation(final String entityId, final String attribute, final String value, final AnomalyConfig anomalyConfig, final double score) {
 
         final TagDomainDTO domain = retrieveTagDomain(anomalyConfig.getTags());
 
         final AnnotationDTO annotationDTO = new AnnotationDTO();
         annotationDTO.setAnnotationId(null);
-        annotationDTO.setApplication(null);
+        annotationDTO.setApplication("jamaica");
         annotationDTO.setAssetUrn(entityId);
-        annotationDTO.setDatetime(String.valueOf(System.currentTimeMillis()));
         annotationDTO.setNumericValue(score);
         annotationDTO.setTagUrn(domain.getTags().iterator().next().getUrn());
         annotationDTO.setTextValue(null);
-        annotationDTO.setUser(null);
+        annotationDTO.setUser("jamaica");
 
-        postAnnotation(annotationDTO);
+        return postAnnotation(annotationDTO);
     }
 
 
@@ -94,9 +98,15 @@ public class AnnotationService {
         return null;
     }
 
-    public String postAnnotation(final AnnotationDTO annotationDTO) {
+    public AnnotationDTO postAnnotation(final AnnotationDTO annotationDTO) {
+        LOGGER.info(annotationUrl + "annotations/" + annotationDTO.getAssetUrn());
+        try {
+            LOGGER.info(new ObjectMapper().writeValueAsString(annotationDTO));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return annotationRestTemplate.postForObject(
-                annotationUrl + "annotations/" + annotationDTO.getAssetUrn(), annotationDTO, String.class);
+                annotationUrl + "annotations/" + annotationDTO.getAssetUrn(), annotationDTO, AnnotationDTO.class);
     }
 
 }
