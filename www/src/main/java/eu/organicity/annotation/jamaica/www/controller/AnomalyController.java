@@ -205,7 +205,7 @@ public class AnomalyController extends BaseController {
             AnomalyConfig config = anomalyConfigRepository.findById(id);
             config.setEnable(true);
             anomalyConfigRepository.save(config);
-            return new AnomalyConfigDTO(config);
+            return Utils.newAnomalyConfigDTO(config);
 
     }
 
@@ -224,7 +224,7 @@ public class AnomalyController extends BaseController {
         AnomalyConfig config = anomalyConfigRepository.findById(id);
         config.setEnable(false);
         anomalyConfigRepository.save(config);
-        return new AnomalyConfigDTO(config);
+        return Utils.newAnomalyConfigDTO(config);
 
     }
 }
