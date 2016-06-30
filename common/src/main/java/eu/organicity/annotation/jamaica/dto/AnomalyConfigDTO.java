@@ -1,6 +1,4 @@
-package eu.organicity.annotation.jamaica.www.dto;
-
-import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
+package eu.organicity.annotation.jamaica.dto;
 
 public class AnomalyConfigDTO {
 
@@ -12,15 +10,6 @@ public class AnomalyConfigDTO {
     private String urlExt;
 
     public AnomalyConfigDTO() {
-    }
-
-    public AnomalyConfigDTO(final AnomalyConfig config) {
-        id = config.getId();
-        typePat = config.getTypePat();
-        idPat = config.getIdPat();
-        attribute = config.getAttribute();
-        tagDomain = config.getTags();
-        urlExt = config.getUrlExt();
     }
 
     public long getId() {

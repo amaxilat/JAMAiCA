@@ -1,6 +1,4 @@
-package eu.organicity.annotation.jamaica.www.dto;
-
-import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
+package eu.organicity.annotation.jamaica.dto;
 
 public class ClassifConfigDTO {
 
@@ -12,15 +10,6 @@ public class ClassifConfigDTO {
     private String urlExt;
 
     public ClassifConfigDTO() {
-    }
-
-    public ClassifConfigDTO(final ClassifConfig config) {
-        id = config.getId();
-        typePat = config.getTypePat();
-        idPat = config.getIdPat();
-        attribute = config.getAttribute();
-        tagDomain = config.getTags();
-        urlExt = config.getUrlExt();
     }
 
     public long getId() {

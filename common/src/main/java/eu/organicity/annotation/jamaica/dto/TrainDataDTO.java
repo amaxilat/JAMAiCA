@@ -1,4 +1,4 @@
-package eu.organicity.annotation.jamaica.www.dto;
+package eu.organicity.annotation.jamaica.dto;
 
 /**
  * Created by amaxilatis on 28/6/2016.
