@@ -1,8 +1,10 @@
 package eu.organicity.annotation.jamaica.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AnnotationDTO {
     private Long annotationId;
     private String application;
@@ -75,5 +77,19 @@ public class AnnotationDTO {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "AnnotationDTO{" +
+                "annotationId=" + annotationId +
+                ", application='" + application + '\'' +
+                ", assetUrn='" + assetUrn + '\'' +
+                ", datetime='" + datetime + '\'' +
+                ", numericValue=" + numericValue +
+                ", tagUrn='" + tagUrn + '\'' +
+                ", textValue='" + textValue + '\'' +
+                ", user='" + user + '\'' +
+                '}';
     }
 }
