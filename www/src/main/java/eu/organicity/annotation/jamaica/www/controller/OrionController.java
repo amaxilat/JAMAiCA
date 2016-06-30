@@ -49,10 +49,12 @@ public class OrionController extends BaseController {
 
                     if ((anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
                         if (contextElementAttribute.getType().equals(anomalyConfig.getAttribute())) {
-                            // start jubatus training for anomaly detection
-                            LOGGER.info(element.getId() + " value:" + contextElementAttribute.getValue());
-                            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(), "test", 1);
-                            jubatusService.calcScore(client, contextElementAttribute.getValue(), element.getId(), contextElementAttribute.getType(), anomalyConfig.getId());
+                            // start jubatus training for anomaly detection if anomaly config enable is true
+                            if (anomalyConfig.isEnable()) {
+                                LOGGER.info(element.getId() + " value:" + contextElementAttribute.getValue());
+                                final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(), "test", 1);
+                                jubatusService.calcScore(client, contextElementAttribute.getValue(), element.getId(), contextElementAttribute.getType(), anomalyConfig.getId());
+                            }
                         }
                     } else if ((classifConfig = classifConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
 

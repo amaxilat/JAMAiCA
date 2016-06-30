@@ -29,11 +29,12 @@ public class AnomalyConfig implements Serializable {
     private String jubatusConfig;
     private String subscriptionId;
     private long lastSubscription;
+    private boolean enable;
 
     public AnomalyConfig() {
     }
 
-    public AnomalyConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion, int jubatusPort, String jubatusConfig, String subscriptionId, long lastSubscription) {
+    public AnomalyConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion, int jubatusPort, String jubatusConfig, String subscriptionId, long lastSubscription, boolean enable) {
         this.typePat = typePat;
         this.idPat = idPat;
         this.attribute = attribute;
@@ -44,6 +45,7 @@ public class AnomalyConfig implements Serializable {
         this.jubatusConfig = jubatusConfig;
         this.subscriptionId = subscriptionId;
         this.lastSubscription = lastSubscription;
+        this.enable = enable;
     }
 
     @Override
@@ -119,6 +121,14 @@ public class AnomalyConfig implements Serializable {
 
     public void setLastSubscription(long lastSubscription) {
         this.lastSubscription = lastSubscription;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     @Override

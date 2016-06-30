@@ -76,7 +76,7 @@ public class ClassificationController extends BaseController {
             }
 
             // save anomaly config entry
-            ClassifConfig storedConfig = classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), classificationConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId));
+            ClassifConfig storedConfig = classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), classificationConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId,System.currentTimeMillis(), false));
             LOGGER.info("successful save new classification job. Returned id: " + storedConfig.getId());
 
             return new ClassifConfigDTO(storedConfig);
