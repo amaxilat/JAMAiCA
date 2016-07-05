@@ -8,7 +8,7 @@ public class AnomalyConfigDTO {
     private String attribute;
     private String tagDomain;
     private String urlExt;
-    private String enable;
+    private boolean enable;
     private String contextBrokerUrl;
     private String contextBrokerService;
     private String contextBrokerServicePath;
@@ -64,11 +64,11 @@ public class AnomalyConfigDTO {
         this.urlExt = urlExt;
     }
 
-    public String getEnable() {
+    public boolean isEnable() {
         return enable;
     }
 
-    public void setEnable(String enable) {
+    public void setEnable(boolean enable) {
         this.enable = enable;
     }
 
