@@ -210,7 +210,7 @@ public class ClassificationController extends BaseController {
         config.setEnable(true);
         classifConfigRepository.save(config);
 
-        return new ClassifConfigDTO(config);
+        return Utils.newClassifConfigDTO(config);
     }
 
     /**
@@ -229,6 +229,6 @@ public class ClassificationController extends BaseController {
         config.setEnable(false);
         classifConfigRepository.save(config);
 
-        return new ClassifConfigDTO(config);
+        return Utils.newClassifConfigDTO(config);
     }
 }
