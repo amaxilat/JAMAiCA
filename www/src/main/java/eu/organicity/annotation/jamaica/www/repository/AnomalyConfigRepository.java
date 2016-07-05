@@ -23,4 +23,5 @@ public interface AnomalyConfigRepository extends CrudRepository<AnomalyConfig, L
     Integer findMaxJubatusPort();
 
     AnomalyConfig findBySubscriptionId(String subscriptionId);
+    AnomalyConfig findByUrlOrion(String urlOrion);
 }

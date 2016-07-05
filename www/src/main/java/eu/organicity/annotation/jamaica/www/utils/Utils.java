@@ -45,6 +45,9 @@ public class Utils {
         dto.setAttribute(storedConfig.getAttribute());
         dto.setTagDomain(storedConfig.getTags());
         dto.setUrlExt(storedConfig.getUrlExt());
+        dto.setContextBrokerUrl(storedConfig.getContextBrokerUrl());
+        dto.setContextBrokerService(storedConfig.getContextBrokerService());
+        dto.setContextBrokerServicePath(storedConfig.getContextBrokerServicePath());
         return dto;
     }
 

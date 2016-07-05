@@ -26,6 +26,9 @@ public class AnomalyConfig implements Serializable {
     private String urlExt;
     private String urlOrion;
     private int jubatusPort;
+    private String contextBrokerUrl;
+    private String contextBrokerService;
+    private String contextBrokerServicePath;
     private String jubatusConfig;
     private String subscriptionId;
     private long lastSubscription;
@@ -34,7 +37,10 @@ public class AnomalyConfig implements Serializable {
     public AnomalyConfig() {
     }
 
-    public AnomalyConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion, int jubatusPort, String jubatusConfig, String subscriptionId, long lastSubscription, boolean enable) {
+    public AnomalyConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion,
+                         int jubatusPort, String jubatusConfig, String subscriptionId, long lastSubscription,
+                         boolean enable, String contextBrokerUrl, String contextBrokerService, String contextBrokerServicePath
+    ) {
         this.typePat = typePat;
         this.idPat = idPat;
         this.attribute = attribute;
@@ -46,6 +52,9 @@ public class AnomalyConfig implements Serializable {
         this.subscriptionId = subscriptionId;
         this.lastSubscription = lastSubscription;
         this.enable = enable;
+        this.contextBrokerUrl = contextBrokerUrl;
+        this.contextBrokerService = contextBrokerService;
+        this.contextBrokerServicePath = contextBrokerServicePath;
     }
 
     @Override
@@ -61,10 +70,6 @@ public class AnomalyConfig implements Serializable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getJubatusConfig() {
-        return jubatusConfig;
     }
 
     public String getTypePat() {
@@ -103,12 +108,40 @@ public class AnomalyConfig implements Serializable {
         return urlExt;
     }
 
+    public void setUrlExt(String urlExt) {
+        this.urlExt = urlExt;
+    }
+
     public String getUrlOrion() {
         return urlOrion;
     }
 
+    public void setUrlOrion(String urlOrion) {
+        this.urlOrion = urlOrion;
+    }
+
     public int getJubatusPort() {
         return jubatusPort;
+    }
+
+    public void setJubatusPort(int jubatusPort) {
+        this.jubatusPort = jubatusPort;
+    }
+
+    public String getContextBrokerUrl() {
+        return contextBrokerUrl;
+    }
+
+    public void setContextBrokerUrl(String contextBrokerUrl) {
+        this.contextBrokerUrl = contextBrokerUrl;
+    }
+
+    public String getJubatusConfig() {
+        return jubatusConfig;
+    }
+
+    public void setJubatusConfig(String jubatusConfig) {
+        this.jubatusConfig = jubatusConfig;
     }
 
     public String getSubscriptionId() {
@@ -133,6 +166,22 @@ public class AnomalyConfig implements Serializable {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public String getContextBrokerService() {
+        return contextBrokerService;
+    }
+
+    public void setContextBrokerService(String contextBrokerService) {
+        this.contextBrokerService = contextBrokerService;
+    }
+
+    public String getContextBrokerServicePath() {
+        return contextBrokerServicePath;
+    }
+
+    public void setContextBrokerServicePath(String contextBrokerServicePath) {
+        this.contextBrokerServicePath = contextBrokerServicePath;
     }
 
     @Override

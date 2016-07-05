@@ -41,4 +41,7 @@ public class BaseController {
     @Value("${application.baseUrl}")
     protected String baseUrl;
 
+    @Value("${orion.serverUrl}")
+    protected String contextBrokerServerUrl;
+
 }

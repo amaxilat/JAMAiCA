@@ -53,10 +53,14 @@ public class AnomalyController extends BaseController {
 
         final String randUiid = randomStringGenerator.getUuid();
 
+        // save anomaly config entry
+        AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), anomalyConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, "", System.currentTimeMillis(), false,
+                anomalyConfig.getContextBrokerUrl(), anomalyConfig.getContextBrokerService(), anomalyConfig.getContextBrokerServicePath()));
+        LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
 
         try {
             // subscribe to Orion
-            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "api/v1/notifyContext/" + randUiid, cond, "P1D");
+            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "/v1/notifyContext/" + randUiid, cond, "P1D", storedConfig);
 
 
             final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
@@ -75,11 +79,11 @@ public class AnomalyController extends BaseController {
             jubatusService.launchJubaanomaly(basePort);
 
             // save anomaly config entry
-            AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), anomalyConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId, System.currentTimeMillis(), false));
+            storedConfig.setSubscriptionId(subscriptionId);
+            storedConfig = anomalyConfigRepository.save(storedConfig);
             LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
 
             return Utils.newAnomalyConfigDTO(storedConfig);
-
         } catch (IOException er) {
             LOGGER.error(er, er);
 
@@ -154,6 +158,45 @@ public class AnomalyController extends BaseController {
 
     }
 
+    /**
+     * Subscribe for an existing Anomaly Detection Job with the supplied data.
+     *
+     * @param id the id of the requested {@see AnomalyConfigDTO}.
+     * @return the used {@see AnomalyConfigDTO}.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/v1/config/anomaly/{id}/subscribe", method = RequestMethod.POST, produces = "application/json")
+    AnomalyConfigDTO subscribeAnomaly(@PathVariable("id") long id) {
+        LOGGER.debug("[call] subscribeAnomaly");
+        AnomalyConfig anomalyConfig = anomalyConfigRepository.findById(id);
+
+
+        OrionEntity e = new OrionEntity();
+        e.setId(anomalyConfig.getIdPat());
+        e.setIsPattern("true");
+        e.setType(anomalyConfig.getTypePat());
+        String[] cond = new String[1];
+        cond[0] = "TimeInstant";
+
+        try {
+            // subscribe to Orion
+            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "v1/notifyContext/" + anomalyConfig.getUrlOrion(), cond, "P1D", anomalyConfig);
+
+            final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
+            LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
+
+            anomalyConfig.setSubscriptionId(r.getSubscribeResponse().getSubscriptionId());
+            anomalyConfig.setLastSubscription(System.currentTimeMillis());
+            // update anomaly config entry
+            anomalyConfigRepository.save(anomalyConfig);
+            LOGGER.info("successful updated the subscription for the anomaly detection job " + anomalyConfig.getId() + " new subscriptionId is " + anomalyConfig.getSubscriptionId());
+        } catch (IOException | DataAccessException er) {
+            LOGGER.error(er, er);
+        }
+
+        return Utils.newAnomalyConfigDTO(anomalyConfig);
+    }
+
 
     @Scheduled(cron = "0 0 * * * ?")
     void checkSubscriptions() {
@@ -172,7 +215,7 @@ public class AnomalyController extends BaseController {
 
                 try {
                     // subscribe to Orion
-                    SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "api/v1/notifyContext/" + anomalyConfig.getUrlOrion(), cond, "P1D");
+                    SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "v1/notifyContext/" + anomalyConfig.getUrlOrion(), cond, "P1D", anomalyConfig);
 
                     final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
                     LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
@@ -202,10 +245,10 @@ public class AnomalyController extends BaseController {
     AnomalyConfigDTO enableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] enableAnomalyConfig");
 
-            AnomalyConfig config = anomalyConfigRepository.findById(id);
-            config.setEnable(true);
-            anomalyConfigRepository.save(config);
-            return Utils.newAnomalyConfigDTO(config);
+        AnomalyConfig config = anomalyConfigRepository.findById(id);
+        config.setEnable(true);
+        anomalyConfigRepository.save(config);
+        return Utils.newAnomalyConfigDTO(config);
 
     }
 

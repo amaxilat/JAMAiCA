@@ -32,9 +32,9 @@ public class OrionController extends BaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/notifyContext/{contextConnectionId}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = {"/v1/notifyContext/{contextConnectionId}", "/api/v1/notifyContext/{contextConnectionId}"}, method = RequestMethod.POST, produces = "application/json")
     SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate, @PathVariable("contextConnectionId") String contextConnectionId) {
-        LOGGER.debug("[call] notifyContext");
+        LOGGER.debug("[call] notifyContext " + subscriptionUpdate.getSubscriptionId());
         try {
             final String subscriptionId = subscriptionUpdate.getSubscriptionId();
 
@@ -46,23 +46,26 @@ public class OrionController extends BaseController {
 
                 final OrionContextElement element = wrapper.getContextElement();
                 for (final Attribute contextElementAttribute : element.getAttributes()) {
-
-                    if ((anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
+                    anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId);
+                    if (anomalyConfig == null) {
+                        anomalyConfig = anomalyConfigRepository.findByUrlOrion(contextConnectionId);
+                    }
+                    if (anomalyConfig != null) {
                         if (contextElementAttribute.getType().equals(anomalyConfig.getAttribute())) {
                             // start jubatus training for anomaly detection if anomaly config enable is true
                             if (anomalyConfig.isEnable()) {
                                 LOGGER.info(element.getId() + " value:" + contextElementAttribute.getValue());
                                 final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(), "test", 1);
                                 jubatusService.calcScore(client, contextElementAttribute.getValue(), element.getId(), contextElementAttribute.getType(), anomalyConfig.getId());
+                            } else {
+                                LOGGER.warn("SubscriptionId: " + subscriptionId + " Disabled.");
                             }
                         }
                     } else if ((classifConfig = classifConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
 
 
                     } else {
-
                         LOGGER.error("SubscriptionId: " + subscriptionId + " Not Found.");
-                        return null;
                     }
                 }
             }

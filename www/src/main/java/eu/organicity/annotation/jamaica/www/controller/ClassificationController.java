@@ -55,10 +55,13 @@ public class ClassificationController extends BaseController {
 
         final String randUiid = randomStringGenerator.getUuid();
 
+        // save anomaly config entry
+        ClassifConfig storedConfig = classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), classificationConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, "", System.currentTimeMillis(), false));
+        LOGGER.info("successful save new classification job. Returned id: " + storedConfig.getId());
 
         try {
             // subscribe to Orion
-            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "api/v1/notifyContext/" + randUiid, cond, "P1D");
+            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "v1/notifyContext/" + randUiid, cond, "P1D", storedConfig);
 
 
             final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
@@ -74,9 +77,8 @@ public class ClassificationController extends BaseController {
                 basePort = maxJubatusPortEntry + 1;
             }
 
-            // save anomaly config entry
-            ClassifConfig storedConfig = classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), classificationConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, subscriptionId,System.currentTimeMillis(), false));
-            LOGGER.info("successful save new classification job. Returned id: " + storedConfig.getId());
+            storedConfig.setSubscriptionId(subscriptionId);
+            storedConfig = classifConfigRepository.save(storedConfig);
 
             return Utils.newClassifConfigDTO(storedConfig);
 
@@ -176,7 +178,7 @@ public class ClassificationController extends BaseController {
 
                 try {
                     // subscribe to Orion
-                    SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "api/v1/notifyContext/" + classifConfig.getUrlOrion(), cond, "P1D");
+                    SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "v1/notifyContext/" + classifConfig.getUrlOrion(), cond, "P1D", classifConfig);
 
                     final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
                     LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
