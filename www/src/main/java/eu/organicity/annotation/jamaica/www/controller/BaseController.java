@@ -1,6 +1,9 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
+import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
+import eu.organicity.annotation.jamaica.www.repository.ClassifConfigRepository;
 import eu.organicity.annotation.jamaica.www.service.JubatusService;
+import eu.organicity.annotation.jamaica.www.service.OrionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +18,30 @@ public class BaseController {
     protected static final Logger LOGGER = Logger.getLogger(BaseController.class);
 
     @Autowired
+    AnomalyConfigRepository anomalyConfigRepository;
+
+    @Autowired
+    ClassifConfigRepository classifConfigRepository;
+
+    @Autowired
     JubatusService jubatusService;
+
+    @Autowired
+    OrionService orionService;
+
+    @Value("${jubatus.host}")
+    protected String jubatusHost;
+
+    @Value("${jubatus.basePort}")
+    protected int basePort;
 
     @Value("${application.version}")
     protected String applicationVersion;
+
+    @Value("${application.baseUrl}")
+    protected String baseUrl;
+
+    @Value("${orion.serverUrl}")
+    protected String contextBrokerServerUrl;
 
 }

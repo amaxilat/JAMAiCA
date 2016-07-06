@@ -17,66 +17,108 @@ public class ClassifConfig {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
-    private String type_pat;
-    private String id_pat;
+    private String typePat;
+    private String idPat;
+    private String attribute;
     private String tags;
-    private String url_ext;
-    private String url_orion;
-    private int jubatus_port;
-    private String jubatus_config;
-    private String subscription_id;
+    private String urlExt;
+    private String urlOrion;
+    private int jubatusPort;
+    private String jubatusConfig;
+    private String subscriptionId;
+    private long lastSubscription;
+    private boolean enable;
+
 
     protected ClassifConfig() {}
 
-    public ClassifConfig(String type_pat, String id_pat, String tags, String url_ext, String url_orion, int jubatus_port, String jubatus_config, String subscription_id) {
-        this.type_pat = type_pat;
-        this.id_pat = id_pat;
+    public ClassifConfig(String typePat, String idPat, String attribute, String tags, String urlExt, String urlOrion, int jubatusPort, String jubatusConfig, String subscriptionId, long lastSubscription, boolean enable) {
+        this.typePat = typePat;
+        this.idPat = idPat;
+        this.attribute = attribute;
         this.tags = tags;
-        this.url_ext = url_ext;
-        this.url_orion = url_orion;
-        this.jubatus_port = jubatus_port;
-        this.jubatus_config = jubatus_config;
-        this.subscription_id = subscription_id;
+        this.urlExt = urlExt;
+        this.urlOrion = urlOrion;
+        this.jubatusPort = jubatusPort;
+        this.jubatusConfig = jubatusConfig;
+        this.subscriptionId = subscriptionId;
+        this.lastSubscription = lastSubscription;
+        this.enable = enable;
 
     }
 
     @Override
     public String toString() {
         return String.format(
-                "ClassifConfig[id=%d, type_pat='%s', id_pat='%s', tags='%s', url_ext='%s', url_orion='%s', jubatus_port='%d', jubatus_config='%s', subscription_id='%s']",
-                id, type_pat, id_pat, tags, url_ext, url_orion, jubatus_port, jubatus_config,subscription_id);
+                "ClassifConfig[id=%d, typePat='%s', idPat='%s', attribute='%s', tags='%s', urlExt='%s', urlOrion='%s', jubatusPort='%d', jubatusConfig='%s', subscriptionId='%s']",
+                id, typePat, idPat, attribute, tags, urlExt, urlOrion, jubatusPort, jubatusConfig, subscriptionId);
     }
 
-    public String getJubatus_config(){
-        return jubatus_config;
+    public long getId() {
+        return id;
     }
 
-    public String getType_pat(){
-        return type_pat;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getId_pat(){
-        return id_pat;
+    public String getJubatusConfig(){
+        return jubatusConfig;
+    }
+
+    public String getTypePat(){
+        return typePat;
+    }
+
+    public String getIdPat(){
+        return idPat;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     public String getTags(){
         return tags;
     }
 
-    public String getUrl_ext(){
-        return url_ext;
+    public String getUrlExt(){
+        return urlExt;
     }
 
-    public String getUrl_orion(){
-        return url_orion;
+    public String getUrlOrion(){
+        return urlOrion;
     }
 
-    public int getJubatus_port(){
-        return jubatus_port;
+    public int getJubatusPort(){
+        return jubatusPort;
     }
 
-    public String getSubscription_id(){
-        return subscription_id;
+    public String getSubscriptionId(){
+        return subscriptionId;
     }
 
+    public void setSubscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
+    }
+
+    public long getLastSubscription() {
+        return lastSubscription;
+    }
+
+    public void setLastSubscription(long lastSubscription) {
+        this.lastSubscription = lastSubscription;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 }

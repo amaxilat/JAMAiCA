@@ -1,6 +1,6 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
-import eu.organicity.annotation.jamaica.www.dto.VersionDTO;
+import eu.organicity.annotation.jamaica.dto.VersionDTO;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +15,18 @@ public class RestController extends BaseController {
     /**
      * a log4j logger to print messages.
      */
+
+
     protected static final Logger LOGGER = Logger.getLogger(RestController.class);
 
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
+    String getHome() {
+        LOGGER.debug("[call] /");
+        return "redirect:/swagger-ui.html";
+    }
 
     @ResponseBody
-    @RequestMapping(value = "/api/v1/version", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/v1/version", method = RequestMethod.GET, produces = "application/json")
     VersionDTO getVersion(final HttpServletResponse response) {
         LOGGER.debug("[call] getVersion");
         return new VersionDTO(applicationVersion);
