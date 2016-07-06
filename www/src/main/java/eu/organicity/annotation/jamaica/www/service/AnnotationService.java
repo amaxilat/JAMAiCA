@@ -80,9 +80,8 @@ public class AnnotationService {
         annotationDTO.setAnnotationId(null);
         annotationDTO.setApplication("jamaica");
         annotationDTO.setAssetUrn(entityId);
-        annotationDTO.setNumericValue(score);
+        annotationDTO.setTextValue(String.valueOf(score));
         annotationDTO.setTagUrn(domain.getTags().iterator().next().getUrn());
-        annotationDTO.setTextValue(null);
         annotationDTO.setUser("jamaica");
 
         return postAnnotation(annotationDTO);
