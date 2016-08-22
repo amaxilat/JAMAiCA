@@ -12,7 +12,6 @@ import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,10 +46,9 @@ public class AnnotationService {
 
     }
 
-    @Async
     public void storeAnomaly(final String entityId, final String attribute, final String value, final long anomalyConfigId, final double score) {
         storeAnomalyLocaly(entityId, attribute, value, anomalyConfigId, score);
-        storeAnomaly2Annotation(entityId, attribute, value, anomalyConfigRepository.findById(anomalyConfigId), score);
+//        storeAnomaly2Annotation(entityId, attribute, value, anomalyConfigRepository.findById(anomalyConfigId), score);
     }
 
     public void storeAnomalyLocaly(final String entityId, final String attribute, final String value, final long anomalyConfigId, final double score) {
@@ -60,6 +58,7 @@ public class AnnotationService {
         anomaly.setAttributeValue(value);
         anomaly.setScore(score);
         anomaly.setAnomalyConfigId(anomalyConfigId);
+        anomaly.setStartTime(System.currentTimeMillis());
         anomalyRepository.save(anomaly);
     }
 
@@ -104,8 +103,14 @@ public class AnnotationService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return annotationRestTemplate.postForObject(
-                annotationUrl + "annotations/" + annotationDTO.getAssetUrn(), annotationDTO, AnnotationDTO.class);
+        String response = annotationRestTemplate.postForObject(
+                annotationUrl + "annotations/" + annotationDTO.getAssetUrn(), annotationDTO, String.class);
+        try {
+            return new ObjectMapper().readValue(response, AnnotationDTO.class);
+        } catch (IOException e) {
+            LOGGER.error("RETURNED " + response);
+            return null;
+        }
     }
 
 }

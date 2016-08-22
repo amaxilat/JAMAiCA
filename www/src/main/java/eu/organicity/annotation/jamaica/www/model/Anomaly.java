@@ -20,6 +20,7 @@ public class Anomaly {
     private String attributeValue;
     private double score;
     private long anomalyConfigId;
+    private long startTime;
 
     public long getId() {
         return id;
@@ -67,5 +68,13 @@ public class Anomaly {
 
     public void setAnomalyConfigId(long anomalyConfigId) {
         this.anomalyConfigId = anomalyConfigId;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 }
