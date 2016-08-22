@@ -91,6 +91,20 @@
         </dependency>
 
         <!--#################################################################################################-->
+        <!--Security-->
+
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-tomcat8-adapter</artifactId>
+            <version>2.1.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-security-adapter</artifactId>
+            <version>2.1.0.Final</version>
+        </dependency>
+
+        <!--#################################################################################################-->
         <!--Jubatus-->
 
         <dependency>
@@ -184,6 +198,16 @@
             <version>9.4.1208.jre7</version>
         </dependency>
 
+
+        <!--#################################################################################################-->
+        <!--dev-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!--#################################################################################################-->
         <!--Tests-->
         <dependency>
@@ -191,6 +215,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
 

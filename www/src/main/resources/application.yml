@@ -21,6 +21,7 @@ spring:
     hibernate.ddl-auto: update
   datasource:
     driverClassName: org.postgresql.Driver
+server.port: 8080
 application:
   baseUrl: "http://150.140.5.27:8080/"
   annotationUrl: "http://146.169.46.162:8084/"
@@ -50,6 +51,7 @@ spring:
 hibernate:
   dialect: org.hibernate.dialect.HSQLDialect
   show_sql: false
+server.port: 8080
 application:
   baseUrl: "http://150.140.5.32:8080/"
   annotationUrl: "http://146.169.46.162:8084/"
