@@ -81,7 +81,6 @@ public class JubatusService {
      * @param attribute       the attribute to be tested.
      * @param anomalyConfigId the id of the anomaly detection job performed.
      */
-    @Async
     public void calcScore(final AnomalyClient anomalyClient, final String value, final String entityId, final String attribute, final long anomalyConfigId) {
         final float score = anomalyClient.calcScore(Utils.makeDatum(Double.parseDouble(value)));
         if (score < 3) {
