@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import us.jubat.anomaly.AnomalyClient;
 
 @Controller
-public class OrionController extends BaseController {
+public class ContextController extends BaseController {
 
     /**
      * a log4j logger to print messages.
      */
 
 
-    protected static final Logger LOGGER = Logger.getLogger(OrionController.class);
+    protected static final Logger LOGGER = Logger.getLogger(ContextController.class);
 
     /**
      * A method that handles subscription updates from Orion or users and starts the data validation against Jubatus.
