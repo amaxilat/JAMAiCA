@@ -45,7 +45,7 @@ application:
 ---
 spring:
   profiles: local
-  datasource.url: jdbc:hsqldb:file:hsqldb
+  datasource.url: jdbc:hsqldb:file:hsqldb/hsqldb
   jpa.hibernate.ddl-auto: update
 
 hibernate:
