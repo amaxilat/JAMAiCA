@@ -7,6 +7,7 @@
     <artifactId>jamaica-www</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <name>JAMAiCA Service</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,7 +61,7 @@
 
         <dependency>
             <groupId>eu.organicity.annotation.jamaica</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>jamaica-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
