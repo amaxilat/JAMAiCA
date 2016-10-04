@@ -39,7 +39,7 @@ public class AnomalyController extends BaseController {
      * @return the added {@see AnomalyConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly", method = RequestMethod.PUT, produces = "application/json")
+    @RequestMapping(value = "/v1/config/anomaly", method = RequestMethod.PUT, produces = APPLICATION_JSON)
     AnomalyConfigDTO putAnomalyConfig(final HttpServletResponse response, @RequestBody AnomalyConfigDTO anomalyConfig) {
         LOGGER.debug("[call] putAnomalyConfig");
 
@@ -104,7 +104,7 @@ public class AnomalyController extends BaseController {
      * @return the existing {@see AnomalyConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     AnomalyConfigDTO getAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getAnomalyConfig");
 
@@ -121,7 +121,7 @@ public class AnomalyController extends BaseController {
      * @return the existing {@see AnomalyConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.DELETE, produces = APPLICATION_JSON)
     AnomalyConfigDTO deleteAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getAnomalyConfig");
 
@@ -139,7 +139,7 @@ public class AnomalyController extends BaseController {
      * @return the used {@see TrainDataListDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly/{id}/train", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/v1/config/anomaly/{id}/train", method = RequestMethod.POST, produces = APPLICATION_JSON)
     TrainDataListDTO trainAnomaly(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id) {
         LOGGER.debug("[call] trainAnomaly");
         AnomalyConfig anomalyConfig = anomalyConfigRepository.findById(id);
@@ -165,7 +165,7 @@ public class AnomalyController extends BaseController {
      * @return the used {@see AnomalyConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly/{id}/subscribe", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/v1/config/anomaly/{id}/subscribe", method = RequestMethod.POST, produces = APPLICATION_JSON)
     AnomalyConfigDTO subscribeAnomaly(@PathVariable("id") long id) {
         LOGGER.debug("[call] subscribeAnomaly");
         AnomalyConfig anomalyConfig = anomalyConfigRepository.findById(id);
@@ -241,7 +241,7 @@ public class AnomalyController extends BaseController {
      * @return the existing {@see AnomalyConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly/{id}/enable", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/v1/config/anomaly/{id}/enable", method = RequestMethod.POST, produces = APPLICATION_JSON)
     AnomalyConfigDTO enableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] enableAnomalyConfig");
 
@@ -260,7 +260,7 @@ public class AnomalyController extends BaseController {
      * @return the existing {@see AnomalyConfigDTO}.
      */
     @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly/{id}/disable", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/v1/config/anomaly/{id}/disable", method = RequestMethod.POST, produces = APPLICATION_JSON)
     AnomalyConfigDTO disableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] disableAnomalyConfig");
 

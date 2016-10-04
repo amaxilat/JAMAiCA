@@ -3,8 +3,8 @@ package eu.organicity.annotation.jamaica.www.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.organicity.annotation.jamaica.dto.AnnotationDTO;
-import eu.organicity.annotation.jamaica.dto.TagDomainDTO;
+import eu.organicity.annotation.service.dto.AnnotationDTO;
+import eu.organicity.annotation.service.dto.TagDomainDTO;
 import eu.organicity.annotation.jamaica.www.model.Anomaly;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;

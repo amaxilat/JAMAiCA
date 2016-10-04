@@ -1,4 +1,4 @@
-package eu.organicity.annotation.jamaica.dto;
+package eu.organicity.annotation.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

@@ -19,14 +19,14 @@ public class RestController extends BaseController {
 
     protected static final Logger LOGGER = Logger.getLogger(RestController.class);
 
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = APPLICATION_JSON)
     String getHome() {
         LOGGER.debug("[call] /");
         return "redirect:/swagger-ui.html";
     }
 
     @ResponseBody
-    @RequestMapping(value = "/v1/version", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/v1/version", method = RequestMethod.GET, produces = APPLICATION_JSON)
     VersionDTO getVersion(final HttpServletResponse response) {
         LOGGER.debug("[call] getVersion");
         return new VersionDTO(applicationVersion);

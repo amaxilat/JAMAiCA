@@ -1,4 +1,4 @@
-package eu.organicity.annotation.jamaica.dto;
+package eu.organicity.annotation.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,7 +10,7 @@ public class AnnotationDTO {
     private String application;
     private String assetUrn;
     private String datetime;
-    private double numericValue;
+    private Double numericValue;
     private String tagUrn;
     private String textValue;
     private String user;
@@ -47,11 +47,11 @@ public class AnnotationDTO {
         this.datetime = datetime;
     }
 
-    public double getNumericValue() {
+    public Double getNumericValue() {
         return numericValue;
     }
 
-    public void setNumericValue(double numericValue) {
+    public void setNumericValue(Double numericValue) {
         this.numericValue = numericValue;
     }
 
