@@ -16,6 +16,8 @@ public class BaseController {
      * a log4j logger to print messages.
      */
     protected static final Logger LOGGER = Logger.getLogger(BaseController.class);
+    protected static final String APPLICATION_JSON = "application/json";
+    protected static final String TEXT_PLAIN = "text/plain";
 
     @Autowired
     AnomalyConfigRepository anomalyConfigRepository;
