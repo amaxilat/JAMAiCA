@@ -1,14 +1,13 @@
 package eu.organicity.annotation.jamaica.www.service;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.organicity.annotation.service.dto.AnnotationDTO;
-import eu.organicity.annotation.service.dto.TagDomainDTO;
 import eu.organicity.annotation.jamaica.www.model.Anomaly;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
+import eu.organicity.annotation.service.client.AnnotationServiceClient;
+import eu.organicity.annotation.service.dto.AnnotationDTO;
+import eu.organicity.annotation.service.dto.TagDomainDTO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.net.URL;
 
 @Service
 public class AnnotationService {
@@ -38,12 +35,11 @@ public class AnnotationService {
     public String annotationUrl;
 
     private RestTemplate annotationRestTemplate;
+    private AnnotationServiceClient annotation = new AnnotationServiceClient("");
 
     @PostConstruct
     public void init() {
         LOGGER.debug("init");
-        annotationRestTemplate = new RestTemplate();
-
     }
 
     public void storeAnomaly(final String entityId, final String attribute, final String value, final long anomalyConfigId, final double score) {
@@ -73,7 +69,7 @@ public class AnnotationService {
      */
     public AnnotationDTO storeAnomaly2Annotation(final String entityId, final String attribute, final String value, final AnomalyConfig anomalyConfig, final double score) {
 
-        final TagDomainDTO domain = retrieveTagDomain(anomalyConfig.getTags());
+        final TagDomainDTO domain = annotation.getTagDomain(anomalyConfig.getTags());
 
         final AnnotationDTO annotationDTO = new AnnotationDTO();
         annotationDTO.setAnnotationId(null);
@@ -87,30 +83,9 @@ public class AnnotationService {
     }
 
 
-    public TagDomainDTO retrieveTagDomain(final String tagDomainName) {
-        try {
-            return new ObjectMapper().readValue(new URL(annotationUrl + "tagDomains/" + tagDomainName), TagDomainDTO.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public AnnotationDTO postAnnotation(final AnnotationDTO annotationDTO) {
         LOGGER.info(annotationUrl + "annotations/" + annotationDTO.getAssetUrn());
-        try {
-            LOGGER.info(new ObjectMapper().writeValueAsString(annotationDTO));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        String response = annotationRestTemplate.postForObject(
-                annotationUrl + "annotations/" + annotationDTO.getAssetUrn(), annotationDTO, String.class);
-        try {
-            return new ObjectMapper().readValue(response, AnnotationDTO.class);
-        } catch (IOException e) {
-            LOGGER.error("RETURNED " + response);
-            return null;
-        }
+        return annotation.postAnnotation(annotationDTO);
     }
 
 }
