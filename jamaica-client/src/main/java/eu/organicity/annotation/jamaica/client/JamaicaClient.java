@@ -2,19 +2,21 @@ package eu.organicity.annotation.jamaica.client;
 
 import eu.organicity.annotation.jamaica.dto.AnomalyConfigDTO;
 import eu.organicity.annotation.jamaica.dto.ClassifConfigDTO;
+import eu.organicity.client.OrganicityServiceBaseClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
 
-public class JamaicaClient {
+import java.util.logging.Logger;
+
+public class JamaicaClient extends OrganicityServiceBaseClient {
+    private static final Logger LOGGER = Logger.getLogger(JamaicaClient.class.getName());
+
     private static final String BASE_URL = "http://jamaica.organicity.eu/v1/";
-    private final RestTemplate restTemplate;
 
-    public JamaicaClient() {
-        restTemplate = new RestTemplate();
-
+    public JamaicaClient(final String token) {
+        super(token);
     }
 
     public AnomalyConfigDTO getAnomalyConfig(final long id) {
