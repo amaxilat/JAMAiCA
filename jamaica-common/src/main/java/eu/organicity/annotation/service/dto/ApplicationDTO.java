@@ -3,13 +3,17 @@ package eu.organicity.annotation.service.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TagDTO {
+public class ApplicationDTO {
 
     private Long id;
     private String urn;
-    private String name;
+    private String description;
+    private List<TagDomainDTO> tagDomains;
+
 
     public Long getId() {
         return id;
@@ -27,17 +31,25 @@ public class TagDTO {
         this.urn = urn;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<TagDomainDTO> getTagDomains() {
+        return tagDomains;
+    }
+
+    public void setTagDomains(List<TagDomainDTO> tagDomains) {
+        this.tagDomains = tagDomains;
     }
 
     @Override
     public String toString() {
-        return "TagDTO{" +
+        return "ApplicationDTO{" +
                 "urn='" + urn + '\'' +
                 '}';
     }

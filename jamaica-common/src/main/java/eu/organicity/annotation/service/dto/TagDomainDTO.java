@@ -48,10 +48,7 @@ public class TagDomainDTO {
     @Override
     public String toString() {
         return "TagDomainDTO{" +
-                "id=" + id +
-                ", urn='" + urn + '\'' +
-                ", description='" + description + '\'' +
-                ", tags=" + tags +
+                "urn='" + urn + '\'' +
                 '}';
     }
 }

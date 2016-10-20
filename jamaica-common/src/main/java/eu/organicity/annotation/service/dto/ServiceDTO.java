@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TagDTO {
+public class ServiceDTO {
 
     private Long id;
     private String urn;
-    private String name;
+    private String description;
 
     public Long getId() {
         return id;
@@ -27,17 +27,17 @@ public class TagDTO {
         this.urn = urn;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public String toString() {
-        return "TagDTO{" +
+        return "ServiceDTO{" +
                 "urn='" + urn + '\'' +
                 '}';
     }
