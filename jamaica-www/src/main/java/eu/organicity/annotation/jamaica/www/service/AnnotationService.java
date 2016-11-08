@@ -3,8 +3,10 @@ package eu.organicity.annotation.jamaica.www.service;
 
 import eu.organicity.annotation.jamaica.www.model.Anomaly;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
+import eu.organicity.annotation.jamaica.www.model.Classification;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
+import eu.organicity.annotation.jamaica.www.repository.ClassificationRepository;
 import eu.organicity.annotation.service.client.AnnotationServiceClient;
 import eu.organicity.annotation.service.dto.AnnotationDTO;
 import eu.organicity.annotation.service.dto.TagDomainDTO;
@@ -25,6 +27,8 @@ public class AnnotationService {
 
     @Autowired
     AnomalyRepository anomalyRepository;
+    @Autowired
+    ClassificationRepository classificationRepository;
     @Autowired
     AnomalyConfigRepository anomalyConfigRepository;
 
@@ -87,5 +91,42 @@ public class AnnotationService {
         LOGGER.info(annotationUrl + "annotations/" + annotationDTO.getAssetUrn());
         return annotation.postAnnotation(annotationDTO);
     }
+
+    public void storeClassification(String entityId, String attribute, String value, long classificationConfigId, String tag, double score) {
+        storeClassificationLocaly(entityId, attribute, value, classificationConfigId, tag, score);
+        try {
+            storeClassification2Annotation(entityId, attribute, value, classificationConfigId, tag, score);
+        } catch (Exception e) {
+            LOGGER.error(e, e);
+        }
+    }
+
+    public AnnotationDTO storeClassification2Annotation(final String entityId, final String attribute, final String value,
+                                                        final long classificationConfigId, final String tag, final double score) {
+
+        final AnnotationDTO annotationDTO = new AnnotationDTO();
+        annotationDTO.setAnnotationId(null);
+        annotationDTO.setApplication("jamaica");
+        annotationDTO.setAssetUrn(entityId);
+        annotationDTO.setTextValue(String.valueOf(score));
+        annotationDTO.setTagUrn(tag);
+        annotationDTO.setUser("jamaica");
+
+        return postAnnotation(annotationDTO);
+    }
+
+    public void storeClassificationLocaly(final String entityId, final String attribute, final String value,
+                                          final long classificationConfigId, final String tag, final double score) {
+        final Classification classification = new Classification();
+        classification.setEntityId(entityId);
+        classification.setEntityAttribute(attribute);
+        classification.setAttributeValue(value);
+        classification.setTag(tag);
+        classification.setScore(score);
+        classification.setClassificationConfigId(classificationConfigId);
+        classification.setStartTime(System.currentTimeMillis());
+        classificationRepository.save(classification);
+    }
+
 
 }
