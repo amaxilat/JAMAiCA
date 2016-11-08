@@ -6,6 +6,13 @@ package eu.organicity.annotation.jamaica.dto;
 public class TrainDataDTO {
     private String value;
 
+    public TrainDataDTO() {
+    }
+
+    public TrainDataDTO(String value) {
+        this.value = value;
+    }
+
     public String getValue() {
         return value;
     }

@@ -8,6 +8,10 @@ public class ClassifConfigDTO {
     private String attribute;
     private String tagDomain;
     private String urlExt;
+    private boolean enable;
+    private String contextBrokerUrl;
+    private String contextBrokerService;
+    private String contextBrokerServicePath;
 
     public ClassifConfigDTO() {
     }
@@ -58,5 +62,37 @@ public class ClassifConfigDTO {
 
     public void setUrlExt(String urlExt) {
         this.urlExt = urlExt;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    public String getContextBrokerUrl() {
+        return contextBrokerUrl;
+    }
+
+    public void setContextBrokerUrl(String contextBrokerUrl) {
+        this.contextBrokerUrl = contextBrokerUrl;
+    }
+
+    public String getContextBrokerService() {
+        return contextBrokerService;
+    }
+
+    public void setContextBrokerService(String contextBrokerService) {
+        this.contextBrokerService = contextBrokerService;
+    }
+
+    public String getContextBrokerServicePath() {
+        return contextBrokerServicePath;
+    }
+
+    public void setContextBrokerServicePath(String contextBrokerServicePath) {
+        this.contextBrokerServicePath = contextBrokerServicePath;
     }
 }
