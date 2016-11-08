@@ -1,7 +1,9 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
 import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
+import eu.organicity.annotation.jamaica.www.repository.AnomalyTrainDataRepository;
 import eu.organicity.annotation.jamaica.www.repository.ClassifConfigRepository;
+import eu.organicity.annotation.jamaica.www.repository.ClassificationTrainDataRepository;
 import eu.organicity.annotation.jamaica.www.service.JubatusService;
 import eu.organicity.annotation.jamaica.www.service.OrionService;
 import org.apache.log4j.Logger;
@@ -23,7 +25,13 @@ public class BaseController {
     AnomalyConfigRepository anomalyConfigRepository;
 
     @Autowired
+    AnomalyTrainDataRepository anomalyTrainDataRepository;
+
+    @Autowired
     ClassifConfigRepository classifConfigRepository;
+
+    @Autowired
+    ClassificationTrainDataRepository classificationTrainDataRepository;
 
     @Autowired
     JubatusService jubatusService;
