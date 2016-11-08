@@ -19,7 +19,7 @@ import java.io.IOException;
 public class OrionService {
 
     @Value("${orion.serverUrl}")
-    private String serverUrl;
+    private String contextBrokerUrl;
 
     @Value("${orion.token}")
     private String token;
@@ -35,7 +35,7 @@ public class OrionService {
 
     @PostConstruct
     public void init() {
-        this.client = new OrionClient(this.serverUrl, this.token, this.service, this.servicePath);
+        this.client = new OrionClient(this.contextBrokerUrl, this.token, this.service, this.servicePath);
     }
 
     /**
@@ -53,7 +53,7 @@ public class OrionService {
     public SubscriptionResponse subscribeToOrion(
             final OrionEntity entity, final String[] attributes, final String reference, final String[] conditions,
             final String duration, AnomalyConfig anomalyConfig) throws IOException {
-        if (serverUrl.equals(anomalyConfig.getContextBrokerUrl())) {
+        if (contextBrokerUrl.equals(anomalyConfig.getContextBrokerUrl())) {
             return subscribeToOrion(entity, attributes, reference, conditions, duration, client);
         } else {
             final OrionClient newClient = new OrionClient(anomalyConfig.getContextBrokerUrl(),
@@ -98,4 +98,15 @@ public class OrionService {
         return client.subscribeChange(entity, attributes, reference, conditions, duration);
     }
 
+    public String getContextBrokerUrl() {
+        return contextBrokerUrl;
+    }
+
+    public String getContextBrokerService() {
+        return service;
+    }
+
+    public String getContextBrokerServicePath() {
+        return servicePath;
+    }
 }
