@@ -9,8 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import us.jubat.anomaly.AnomalyClient;
+import us.jubat.classifier.ClassifierClient;
+import us.jubat.classifier.EstimateResult;
+import us.jubat.common.Datum;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class JubatusService {
@@ -42,7 +47,7 @@ public class JubatusService {
     public Process launchJubaclassifier(final int port) {
         if ("production".equals(env)) {
             try {
-                return Runtime.getRuntime().exec("source /opt/jubatus/profile ; jubaclassifier -p " + port + " -f classifier.json");
+                return Runtime.getRuntime().exec("source /opt/jubatus/profile ; jubaclassifier -p " + port + " -f /home/amaxilatis/classification.json");
             } catch (Exception e) {
                 LOGGER.error(e, e);
                 return null;
@@ -89,6 +94,33 @@ public class JubatusService {
             LOGGER.info("Value is abnormal! score: " + score);
             annotationService.storeAnomaly(entityId, attribute, value, anomalyConfigId, score);
         }
+    }
+
+    /**
+     * Calculates the anomaly score for an Orion attribute.
+     *
+     * @param classificationClient   an instance of {@see Class}.
+     * @param value                  the value that needs to be checked oven the Jubatus instance.
+     * @param entityId               the id of the entity that produced the value.
+     * @param attribute              the attribute to be tested.
+     * @param classificationConfigId the id of the classification job performed.
+     */
+    public void calcScore(final ClassifierClient classificationClient, final String value, final String entityId, final String attribute, final long classificationConfigId) {
+
+        final List<List<EstimateResult>> score = classificationClient.classify(Utils.makeDatumList(Double.parseDouble(value)));
+        double maxVal = 0;
+        String maxLabel = "";
+        for (List<EstimateResult> estimateResults : score) {
+            for (EstimateResult estimateResult : estimateResults) {
+                if (maxVal < estimateResult.score) {
+                    maxVal = estimateResult.score;
+                    maxLabel = estimateResult.label;
+                }
+            }
+        }
+        LOGGER.info("Value is " + maxLabel + ", score: " + maxVal);
+
+        annotationService.storeClassification(entityId, attribute, value, classificationConfigId, maxLabel, maxVal);
     }
 
     /**
