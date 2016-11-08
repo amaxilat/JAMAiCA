@@ -22,5 +22,6 @@ public interface ClassifConfigRepository extends CrudRepository<ClassifConfig, L
     Integer findMaxJubatusPort();
 
     ClassifConfig findBySubscriptionId(String subscriptionId);
+    ClassifConfig findByUrlOrion(String urlOrion);
 
 }

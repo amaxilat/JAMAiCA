@@ -24,6 +24,9 @@ public class ClassifConfig {
     private String urlExt;
     private String urlOrion;
     private int jubatusPort;
+    private String contextBrokerUrl;
+    private String contextBrokerService;
+    private String contextBrokerServicePath;
     private String jubatusConfig;
     private String subscriptionId;
     private long lastSubscription;
@@ -44,6 +47,9 @@ public class ClassifConfig {
         this.subscriptionId = subscriptionId;
         this.lastSubscription = lastSubscription;
         this.enable = enable;
+        this.contextBrokerUrl = contextBrokerUrl;
+        this.contextBrokerService = contextBrokerService;
+        this.contextBrokerServicePath = contextBrokerServicePath;
 
     }
 
@@ -62,16 +68,20 @@ public class ClassifConfig {
         this.id = id;
     }
 
-    public String getJubatusConfig(){
-        return jubatusConfig;
-    }
-
-    public String getTypePat(){
+    public String getTypePat() {
         return typePat;
     }
 
-    public String getIdPat(){
+    public void setTypePat(String typePat) {
+        this.typePat = typePat;
+    }
+
+    public String getIdPat() {
         return idPat;
+    }
+
+    public void setIdPat(String idPat) {
+        this.idPat = idPat;
     }
 
     public String getAttribute() {
@@ -82,23 +92,71 @@ public class ClassifConfig {
         this.attribute = attribute;
     }
 
-    public String getTags(){
+    public String getTags() {
         return tags;
     }
 
-    public String getUrlExt(){
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getUrlExt() {
         return urlExt;
     }
 
-    public String getUrlOrion(){
+    public void setUrlExt(String urlExt) {
+        this.urlExt = urlExt;
+    }
+
+    public String getUrlOrion() {
         return urlOrion;
     }
 
-    public int getJubatusPort(){
+    public void setUrlOrion(String urlOrion) {
+        this.urlOrion = urlOrion;
+    }
+
+    public int getJubatusPort() {
         return jubatusPort;
     }
 
-    public String getSubscriptionId(){
+    public void setJubatusPort(int jubatusPort) {
+        this.jubatusPort = jubatusPort;
+    }
+
+    public String getContextBrokerUrl() {
+        return contextBrokerUrl;
+    }
+
+    public void setContextBrokerUrl(String contextBrokerUrl) {
+        this.contextBrokerUrl = contextBrokerUrl;
+    }
+
+    public String getContextBrokerService() {
+        return contextBrokerService;
+    }
+
+    public void setContextBrokerService(String contextBrokerService) {
+        this.contextBrokerService = contextBrokerService;
+    }
+
+    public String getContextBrokerServicePath() {
+        return contextBrokerServicePath;
+    }
+
+    public void setContextBrokerServicePath(String contextBrokerServicePath) {
+        this.contextBrokerServicePath = contextBrokerServicePath;
+    }
+
+    public String getJubatusConfig() {
+        return jubatusConfig;
+    }
+
+    public void setJubatusConfig(String jubatusConfig) {
+        this.jubatusConfig = jubatusConfig;
+    }
+
+    public String getSubscriptionId() {
         return subscriptionId;
     }
 
