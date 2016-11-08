@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import us.jubat.classifier.LabeledDatum;
 import us.jubat.common.Datum;
 
+import java.util.ArrayList;
+
 public class Utils {
 
     /**
@@ -24,6 +26,13 @@ public class Utils {
      */
     public static Datum makeDatum(double value) {
         return new Datum().addNumber("value", value);
+    }
+
+    public static ArrayList<Datum> makeDatumList(double value) {
+        final Datum datum = new Datum().addNumber("value", value);
+        final ArrayList<Datum> data = new ArrayList<>();
+        data.add(datum);
+        return data;
     }
 
     /**
