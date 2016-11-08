@@ -136,6 +136,22 @@ public class AnomalyConfig implements Serializable {
         this.contextBrokerUrl = contextBrokerUrl;
     }
 
+    public String getContextBrokerService() {
+        return contextBrokerService;
+    }
+
+    public void setContextBrokerService(String contextBrokerService) {
+        this.contextBrokerService = contextBrokerService;
+    }
+
+    public String getContextBrokerServicePath() {
+        return contextBrokerServicePath;
+    }
+
+    public void setContextBrokerServicePath(String contextBrokerServicePath) {
+        this.contextBrokerServicePath = contextBrokerServicePath;
+    }
+
     public String getJubatusConfig() {
         return jubatusConfig;
     }
@@ -166,22 +182,6 @@ public class AnomalyConfig implements Serializable {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    public String getContextBrokerService() {
-        return contextBrokerService;
-    }
-
-    public void setContextBrokerService(String contextBrokerService) {
-        this.contextBrokerService = contextBrokerService;
-    }
-
-    public String getContextBrokerServicePath() {
-        return contextBrokerServicePath;
-    }
-
-    public void setContextBrokerServicePath(String contextBrokerServicePath) {
-        this.contextBrokerServicePath = contextBrokerServicePath;
     }
 
     @Override
