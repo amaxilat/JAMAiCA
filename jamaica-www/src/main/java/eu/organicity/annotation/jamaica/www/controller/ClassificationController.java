@@ -6,13 +6,14 @@ import eu.organicity.annotation.jamaica.dto.ClassifConfigDTO;
 import eu.organicity.annotation.jamaica.dto.TrainDataDTO;
 import eu.organicity.annotation.jamaica.dto.TrainDataListDTO;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
+import eu.organicity.annotation.jamaica.www.model.ClassificationTrainData;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 import us.jubat.classifier.ClassifierClient;
 import us.jubat.classifier.LabeledDatum;
 
@@ -22,7 +23,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
 public class ClassificationController extends BaseController {
 
     /**
@@ -41,58 +42,47 @@ public class ClassificationController extends BaseController {
      * @param classificationConfig the {@see ClassifConfigDTO} that describes the job to add.
      * @return the added {@see ClassifConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/classification", method = RequestMethod.PUT, produces = APPLICATION_JSON)
     ClassifConfigDTO putClassificationConfig(final HttpServletResponse response, @RequestBody ClassifConfigDTO classificationConfig) {
         LOGGER.debug("[call] putClassificationConfig");
 
-        OrionEntity e = new OrionEntity();
-        e.setId(classificationConfig.getIdPat());
-        e.setIsPattern("true");
-        e.setType(classificationConfig.getTypePat());
-        String[] cond = new String[1];
-        cond[0] = "TimeInstant";
-
         final String randUiid = randomStringGenerator.getUuid();
 
+        final ClassifConfig conf = new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), classificationConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, "", System.currentTimeMillis(), false);
+
+        //Add default orion settings
+        if (classificationConfig.getContextBrokerUrl() == null) {
+            conf.setContextBrokerUrl(orionService.getContextBrokerUrl());
+        }
+        if (classificationConfig.getContextBrokerService() == null) {
+            conf.setContextBrokerService(orionService.getContextBrokerService());
+        }
+        if (classificationConfig.getContextBrokerServicePath() == null) {
+            conf.setContextBrokerServicePath(orionService.getContextBrokerServicePath());
+        }
+
+        if (classifConfigRepository.count() > 0) {
+            // get max jubatus port entry
+            Integer maxJubatusPortEntry = classifConfigRepository.findMaxJubatusPort();
+            if (maxJubatusPortEntry == null) {
+                maxJubatusPortEntry = 1;
+            }
+            // add 1 to create next port number
+            basePort = maxJubatusPortEntry + 1;
+        }
+
+        conf.setJubatusPort(basePort);
+
         // save anomaly config entry
-        ClassifConfig storedConfig = classifConfigRepository.save(new ClassifConfig(classificationConfig.getTypePat(), classificationConfig.getIdPat(), classificationConfig.getAttribute(), classificationConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, "", System.currentTimeMillis(), false));
+        ClassifConfig storedConfig = classifConfigRepository.save(conf);
+
         LOGGER.info("successful save new classification job. Returned id: " + storedConfig.getId());
 
-        try {
-            // subscribe to Orion
-            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "v1/notifyContext/" + randUiid, cond, "P1D", storedConfig);
-
-
-            final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
-            LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
-
-            if (anomalyConfigRepository.count() > 0) {
-                // get max jubatus port entry
-                Integer maxJubatusPortEntry = classifConfigRepository.findMaxJubatusPort();
-                if (maxJubatusPortEntry == null) {
-                    maxJubatusPortEntry = 1;
-                }
-                // add 1 to create next port number
-                basePort = maxJubatusPortEntry + 1;
-            }
-
-            storedConfig.setSubscriptionId(subscriptionId);
-            storedConfig = classifConfigRepository.save(storedConfig);
-
-            return Utils.newClassifConfigDTO(storedConfig);
-
-        } catch (IOException er) {
-            LOGGER.error(er, er);
-
-        } catch (DataAccessException er) {
-            LOGGER.error(er, er);
-
-        }
         return null;
 
 
     }
+
 
     /**
      * Gets the information of an existing Classification Job.
@@ -101,7 +91,6 @@ public class ClassificationController extends BaseController {
      * @param id       the id of the requested {@see ClassifConfigDTO}.
      * @return the existing {@see ClassifConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/classification/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     ClassifConfigDTO getClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getClassificationConfig");
@@ -113,34 +102,97 @@ public class ClassificationController extends BaseController {
 
 
     /**
+     * Subscribe for an existing Anomaly Detection Job with the supplied data.
+     *
+     * @param id the id of the requested {@see AnomalyConfigDTO}.
+     * @return the used {@see AnomalyConfigDTO}.
+     */
+    @RequestMapping(value = "/v1/config/classification/{id}/subscribe", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    ClassifConfigDTO subscribeClassif(@PathVariable("id") long id) {
+
+        ClassifConfig storedConfig = classifConfigRepository.findById(id);
+
+        try {
+
+            final OrionEntity e = new OrionEntity();
+            e.setId(storedConfig.getIdPat());
+            e.setIsPattern("true");
+            e.setType(storedConfig.getTypePat());
+            String[] cond = new String[1];
+            cond[0] = "TimeInstant";
+
+            // subscribe to Orion
+            final SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "v1/notifyContext/" + storedConfig.getUrlOrion(), cond, "P1D", storedConfig);
+
+            final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
+            LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
+
+            storedConfig.setSubscriptionId(subscriptionId);
+            storedConfig = classifConfigRepository.save(storedConfig);
+
+        } catch (IOException | DataAccessException er) {
+            LOGGER.error(er, er);
+        }
+
+        return Utils.newClassifConfigDTO(storedConfig);
+    }
+
+    /**
      * Train a Jubatus instance for an existing Classification Job with the supplied data.
      *
      * @param trainDataDTO the {@see TrainDataListDTO } object to use as input for training the Jubatus instance.
      * @param id           the id of the requested {@see AnomalyConfigDTO}.
      * @return the used {@see TrainDataListDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/classification/{id}/{tag}/train", method = RequestMethod.POST, produces = APPLICATION_JSON)
     TrainDataListDTO trainClassification(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id, @PathVariable("tag") String tag) {
         LOGGER.debug("[call] trainClassification");
         ClassifConfig classification = classifConfigRepository.findById(id);
 
-        try {
 
+        List<ClassificationTrainData> trainDataList = new ArrayList<>();
+        for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
+
+            ClassificationTrainData data = new ClassificationTrainData();
+            data.setClassificationConfigId(id);
+            data.setTag(tag);
+            data.setValue(singleTrainData.getValue());
+            trainDataList.add(data);
+        }
+
+        if (!trainDataList.isEmpty()) {
+            classificationTrainDataRepository.save(trainDataList);
+        }
+
+        return trainDataDTO;
+    }
+
+    /**
+     * Train a Jubatus instance for an existing Classification Job with the supplied data.
+     *
+     * @param id the id of the requested {@see AnomalyConfigDTO}.
+     * @return the used {@see TrainDataListDTO}.
+     */
+    @RequestMapping(value = "/v1/config/classification/{id}/train", method = RequestMethod.GET, produces = APPLICATION_JSON)
+    List<ClassificationTrainData> doTrainClassification(@PathVariable("id") long id) {
+        LOGGER.debug("[call] doTrainClassification");
+        ClassifConfig classification = classifConfigRepository.findById(id);
+
+        List<ClassificationTrainData> data = classificationTrainDataRepository.findByClassificationConfigId(classification.getId());
+
+        try {
             ClassifierClient client = new ClassifierClient(classification.getJubatusConfig(), classification.getJubatusPort(), "test", 1);
             List<LabeledDatum> trainData = new ArrayList<>();
 
-            for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
+            for (final ClassificationTrainData singleTrainData : data) {
                 LOGGER.info(singleTrainData);
-                trainData.add(Utils.makeTrainDatum(tag, Double.parseDouble(singleTrainData.getValue())));
+                trainData.add(Utils.makeTrainDatum(singleTrainData.getTag(), Double.parseDouble(singleTrainData.getValue())));
                 client.train(trainData);
-
             }
-            return trainDataDTO;
-        } catch (UnknownHostException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return data;
     }
 
     /**
@@ -150,7 +202,6 @@ public class ClassificationController extends BaseController {
      * @param id       the id of the requested {@see ClassifConfigDTO}.
      * @return the existing {@see ClassifConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/classification/{id}", method = RequestMethod.DELETE, produces = APPLICATION_JSON)
     ClassifConfigDTO deleteClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getClassificationConfig");
@@ -165,6 +216,7 @@ public class ClassificationController extends BaseController {
     void checkSubscriptions() {
         LOGGER.info("Checking subscriptions...");
         for (final ClassifConfig classifConfig : classifConfigRepository.findAll()) {
+            if (!classifConfig.isEnable()) continue;
             if (System.currentTimeMillis() - classifConfig.getLastSubscription() > 24 * 60 * 60 * 1000) {
                 LOGGER.info("Re-Subscribing for " + classifConfig.getId());
 
@@ -203,15 +255,25 @@ public class ClassificationController extends BaseController {
      * @param id       the id of the requested {@see ClassifConfigDTO}.
      * @return the existing {@see ClassifConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/classification/{id}/enable", method = RequestMethod.GET, produces = APPLICATION_JSON)
     ClassifConfigDTO enableClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] enableClassificationConfig");
 
         ClassifConfig config = classifConfigRepository.findById(id);
-        config.setEnable(true);
-        classifConfigRepository.save(config);
+//        config.setEnable(true);
+//        classifConfigRepository.save(config);
 
+        List<ClassificationTrainData> classifData = classificationTrainDataRepository.findByClassificationConfigId(id);
+        try {
+            ClassifierClient client = new ClassifierClient(config.getJubatusConfig(), config.getJubatusPort(), "test", 1);
+            List<LabeledDatum> trainData = new ArrayList<>();
+            for (ClassificationTrainData classificationTrainData : classifData) {
+                trainData.add(Utils.makeTrainDatum(classificationTrainData.getTag(), Double.parseDouble(classificationTrainData.getValue())));
+                client.train(trainData);
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         return Utils.newClassifConfigDTO(config);
     }
 
@@ -222,7 +284,6 @@ public class ClassificationController extends BaseController {
      * @param id       the id of the requested {@see ClassifConfigDTO}.
      * @return the existing {@see ClassifConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/classification/{id}/disable", method = RequestMethod.GET, produces = APPLICATION_JSON)
     ClassifConfigDTO disableClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] enableClassificationConfig");
