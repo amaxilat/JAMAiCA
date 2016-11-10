@@ -6,20 +6,21 @@ import eu.organicity.annotation.jamaica.dto.AnomalyConfigDTO;
 import eu.organicity.annotation.jamaica.dto.TrainDataDTO;
 import eu.organicity.annotation.jamaica.dto.TrainDataListDTO;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
+import eu.organicity.annotation.jamaica.www.model.AnomalyTrainData;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import us.jubat.anomaly.AnomalyClient;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
-@Controller
+@RestController
 public class AnomalyController extends BaseController {
 
     /**
@@ -38,60 +39,79 @@ public class AnomalyController extends BaseController {
      * @param anomalyConfig the {@see AnomalyConfigDTO} that describes the job to add.
      * @return the added {@see AnomalyConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/anomaly", method = RequestMethod.PUT, produces = APPLICATION_JSON)
     AnomalyConfigDTO putAnomalyConfig(final HttpServletResponse response, @RequestBody AnomalyConfigDTO anomalyConfig) {
         LOGGER.debug("[call] putAnomalyConfig");
 
-
-        OrionEntity e = new OrionEntity();
-        e.setId(anomalyConfig.getIdPat());
-        e.setIsPattern("true");
-        e.setType(anomalyConfig.getTypePat());
-        String[] cond = new String[1];
-        cond[0] = "TimeInstant";
-
         final String randUiid = randomStringGenerator.getUuid();
 
+        AnomalyConfig config = new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), anomalyConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, "", System.currentTimeMillis(), false,
+                anomalyConfig.getContextBrokerUrl(), anomalyConfig.getContextBrokerService(), anomalyConfig.getContextBrokerServicePath());
+
+        //Add default orion settings
+        if (anomalyConfig.getContextBrokerUrl() == null) {
+            config.setContextBrokerUrl(orionService.getContextBrokerUrl());
+        }
+        if (anomalyConfig.getContextBrokerService() == null) {
+            config.setContextBrokerService(orionService.getContextBrokerService());
+        }
+        if (anomalyConfig.getContextBrokerServicePath() == null) {
+            config.setContextBrokerServicePath(orionService.getContextBrokerServicePath());
+        }
+
+        if (anomalyConfigRepository.count() > 0) {
+            // get max jubatus port entry
+            Integer maxJubatusPortEntry = anomalyConfigRepository.findMaxJubatusPort();
+            if (maxJubatusPortEntry == null) {
+                maxJubatusPortEntry = 1;
+            }
+            // add 1 to create next port number
+            basePort = maxJubatusPortEntry + 1;
+        }
+
+        config.setJubatusPort(basePort);
+
         // save anomaly config entry
-        AnomalyConfig storedConfig = anomalyConfigRepository.save(new AnomalyConfig(anomalyConfig.getTypePat(), anomalyConfig.getIdPat(), anomalyConfig.getAttribute(), anomalyConfig.getTagDomain(), randomStringGenerator.getUuid(), randUiid, basePort, jubatusHost, "", System.currentTimeMillis(), false,
-                anomalyConfig.getContextBrokerUrl(), anomalyConfig.getContextBrokerService(), anomalyConfig.getContextBrokerServicePath()));
+        AnomalyConfig storedConfig = anomalyConfigRepository.save(config);
         LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
 
-        try {
-            // subscribe to Orion
-            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "/v1/notifyContext/" + randUiid, cond, "P1D", storedConfig);
-
-
-            final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
-            LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
-
-            if (anomalyConfigRepository.count() > 0) {
-                // get max jubatus port entry
-                Integer maxJubatusPortEntry = anomalyConfigRepository.findMaxJubatusPort();
-                if (maxJubatusPortEntry == null) {
-                    maxJubatusPortEntry = 1;
-                }
-                // add 1 to create next port number
-                basePort = maxJubatusPortEntry + 1;
-            }
-
-            jubatusService.launchJubaanomaly(basePort);
-
-            // save anomaly config entry
-            storedConfig.setSubscriptionId(subscriptionId);
-            storedConfig = anomalyConfigRepository.save(storedConfig);
-            LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
-
-            return Utils.newAnomalyConfigDTO(storedConfig);
-        } catch (IOException er) {
-            LOGGER.error(er, er);
-
-        } catch (DataAccessException er) {
-            LOGGER.error(er, er);
-
-        }
-        return null;
+        return Utils.newAnomalyConfigDTO(storedConfig);
+//
+//
+//        try {
+//            // subscribe to Orion
+//            SubscriptionResponse r = orionService.subscribeToOrion(e, null, baseUrl + "/v1/notifyContext/" + randUiid, cond, "P1D", storedConfig);
+//
+//
+//            final String subscriptionId = r.getSubscribeResponse().getSubscriptionId();
+//            LOGGER.info("successful subscription to orion. Returned subscriptionId: " + subscriptionId);
+//
+//            if (anomalyConfigRepository.count() > 0) {
+//                // get max jubatus port entry
+//                Integer maxJubatusPortEntry = anomalyConfigRepository.findMaxJubatusPort();
+//                if (maxJubatusPortEntry == null) {
+//                    maxJubatusPortEntry = 1;
+//                }
+//                // add 1 to create next port number
+//                basePort = maxJubatusPortEntry + 1;
+//            }
+//
+//            jubatusService.launchJubaanomaly(basePort);
+//
+//            // save anomaly config entry
+//            storedConfig.setSubscriptionId(subscriptionId);
+//            storedConfig = anomalyConfigRepository.save(storedConfig);
+//            LOGGER.info("successful save new anomaly detection job. Returned id: " + storedConfig.getId());
+//
+//            return Utils.newAnomalyConfigDTO(storedConfig);
+//        } catch (IOException er) {
+//            LOGGER.error(er, er);
+//
+//        } catch (DataAccessException er) {
+//            LOGGER.error(er, er);
+//
+//        }
+//        return null;
 
 
     }
@@ -103,7 +123,6 @@ public class AnomalyController extends BaseController {
      * @param id       the id of the requested {@see AnomalyConfigDTO}.
      * @return the existing {@see AnomalyConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     AnomalyConfigDTO getAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getAnomalyConfig");
@@ -120,7 +139,6 @@ public class AnomalyController extends BaseController {
      * @param id       the id of the requested {@see AnomalyConfigDTO}.
      * @return the existing {@see AnomalyConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.DELETE, produces = APPLICATION_JSON)
     AnomalyConfigDTO deleteAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getAnomalyConfig");
@@ -138,24 +156,25 @@ public class AnomalyController extends BaseController {
      * @param id           the id of the requested {@see AnomalyConfigDTO}.
      * @return the used {@see TrainDataListDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/anomaly/{id}/train", method = RequestMethod.POST, produces = APPLICATION_JSON)
     TrainDataListDTO trainAnomaly(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id) {
         LOGGER.debug("[call] trainAnomaly");
         AnomalyConfig anomalyConfig = anomalyConfigRepository.findById(id);
 
-        try {
-            final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(), "test", 1);
-            for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
-                LOGGER.info(singleTrainData);
-                client.add(Utils.makeDatum(Double.parseDouble(singleTrainData.getValue())));
-            }
-            return trainDataDTO;
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return null;
+        List<AnomalyTrainData> trainDataList = new ArrayList<>();
+        for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
 
+            AnomalyTrainData data = new AnomalyTrainData();
+            data.setAnomalyConfigId(id);
+            data.setValue(singleTrainData.getValue());
+
+            trainDataList.add(data);
+        }
+
+        if (!trainDataList.isEmpty()) {
+            anomalyTrainDataRepository.save(trainDataList);
+        }
+        return trainDataDTO;
     }
 
     /**
@@ -164,12 +183,10 @@ public class AnomalyController extends BaseController {
      * @param id the id of the requested {@see AnomalyConfigDTO}.
      * @return the used {@see AnomalyConfigDTO}.
      */
-    @ResponseBody
-    @RequestMapping(value = "/v1/config/anomaly/{id}/subscribe", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    @RequestMapping(value = "/v1/config/anomaly/{id}/subscribe", method = RequestMethod.GET, produces = APPLICATION_JSON)
     AnomalyConfigDTO subscribeAnomaly(@PathVariable("id") long id) {
         LOGGER.debug("[call] subscribeAnomaly");
         AnomalyConfig anomalyConfig = anomalyConfigRepository.findById(id);
-
 
         OrionEntity e = new OrionEntity();
         e.setId(anomalyConfig.getIdPat());
@@ -240,7 +257,6 @@ public class AnomalyController extends BaseController {
      * @param id       the id of the requested {@see AnomalyConfigDTO}.
      * @return the existing {@see AnomalyConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/anomaly/{id}/enable", method = RequestMethod.POST, produces = APPLICATION_JSON)
     AnomalyConfigDTO enableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] enableAnomalyConfig");
@@ -259,7 +275,6 @@ public class AnomalyController extends BaseController {
      * @param id       the id of the requested {@see AnomalyConfigDTO}.
      * @return the existing {@see AnomalyConfigDTO}.
      */
-    @ResponseBody
     @RequestMapping(value = "/v1/config/anomaly/{id}/disable", method = RequestMethod.POST, produces = APPLICATION_JSON)
     AnomalyConfigDTO disableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] disableAnomalyConfig");
