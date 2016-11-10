@@ -24,9 +24,13 @@ spring:
 server.port: 8080
 application:
   baseUrl: "http://150.140.5.27:8080/"
-  annotationUrl: "http://146.169.46.162:8084/"
+  annotationUrl: "https://annotations.organicity.eu/"
   env: dev
-
+orion:
+  serverUrl: "http://dev.server.organicity.eu:1026/"
+  token: ""
+  service: "organicity"
+  servicePath: "/"
 ---
 spring:
   profiles: production
@@ -39,8 +43,13 @@ spring:
     driverClassName: org.postgresql.Driver
 application:
   baseUrl: "http://150.140.5.27:8080/"
-  annotationUrl: "http://146.169.46.162:8084/"
+  annotationUrl: "https://annotations.organicity.eu/"
   env: production
+orion:
+  serverUrl: "http://dev.server.organicity.eu:1026/"
+  token: ""
+  service: "organicity"
+  servicePath: "/"
 
 ---
 spring:
@@ -62,6 +71,6 @@ spring:
   profiles: test
 
 application:
-  baseUrl: "http://150.140.5.32:8080/"
-  annotationUrl: "http://146.169.46.162:8084/"
+  baseUrl: "http://jamaica.organicity.eu/"
+  annotationUrl: "https://annotations.organicity.eu/"
   env: dev
