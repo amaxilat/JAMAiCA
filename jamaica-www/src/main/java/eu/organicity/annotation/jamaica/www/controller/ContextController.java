@@ -1,7 +1,6 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
 import com.amaxilatis.orion.model.Attribute;
-import com.amaxilatis.orion.model.OrionContextElement;
 import com.amaxilatis.orion.model.OrionContextElementWrapper;
 import com.amaxilatis.orion.model.SubscriptionUpdate;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
@@ -9,7 +8,9 @@ import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import us.jubat.anomaly.AnomalyClient;
+import us.jubat.classifier.ClassifierClient;
+
+import java.net.UnknownHostException;
 
 @Controller
 public class ContextController extends BaseController {
@@ -35,45 +36,64 @@ public class ContextController extends BaseController {
     @RequestMapping(value = {"/v1/notifyContext/{contextConnectionId}", "/api/v1/notifyContext/{contextConnectionId}"}, method = RequestMethod.POST, produces = APPLICATION_JSON)
     SubscriptionUpdate notifyContext(@RequestBody final SubscriptionUpdate subscriptionUpdate, @PathVariable("contextConnectionId") String contextConnectionId) {
         LOGGER.debug("[call] notifyContext " + subscriptionUpdate.getSubscriptionId());
+
+        AnomalyConfig anomalyConfig = anomalyConfigRepository.findByUrlOrion(contextConnectionId);
+        ClassifConfig classifConfig = classifConfigRepository.findByUrlOrion(contextConnectionId);
+
         try {
-            final String subscriptionId = subscriptionUpdate.getSubscriptionId();
-
-            AnomalyConfig anomalyConfig;
-            ClassifConfig classifConfig;
-
-
-            for (final OrionContextElementWrapper wrapper : subscriptionUpdate.getContextResponses()) {
-
-                final OrionContextElement element = wrapper.getContextElement();
-                for (final Attribute contextElementAttribute : element.getAttributes()) {
-                    anomalyConfig = anomalyConfigRepository.findBySubscriptionId(subscriptionId);
-                    if (anomalyConfig == null) {
-                        anomalyConfig = anomalyConfigRepository.findByUrlOrion(contextConnectionId);
-                    }
-                    if (anomalyConfig != null) {
-                        if (contextElementAttribute.getType().equals(anomalyConfig.getAttribute())) {
-                            // start jubatus training for anomaly detection if anomaly config enable is true
-                            if (anomalyConfig.isEnable()) {
-                                LOGGER.info(element.getId() + " value:" + contextElementAttribute.getValue());
-                                final AnomalyClient client = new AnomalyClient(anomalyConfig.getJubatusConfig(), anomalyConfig.getJubatusPort(), "test", 1);
-                                jubatusService.calcScore(client, contextElementAttribute.getValue(), element.getId(), contextElementAttribute.getType(), anomalyConfig.getId());
-                            } else {
-                                LOGGER.warn("SubscriptionId: " + subscriptionId + " Disabled.");
-                            }
-                        }
-                    } else if ((classifConfig = classifConfigRepository.findBySubscriptionId(subscriptionId)) != null) {
-
-
-                    } else {
-                        LOGGER.error("SubscriptionId: " + subscriptionId + " Not Found.");
-                    }
+            if (anomalyConfig != null) {
+                LOGGER.info("For contextConnectionId:" + contextConnectionId + " "
+                        + "anomalyConfig:" + anomalyConfig.getId() + " attr:" + anomalyConfig.getAttribute()
+                );
+                if (anomalyConfig.isEnable()) {
+                    checkAnomalyConfig(anomalyConfig, subscriptionUpdate);
                 }
+            } else if (classifConfig != null) {
+                LOGGER.info("For contextConnectionId:" + contextConnectionId + " "
+                        + "classifConfig:" + classifConfig.getId() + " attr:" + classifConfig.getAttribute()
+                );
+                if (classifConfig.isEnable()) {
+                    checkClassifConfig(classifConfig, subscriptionUpdate);
+                }
+            } else {
+                LOGGER.info("For contextConnectionId:" + contextConnectionId + " none");
             }
-
-
         } catch (Exception e) {
             LOGGER.error(e, e);
         }
         return subscriptionUpdate;
+    }
+
+    private void checkAnomalyConfig(AnomalyConfig anomalyConfig, SubscriptionUpdate subscriptionUpdate) {
+        for (final OrionContextElementWrapper wrapper : subscriptionUpdate.getContextResponses()) {
+            for (final Attribute attribute : wrapper.getContextElement().getAttributes()) {
+                if (anomalyConfig.getAttribute().equals(attribute.getType())
+                        || anomalyConfig.getAttribute().equals(attribute.getName())) {
+                    LOGGER.info("id:" + wrapper.getContextElement().getId() + " attribute:" + anomalyConfig.getAttribute() + " value:" + attribute.getValue());
+                    try {
+                    } catch (Exception e) {
+                        LOGGER.error(e, e);
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkClassifConfig(ClassifConfig classifConfig, SubscriptionUpdate subscriptionUpdate) {
+        for (final OrionContextElementWrapper wrapper : subscriptionUpdate.getContextResponses()) {
+            for (final Attribute attribute : wrapper.getContextElement().getAttributes()) {
+                if (classifConfig.getAttribute().equals(attribute.getType())
+                        || classifConfig.getAttribute().equals(attribute.getName())) {
+                    LOGGER.info("id:" + wrapper.getContextElement().getId() + " attribute:" + attribute.getType() + " value:" + attribute.getValue());
+                    try {
+                        ClassifierClient client = new ClassifierClient(classifConfig.getJubatusConfig(), classifConfig.getJubatusPort(), "test", 1);
+                        jubatusService.calcScore(client, attribute.getValue(),
+                                wrapper.getContextElement().getId(), classifConfig.getAttribute(), classifConfig.getId());
+                    } catch (UnknownHostException e) {
+                        LOGGER.error(e, e);
+                    }
+                }
+            }
+        }
     }
 }
