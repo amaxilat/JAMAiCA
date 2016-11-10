@@ -1,5 +1,7 @@
 package eu.organicity.annotation.jamaica.www;
 
+import org.keycloak.adapters.AdapterDeploymentContext;
+import org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.keycloak.adapters.springsecurity.client.KeycloakClientRequestFactory;
 import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
@@ -10,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -53,5 +56,13 @@ public class ApplicationSecurity extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v1/**").permitAll()
                 .and().csrf().disable();
+    }
+
+    @Override
+    protected AdapterDeploymentContext adapterDeploymentContext() throws Exception {
+        AdapterDeploymentContextFactoryBean factoryBean =
+                new AdapterDeploymentContextFactoryBean(new FileSystemResource("keycloak.json"));
+        factoryBean.afterPropertiesSet();
+        return factoryBean.getObject();
     }
 }
