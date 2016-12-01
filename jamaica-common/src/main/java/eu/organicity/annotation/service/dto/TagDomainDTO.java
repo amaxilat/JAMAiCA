@@ -3,21 +3,32 @@ package eu.organicity.annotation.service.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.List;
+import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TagDomainDTO {
-    private Long id;
+    private long id;
     private String urn;
     private String description;
-    private List<TagDTO> tags;
+    private Set<TagDTO> tags;
+    private ServiceDTO[] services;
 
-    public Long getId() {
+    public TagDomainDTO() {
+    }
+
+    public TagDomainDTO(long id, String urn, String description, Set<TagDTO> tags) {
+        this.id = id;
+        this.urn = urn;
+        this.description = description;
+        this.tags = tags;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -37,18 +48,19 @@ public class TagDomainDTO {
         this.description = description;
     }
 
-    public List<TagDTO> getTags() {
+    public Set<TagDTO> getTags() {
         return tags;
     }
 
-    public void setTags(List<TagDTO> tags) {
+    public void setTags(Set<TagDTO> tags) {
         this.tags = tags;
     }
 
-    @Override
-    public String toString() {
-        return "TagDomainDTO{" +
-                "urn='" + urn + '\'' +
-                '}';
+    public ServiceDTO[] getServices() {
+        return services;
+    }
+
+    public void setServices(ServiceDTO[] services) {
+        this.services = services;
     }
 }
