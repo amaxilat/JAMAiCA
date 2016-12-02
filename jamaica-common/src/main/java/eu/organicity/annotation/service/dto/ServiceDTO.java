@@ -38,7 +38,9 @@ public class ServiceDTO {
     @Override
     public String toString() {
         return "ServiceDTO{" +
-                "urn='" + urn + '\'' +
+                "id=" + id +
+                ", urn='" + urn + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

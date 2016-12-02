@@ -65,7 +65,8 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
      * @return an array of {@see ServiceDTO}
      */
     public ServiceDTO[] tagDomainGetServices(final String tagDomainUrn) {
-        return restTemplate.getForObject(baseUrl + "admin/tagDomains/" + tagDomainUrn + "/services", ServiceDTO[].class);
+        HttpEntity<String> entity = new HttpEntity<>("", headers);
+        return restTemplate.exchange(baseUrl + "admin/tagDomains/" + tagDomainUrn + "/services", HttpMethod.GET, entity, ServiceDTO[].class).getBody();
     }
 
     /**
@@ -129,7 +130,8 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
      * @return the added {@see ServiceDTO}
      */
     public ServiceDTO servicesCreate(final ServiceDTO serviceDTO) {
-        return restTemplate.postForObject(baseUrl + "admin/services", serviceDTO, ServiceDTO.class);
+        HttpEntity<ServiceDTO> entity = new HttpEntity<>(serviceDTO, headers);
+        return restTemplate.exchange(baseUrl + "admin/services", HttpMethod.POST, entity, ServiceDTO.class).getBody();
     }
 
     /**
@@ -213,7 +215,7 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
      * @param serviceUrn the urn of the {@see ServiceDTO}
      */
     public void serviceDelete(final String serviceUrn) {
-        HttpEntity<String> entity = new HttpEntity<>("", headers);
+        HttpEntity entity = new HttpEntity(headers);
         restTemplate.exchange(baseUrl + "admin/services/" + serviceUrn, HttpMethod.DELETE, entity, String.class);
     }
 
@@ -224,11 +226,13 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
      * @param serviceUrn   the urn of the {@see ServiceDTO}
      */
     public void serviceRemoveTagDomains(final String tagDomainUrn, final String serviceUrn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "admin/tagDomains/" + tagDomainUrn + "/services");
-        if (serviceUrn != null) {
-            builder = builder.queryParam("serviceUrn", serviceUrn);
-        }
-        restTemplate.delete(builder.build().encode().toUri());
+//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "admin/tagDomains/" + tagDomainUrn + "/services");
+//        if (serviceUrn != null) {
+//            builder = builder.queryParam("serviceUrn", serviceUrn);
+//        }
+
+        HttpEntity entity = new HttpEntity(headers);
+        restTemplate.exchange(baseUrl + "admin/tagDomains/" + tagDomainUrn + "/services?serviceUrn=" + serviceUrn, HttpMethod.DELETE, entity, String.class);
     }
 
     /**
