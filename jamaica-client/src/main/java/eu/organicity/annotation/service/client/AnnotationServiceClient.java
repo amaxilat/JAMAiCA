@@ -13,4 +13,8 @@ public class AnnotationServiceClient extends AnnotationServiceAndroidClient {
         super(token);
     }
 
+    public AnnotationServiceClient(final String token, final String baseUrl) {
+        super(token, baseUrl);
+    }
+
 }

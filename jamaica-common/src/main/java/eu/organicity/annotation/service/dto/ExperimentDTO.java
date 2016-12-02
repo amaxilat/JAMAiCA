@@ -49,7 +49,7 @@ public class ExperimentDTO {
 
     @Override
     public String toString() {
-        return "ApplicationDTO{" +
+        return "ExperimentDTO{" +
                 "urn='" + urn + '\'' +
                 '}';
     }
