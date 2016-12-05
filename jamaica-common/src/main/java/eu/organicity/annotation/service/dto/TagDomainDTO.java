@@ -12,6 +12,7 @@ public class TagDomainDTO {
     private long id;
     private String urn;
     private String description;
+    private String user;
     private Set<TagDTO> tags;
     private ServiceDTO[] services;
 
@@ -63,6 +64,14 @@ public class TagDomainDTO {
 
     public void setServices(ServiceDTO[] services) {
         this.services = services;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Override

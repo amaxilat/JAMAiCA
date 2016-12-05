@@ -12,6 +12,7 @@ public class ExperimentDTO {
     private Long id;
     private String urn;
     private String description;
+    private String user;
     private List<TagDomainDTO> tagDomains;
 
 
@@ -45,6 +46,14 @@ public class ExperimentDTO {
 
     public void setTagDomains(List<TagDomainDTO> tagDomains) {
         this.tagDomains = tagDomains;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Override
