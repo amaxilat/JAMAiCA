@@ -3,7 +3,6 @@ package eu.organicity.annotation.service.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.Arrays;
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -14,7 +13,7 @@ public class TagDomainDTO {
     private String description;
     private String user;
     private Set<TagDTO> tags;
-    private ServiceDTO[] services;
+    private Set<ServiceDTO> services;
 
     public TagDomainDTO() {
     }
@@ -58,11 +57,11 @@ public class TagDomainDTO {
         this.tags = tags;
     }
 
-    public ServiceDTO[] getServices() {
+    public Set<ServiceDTO> getServices() {
         return services;
     }
 
-    public void setServices(ServiceDTO[] services) {
+    public void setServices(Set<ServiceDTO> services) {
         this.services = services;
     }
 
@@ -81,7 +80,6 @@ public class TagDomainDTO {
                 ", urn='" + urn + '\'' +
                 ", description='" + description + '\'' +
                 ", tags=" + tags +
-                ", services=" + Arrays.toString(services) +
                 '}';
     }
 }
