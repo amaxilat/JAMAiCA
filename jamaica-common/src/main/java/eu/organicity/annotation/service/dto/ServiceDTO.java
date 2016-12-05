@@ -10,6 +10,7 @@ public class ServiceDTO {
     private Long id;
     private String urn;
     private String description;
+    private String user;
 
     public Long getId() {
         return id;
@@ -33,6 +34,14 @@ public class ServiceDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Override

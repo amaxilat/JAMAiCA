@@ -9,6 +9,7 @@ public class TagDTO {
     private long id;
     private String urn;
     private String name;
+    private String user;
 
     public TagDTO() {
     }
@@ -41,6 +42,14 @@ public class TagDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Override
