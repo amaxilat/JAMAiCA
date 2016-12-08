@@ -38,6 +38,13 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
         return restTemplate.getForObject(baseUrl + "tagDomains", TagDomainDTO[].class);
     }
 
+    public TagDomainDTO[] getTagDomainsOfExperiment(String experimentUrn) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+        return restTemplate.exchange(baseUrl + "experiments/" + experimentUrn + "/tagDomains", HttpMethod.GET, entity, TagDomainDTO[].class).getBody();
+    }
+
     /**
      * Retrieves all information for a given {@see TagDomainDTO}
      *
@@ -70,13 +77,13 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
     }
 
     /**
-     * List all {@see TagDomainDTO} of a {@see ApplicationDTO}
+     * List all {@see TagDomainDTO} of a {@see ExperimentDTO}
      *
-     * @param applicationUrn the urn of the {@see ApplicationDTO}
+     * @param experimentUrn the urn of the {@see ExperimentDTO}
      * @return an array of {@see TagDomainDTO}
      */
-    public TagDomainDTO[] applicationGetTagDomains(final String applicationUrn) {
-        return restTemplate.getForObject(baseUrl + "admin/applications/" + applicationUrn + "/tagDomains", TagDomainDTO[].class);
+    public TagDomainDTO[] experimentGetTagDomains(final String experimentUrn) {
+        return restTemplate.getForObject(baseUrl + "admin/experiments/" + experimentUrn + "/tagDomains", TagDomainDTO[].class);
     }
 
     //Add Methods
@@ -106,6 +113,20 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
         dto.setUrn(urn);
         dto.setDescription(description);
         return postTagDomain(dto);
+    }
+
+    /**
+     * Adds a {@see TagDomainDTO}
+     *
+     * @param urn         the {@see TagDomainDTO} urn
+     * @param description a text description  for the {@see TagDomainDTO}
+     * @return the added {@see TagDomainDTO}
+     */
+    public ExperimentDTO addExperiment(final String urn, final String description) {
+        final ExperimentDTO dto = new ExperimentDTO();
+        dto.setUrn(urn);
+        dto.setDescription(description);
+        return postExperiment(dto);
     }
 
     /**
@@ -151,29 +172,29 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
     }
 
     /**
-     * Adds a new {@see ApplicationDTO}
+     * Adds a new {@see ExperimentDTO}
      *
-     * @param applicationDTO the {@see ApplicationDTO} to add
-     * @return the added {@see ApplicationDTO}
+     * @param experimentDTO the {@see ExperimentDTO} to add
+     * @return the added {@see ExperimentDTO}
      */
-    public ApplicationDTO applicationsCreate(final ApplicationDTO applicationDTO) {
-        return restTemplate.postForObject(baseUrl + "admin/applications", applicationDTO, ApplicationDTO.class);
+    public ExperimentDTO experimentCreate(final ExperimentDTO experimentDTO) {
+        return restTemplate.postForObject(baseUrl + "admin/applications", experimentDTO, ExperimentDTO.class);
     }
 
     /**
-     * Adds new {@see ApplicationDTO}
+     * Adds new {@see ExperimentDTO}
      *
-     * @param tagDomainUrn   the urn of the {@see TagDomainDTO}
-     * @param applicationUrn the urn of the {@see ApplicationDTO}
-     * @return the updated {@see ApplicationDTO}
+     * @param tagDomainUrn  the urn of the {@see TagDomainDTO}
+     * @param experimentUrn the urn of the {@see ExperimentDTO}
+     * @return the updated {@see ExperimentDTO}
      */
-    public ApplicationDTO applicationAddTagDomains(final String tagDomainUrn, final String applicationUrn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "admin/applications/" + applicationUrn + "/tagDomains");
+    public ExperimentDTO experimentAddTagDomains(final String tagDomainUrn, final String experimentUrn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "admin/experiments/" + experimentUrn + "/tagDomains");
         if (tagDomainUrn != null) {
             builder = builder.queryParam("tagDomainUrn", tagDomainUrn);
         }
-        HttpEntity<String> entity = new HttpEntity<>("", headers);
-        return restTemplate.postForObject(builder.build().encode().toUri(), entity, ApplicationDTO.class);
+        HttpEntity entity = new HttpEntity(headers);
+        return restTemplate.postForObject(builder.build().encode().toUri(), entity, ExperimentDTO.class);
     }
 
     //Remove Methods
@@ -236,23 +257,23 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
     }
 
     /**
-     * Deletes an {@see ApplicationDTO}
+     * Deletes an {@see ExperimentDTO}
      *
-     * @param applicationUrn the urn of the {@see ApplicationDTO}
+     * @param applicationUrn the urn of the {@see ExperimentDTO}
      */
-    public void applicationDelete(final String applicationUrn) {
+    public void experimentDelete(final String applicationUrn) {
         HttpEntity<String> entity = new HttpEntity<>("", headers);
         restTemplate.exchange(baseUrl + "admin/applications/" + applicationUrn, HttpMethod.DELETE, entity, String.class);
     }
 
     /**
-     * Removes a {@see TagDomainDTO} from the {@see ApplicationDTO}
+     * Removes a {@see TagDomainDTO} from the {@see ExperimentDTO}
      *
-     * @param tagDomainUrn   the urn of the {@see TagDomainDTO}
-     * @param applicationUrn the urn of the {@see ApplicationDTO}
+     * @param tagDomainUrn  the urn of the {@see TagDomainDTO}
+     * @param experimentUrn the urn of the {@see ExperimentDTO}
      */
-    public void applicationRemoveTagDomains(final String tagDomainUrn, final String applicationUrn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "admin/applications/" + applicationUrn + "/tagDomains");
+    public void experimentRemoveTagDomains(final String tagDomainUrn, final String experimentUrn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "admin/experiments/" + experimentUrn + "/tagDomains");
         if (tagDomainUrn != null) {
             builder = builder.queryParam("tagDomainUrn", tagDomainUrn);
         }
@@ -266,6 +287,11 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
         return restTemplate.exchange(baseUrl + "admin/tagDomains", HttpMethod.POST, entity, TagDomainDTO.class).getBody();
     }
 
+    private ExperimentDTO postExperiment(final ExperimentDTO experimentDTO) {
+        HttpEntity<ExperimentDTO> entity = new HttpEntity<>(experimentDTO, headers);
+        return restTemplate.exchange(baseUrl + "admin/experiments", HttpMethod.POST, entity, ExperimentDTO.class).getBody();
+    }
+
     private void deleteTagDomain(final String tagDomainUrn) {
         //https://annotations.organicity.eu/admin/tagDomains/urn:oc:tagDomain:AnomalyDetection:0
         HttpEntity<String> entity = new HttpEntity<>("", headers);
@@ -276,4 +302,6 @@ public class AnnotationServiceAndroidClient extends OrganicityServiceBaseClient 
         HttpEntity<TagDTO> entity = new HttpEntity<>(tagDTO, headers);
         return restTemplate.exchange(baseUrl + "admin/tagDomains/" + tagDomain + "/tag", HttpMethod.POST, entity, TagDTO.class).getBody();
     }
+
+
 }
