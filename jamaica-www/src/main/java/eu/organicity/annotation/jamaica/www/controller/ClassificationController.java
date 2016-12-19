@@ -38,9 +38,9 @@ public class ClassificationController extends BaseController {
      * Adds a new Classification Job to the service.
      * <p>
      *
-     * @param response             the {@see HttpServletResponse} object.
-     * @param classificationConfig the {@see ClassifConfigDTO} that describes the job to add.
-     * @return the added {@see ClassifConfigDTO}.
+     * @param response             the {@link HttpServletResponse} object.
+     * @param classificationConfig the {@link ClassifConfigDTO} that describes the job to add.
+     * @return the added {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification", method = RequestMethod.PUT, produces = APPLICATION_JSON)
     ClassifConfigDTO putClassificationConfig(final HttpServletResponse response, @RequestBody ClassifConfigDTO classificationConfig) {
@@ -87,9 +87,9 @@ public class ClassificationController extends BaseController {
     /**
      * Gets the information of an existing Classification Job.
      *
-     * @param response the {@see HttpServletResponse} object.
-     * @param id       the id of the requested {@see ClassifConfigDTO}.
-     * @return the existing {@see ClassifConfigDTO}.
+     * @param response the {@link HttpServletResponse} object.
+     * @param id       the id of the requested {@link ClassifConfigDTO}.
+     * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     ClassifConfigDTO getClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
@@ -104,8 +104,8 @@ public class ClassificationController extends BaseController {
     /**
      * Subscribe for an existing Anomaly Detection Job with the supplied data.
      *
-     * @param id the id of the requested {@see AnomalyConfigDTO}.
-     * @return the used {@see AnomalyConfigDTO}.
+     * @param id the id of the requested {@link AnomalyConfigDTO}.
+     * @return the used {@link AnomalyConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/subscribe", method = RequestMethod.GET, produces = APPLICATION_JSON)
     ClassifConfigDTO subscribeClassif(@PathVariable("id") long id) {
@@ -140,9 +140,9 @@ public class ClassificationController extends BaseController {
     /**
      * Train a Jubatus instance for an existing Classification Job with the supplied data.
      *
-     * @param trainDataDTO the {@see TrainDataListDTO } object to use as input for training the Jubatus instance.
-     * @param id           the id of the requested {@see AnomalyConfigDTO}.
-     * @return the used {@see TrainDataListDTO}.
+     * @param trainDataDTO the {@link TrainDataListDTO } object to use as input for training the Jubatus instance.
+     * @param id           the id of the requested {@link AnomalyConfigDTO}.
+     * @return the used {@link TrainDataListDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/{tag}/train", method = RequestMethod.POST, produces = APPLICATION_JSON)
     TrainDataListDTO trainClassification(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id, @PathVariable("tag") String tag) {
@@ -170,8 +170,8 @@ public class ClassificationController extends BaseController {
     /**
      * Train a Jubatus instance for an existing Classification Job with the supplied data.
      *
-     * @param id the id of the requested {@see AnomalyConfigDTO}.
-     * @return the used {@see TrainDataListDTO}.
+     * @param id the id of the requested {@link AnomalyConfigDTO}.
+     * @return the used {@link TrainDataListDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/train", method = RequestMethod.GET, produces = APPLICATION_JSON)
     List<ClassificationTrainData> doTrainClassification(@PathVariable("id") long id) {
@@ -198,9 +198,9 @@ public class ClassificationController extends BaseController {
     /**
      * Removes the information of an existing Classification Job.
      *
-     * @param response the {@see HttpServletResponse} object.
-     * @param id       the id of the requested {@see ClassifConfigDTO}.
-     * @return the existing {@see ClassifConfigDTO}.
+     * @param response the {@link HttpServletResponse} object.
+     * @param id       the id of the requested {@link ClassifConfigDTO}.
+     * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}", method = RequestMethod.DELETE, produces = APPLICATION_JSON)
     ClassifConfigDTO deleteClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
@@ -251,9 +251,9 @@ public class ClassificationController extends BaseController {
     /**
      * Enables an existing Classification Job.
      *
-     * @param response the {@see HttpServletResponse} object.
-     * @param id       the id of the requested {@see ClassifConfigDTO}.
-     * @return the existing {@see ClassifConfigDTO}.
+     * @param response the {@link HttpServletResponse} object.
+     * @param id       the id of the requested {@link ClassifConfigDTO}.
+     * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/enable", method = RequestMethod.GET, produces = APPLICATION_JSON)
     ClassifConfigDTO enableClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
@@ -280,9 +280,9 @@ public class ClassificationController extends BaseController {
     /**
      * Disable an existing Classification Job.
      *
-     * @param response the {@see HttpServletResponse} object.
-     * @param id       the id of the requested {@see ClassifConfigDTO}.
-     * @return the existing {@see ClassifConfigDTO}.
+     * @param response the {@link HttpServletResponse} object.
+     * @param id       the id of the requested {@link ClassifConfigDTO}.
+     * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/disable", method = RequestMethod.GET, produces = APPLICATION_JSON)
     ClassifConfigDTO disableClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {

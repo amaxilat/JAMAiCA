@@ -63,7 +63,7 @@ public class AnnotationService {
     }
 
     /**
-     * TODO: extend the {@see AnnotationDTO} to include also the attribute.
+     * TODO: extend the {@link AnnotationDTO} to include also the attribute.
      *
      * @param entityId
      * @param attribute

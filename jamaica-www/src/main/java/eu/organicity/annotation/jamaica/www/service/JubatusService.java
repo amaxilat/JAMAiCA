@@ -42,7 +42,7 @@ public class JubatusService {
      * Launches a jubaclassifier instance in the given port.
      *
      * @param port the port for the jubaclassified RPC interface.
-     * @return the {@see Process} object of the launched jubaclassifier instance.
+     * @return the {@link Process} object of the launched jubaclassifier instance.
      */
     public Process launchJubaclassifier(final int port) {
         if ("production".equals(env)) {
@@ -61,7 +61,7 @@ public class JubatusService {
      * Launches a jubaanomaly instance in the given port.
      *
      * @param port the port for the jubaanomaly RPC interface.
-     * @return the {@see Process} object of the launched jubaanomaly instance.
+     * @return the {@link Process} object of the launched jubaanomaly instance.
      */
     public Process launchJubaanomaly(final int port) {
         if ("production".equals(env)) {
@@ -80,7 +80,7 @@ public class JubatusService {
     /**
      * Calculates the anomaly score for an Orion attribute.
      *
-     * @param anomalyClient   an instance of {@see AnomalyClient}.
+     * @param anomalyClient   an instance of {@link AnomalyClient}.
      * @param value           the value that needs to be checked oven the Jubatus instance.
      * @param entityId        the id of the entity that produced the value.
      * @param attribute       the attribute to be tested.
@@ -99,7 +99,7 @@ public class JubatusService {
     /**
      * Calculates the anomaly score for an Orion attribute.
      *
-     * @param classificationClient   an instance of {@see Class}.
+     * @param classificationClient   an instance of {@link Class}.
      * @param value                  the value that needs to be checked oven the Jubatus instance.
      * @param entityId               the id of the entity that produced the value.
      * @param attribute              the attribute to be tested.
@@ -126,7 +126,7 @@ public class JubatusService {
     /**
      * Trains a jubatus instance with the provided data.
      *
-     * @param anomalyClient an instance of {@see AnomalyClient}.
+     * @param anomalyClient an instance of {@link AnomalyClient}.
      */
     @Async
     public void trainAnomaly(final AnomalyClient anomalyClient) {

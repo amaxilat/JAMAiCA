@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 
 /**
- * Provides operations on the {@see Anomaly} entities.
+ * Provides operations on the Anomaly entities.
  */
 public interface ClassificationRepository extends CrudRepository<Classification, Long> {
 

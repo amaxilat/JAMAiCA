@@ -35,9 +35,9 @@ public class AnomalyController extends BaseController {
      * Adds a new Anomaly Detection Job to the service.
      * <p>
      *
-     * @param response      the {@see HttpServletResponse} object.
-     * @param anomalyConfig the {@see AnomalyConfigDTO} that describes the job to add.
-     * @return the added {@see AnomalyConfigDTO}.
+     * @param response      the {@link HttpServletResponse} object.
+     * @param anomalyConfig the {@link AnomalyConfigDTO} that describes the job to add.
+     * @return the added {@link AnomalyConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/anomaly", method = RequestMethod.PUT, produces = APPLICATION_JSON)
     AnomalyConfigDTO putAnomalyConfig(final HttpServletResponse response, @RequestBody AnomalyConfigDTO anomalyConfig) {
@@ -119,9 +119,9 @@ public class AnomalyController extends BaseController {
     /**
      * Gets the information of an existing Anomaly Detection Job.
      *
-     * @param response the {@see HttpServletResponse} object.
-     * @param id       the id of the requested {@see AnomalyConfigDTO}.
-     * @return the existing {@see AnomalyConfigDTO}.
+     * @param response the {@link HttpServletResponse} object.
+     * @param id       the id of the requested {@link AnomalyConfigDTO}.
+     * @return the existing {@link AnomalyConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
     AnomalyConfigDTO getAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
@@ -135,9 +135,9 @@ public class AnomalyController extends BaseController {
     /**
      * Removes the information of an existing Anomaly Detection Job.
      *
-     * @param response the {@see HttpServletResponse} object.
-     * @param id       the id of the requested {@see AnomalyConfigDTO}.
-     * @return the existing {@see AnomalyConfigDTO}.
+     * @param response the {@link HttpServletResponse} object.
+     * @param id       the id of the requested {@link AnomalyConfigDTO}.
+     * @return the existing {@link AnomalyConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/anomaly/{id}", method = RequestMethod.DELETE, produces = APPLICATION_JSON)
     AnomalyConfigDTO deleteAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
@@ -152,9 +152,9 @@ public class AnomalyController extends BaseController {
     /**
      * Train a Jubatus instance for an existing Anomaly Detection Job with the supplied data.
      *
-     * @param trainDataDTO the {@see TrainDataListDTO } object to use as input for training the Jubatus instance.
-     * @param id           the id of the requested {@see AnomalyConfigDTO}.
-     * @return the used {@see TrainDataListDTO}.
+     * @param trainDataDTO the {@link TrainDataListDTO } object to use as input for training the Jubatus instance.
+     * @param id           the id of the requested {@link AnomalyConfigDTO}.
+     * @return the used {@link TrainDataListDTO}.
      */
     @RequestMapping(value = "/v1/config/anomaly/{id}/train", method = RequestMethod.POST, produces = APPLICATION_JSON)
     TrainDataListDTO trainAnomaly(@RequestBody TrainDataListDTO trainDataDTO, @PathVariable("id") long id) {
@@ -180,8 +180,8 @@ public class AnomalyController extends BaseController {
     /**
      * Subscribe for an existing Anomaly Detection Job with the supplied data.
      *
-     * @param id the id of the requested {@see AnomalyConfigDTO}.
-     * @return the used {@see AnomalyConfigDTO}.
+     * @param id the id of the requested {@link AnomalyConfigDTO}.
+     * @return the used {@link AnomalyConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/anomaly/{id}/subscribe", method = RequestMethod.GET, produces = APPLICATION_JSON)
     AnomalyConfigDTO subscribeAnomaly(@PathVariable("id") long id) {
@@ -253,9 +253,9 @@ public class AnomalyController extends BaseController {
     /**
      * Enable an existing Anomaly Detection Job.
      *
-     * @param response the {@see HttpServletResponse} object.
-     * @param id       the id of the requested {@see AnomalyConfigDTO}.
-     * @return the existing {@see AnomalyConfigDTO}.
+     * @param response the {@link HttpServletResponse} object.
+     * @param id       the id of the requested {@link AnomalyConfigDTO}.
+     * @return the existing {@link AnomalyConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/anomaly/{id}/enable", method = RequestMethod.POST, produces = APPLICATION_JSON)
     AnomalyConfigDTO enableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {
@@ -271,9 +271,9 @@ public class AnomalyController extends BaseController {
     /**
      * Disable an existing Anomaly Detection Job.
      *
-     * @param response the {@see HttpServletResponse} object.
-     * @param id       the id of the requested {@see AnomalyConfigDTO}.
-     * @return the existing {@see AnomalyConfigDTO}.
+     * @param response the {@link HttpServletResponse} object.
+     * @param id       the id of the requested {@link AnomalyConfigDTO}.
+     * @return the existing {@link AnomalyConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/anomaly/{id}/disable", method = RequestMethod.POST, produces = APPLICATION_JSON)
     AnomalyConfigDTO disableAnomalyConfig(final HttpServletResponse response, @PathVariable("id") long id) {

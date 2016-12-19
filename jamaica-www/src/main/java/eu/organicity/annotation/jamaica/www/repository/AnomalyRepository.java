@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 
 /**
- * Provides operations on the {@see Anomaly} entities.
+ * Provides operations on the {@link Anomaly} entities.
  */
 public interface AnomalyRepository extends CrudRepository<Anomaly, Long> {
 

@@ -41,14 +41,12 @@ public class OrionService {
     /**
      * Creates a subscription to Orion for the provided parameters.
      *
-     * @param entity        the {@see OrionEntity} used to define the selection parameters of the context subscription.
+     * @param entity        the {@link OrionEntity} used to define the selection parameters of the context subscription.
      * @param attributes    the attributes we are interested in.
      * @param reference     the reference url for the subscription the Orion server will use for context notifications.
      * @param conditions    the conditions that will trigger the context notifications.
      * @param duration      the duration for the context subscription.
-     * @param anomalyConfig
      * @return
-     * @throws IOException
      */
     public SubscriptionResponse subscribeToOrion(
             final OrionEntity entity, final String[] attributes, final String reference, final String[] conditions,
@@ -65,14 +63,12 @@ public class OrionService {
     /**
      * Creates a subscription to Orion for the provided parameters.
      *
-     * @param entity        the {@see OrionEntity} used to define the selection parameters of the context subscription.
+     * @param entity        the {@link OrionEntity} used to define the selection parameters of the context subscription.
      * @param attributes    the attributes we are interested in.
      * @param reference     the reference url for the subscription the Orion server will use for context notifications.
      * @param conditions    the conditions that will trigger the context notifications.
      * @param duration      the duration for the context subscription.
-     * @param anomalyConfig
      * @return
-     * @throws IOException
      */
     public SubscriptionResponse subscribeToOrion(
             final OrionEntity entity, final String[] attributes, final String reference, final String[] conditions,
@@ -83,14 +79,13 @@ public class OrionService {
     /**
      * Creates a subscription to Orion for the provided parameters.
      *
-     * @param entity     the {@see OrionEntity} used to define the selection parameters of the context subscription.
+     * @param entity     the {@link OrionEntity} used to define the selection parameters of the context subscription.
      * @param attributes the attributes we are interested in.
      * @param reference  the reference url for the subscription the Orion server will use for context notifications.
      * @param conditions the conditions that will trigger the context notifications.
      * @param duration   the duration for the context subscription.
      * @param client     the orion client to use to subscribe.
      * @return
-     * @throws IOException
      */
     public SubscriptionResponse subscribeToOrion(
             final OrionEntity entity, final String[] attributes, final String reference, final String[] conditions,

@@ -19,10 +19,10 @@ public class Utils {
     protected static final Logger LOGGER = Logger.getLogger(Utils.class);
 
     /**
-     * Creates a {@see Datum} to be used in queries to a Jubatus instance.
+     * Creates a {@link Datum} to be used in queries to a Jubatus instance.
      *
-     * @param value the value of the {@see Datum}.
-     * @return the created {@see Datum}.
+     * @param value the value of the {@link Datum}.
+     * @return the created {@link Datum}.
      */
     public static Datum makeDatum(double value) {
         return new Datum().addNumber("value", value);
@@ -36,11 +36,11 @@ public class Utils {
     }
 
     /**
-     * Creates a {@see LabeledDatum} to be used in queries to a Jubatus instance.
+     * Creates a {@link LabeledDatum} to be used in queries to a Jubatus instance.
      *
-     * @param label the label of the {@see Datum}.
-     * @param value the value of the {@see Datum}.
-     * @return the created {@see LabeledDatum}.
+     * @param label the label of the {@link Datum}.
+     * @param value the value of the {@link Datum}.
+     * @return the created {@link LabeledDatum}.
      */
     public static LabeledDatum makeTrainDatum(String label, double value) {
         return new LabeledDatum(label, makeDatum(value));

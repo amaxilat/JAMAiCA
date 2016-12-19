@@ -63,6 +63,7 @@
                     <links>
                         <link>http://java.sun.com/javase/8/docs/api/</link>
                     </links>
+                    <excludePackageNames>eu.organicity.annotation.jamaica.www;eu.organicity.annotation.jamaica.examples</excludePackageNames>
                 </configuration>
             </plugin>
             <plugin>

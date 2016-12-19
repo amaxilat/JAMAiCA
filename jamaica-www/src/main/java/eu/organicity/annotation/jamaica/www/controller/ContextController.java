@@ -29,7 +29,7 @@ public class ContextController extends BaseController {
      * TODO : find the concerning subscription.
      * TODO : forward the request to Jubatus using Jubatus Service - should be ASYNC.
      *
-     * @param subscriptionUpdate the {@see SubscriptionUpdate} received from the Orion Context Broker.
+     * @param subscriptionUpdate the {@link SubscriptionUpdate} received from the Orion Context Broker.
      * @return
      */
     @ResponseBody
