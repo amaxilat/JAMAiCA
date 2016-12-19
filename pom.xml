@@ -8,12 +8,14 @@
     <artifactId>jamaica</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <name>JAMAiCA: Jubatus Automated Machine Annotation</name>
 
     <modules>
-        <module>common</module>
-        <module>client</module>
-        <module>www</module>
-        <module>examples</module>
+        <module>jamaica-common</module>
+        <module>jamaica-android-client</module>
+        <module>jamaica-client</module>
+        <module>jamaica-www</module>
+        <module>jamaica-examples</module>
     </modules>
 
     <properties>
@@ -61,6 +63,7 @@
                     <links>
                         <link>http://java.sun.com/javase/8/docs/api/</link>
                     </links>
+                    <excludePackageNames>eu.organicity.annotation.jamaica.www;eu.organicity.annotation.jamaica.examples</excludePackageNames>
                 </configuration>
             </plugin>
             <plugin>
