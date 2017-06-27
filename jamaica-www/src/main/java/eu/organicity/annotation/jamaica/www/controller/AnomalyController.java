@@ -9,10 +9,14 @@ import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
 import eu.organicity.annotation.jamaica.www.model.AnomalyTrainData;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +32,7 @@ public class AnomalyController extends BaseController {
      */
 
 
-    protected static final Logger LOGGER = Logger.getLogger(AnomalyController.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AnomalyController.class);
     final RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
 
     /**
@@ -208,7 +212,7 @@ public class AnomalyController extends BaseController {
             anomalyConfigRepository.save(anomalyConfig);
             LOGGER.info("successful updated the subscription for the anomaly detection job " + anomalyConfig.getId() + " new subscriptionId is " + anomalyConfig.getSubscriptionId());
         } catch (IOException | DataAccessException er) {
-            LOGGER.error(er, er);
+            LOGGER.error(er.getLocalizedMessage(), er);
         }
 
         return Utils.newAnomalyConfigDTO(anomalyConfig);
@@ -244,7 +248,7 @@ public class AnomalyController extends BaseController {
                     LOGGER.info("successful updated the subscription for the anomaly detection job " + anomalyConfig.getId() + " new subscriptionId is " + anomalyConfig.getSubscriptionId());
 
                 } catch (IOException | DataAccessException er) {
-                    LOGGER.error(er, er);
+                    LOGGER.error(er.getLocalizedMessage(), er);
                 }
             }
         }

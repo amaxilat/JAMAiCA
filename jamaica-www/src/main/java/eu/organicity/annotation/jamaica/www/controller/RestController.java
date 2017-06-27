@@ -1,7 +1,8 @@
 package eu.organicity.annotation.jamaica.www.controller;
 
 import eu.organicity.annotation.jamaica.dto.VersionDTO;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
-import javax.net.ssl.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletResponse;
 import java.security.cert.X509Certificate;
 
@@ -19,7 +25,7 @@ public class RestController extends BaseController {
     /**
      * a log4j logger to print messages.
      */
-    protected static final Logger LOGGER = Logger.getLogger(RestController.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(RestController.class);
 
     @Value("${orion.serverUrl}")
     private String orionServerUrl;

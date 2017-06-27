@@ -22,6 +22,7 @@ public class Classification {
     private double score;
     private long classificationConfigId;
     private long startTime;
+    private long processingTime;
 
     public long getId() {
         return id;
@@ -85,5 +86,13 @@ public class Classification {
 
     public void setStartTime(long startTime) {
         this.startTime = startTime;
+    }
+    
+    public long getProcessingTime() {
+        return processingTime;
+    }
+    
+    public void setProcessingTime(long processingTime) {
+        this.processingTime = processingTime;
     }
 }

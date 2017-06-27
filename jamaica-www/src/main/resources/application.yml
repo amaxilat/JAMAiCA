@@ -15,15 +15,18 @@ jubatus:
 spring:
   profiles: develop
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: false
     generate-ddl: true
     hibernate.ddl-auto: update
   datasource:
-    driverClassName: org.postgresql.Driver
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/oc_jamaica_${user.name}
+    test-on-borrow: true
+    validation-query: "select 1"
 server.port: 8080
 application:
-  baseUrl: "http://150.140.5.27:8080/"
+  baseUrl: "http://jamaica.organicity.eu/"
   annotationUrl: "https://annotations.organicity.eu/"
   env: dev
 orion:
@@ -35,14 +38,17 @@ orion:
 spring:
   profiles: production
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: false
     generate-ddl: true
     hibernate.ddl-auto: update
   datasource:
-    driverClassName: org.postgresql.Driver
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/oc_jamaica_${user.name}
+    test-on-borrow: true
+    validation-query: "select 1"
 application:
-  baseUrl: "http://150.140.5.27:8080/"
+  baseUrl: "http://jamaica.organicity.eu/"
   annotationUrl: "https://annotations.organicity.eu/"
   env: production
 orion:

@@ -14,6 +14,7 @@
         <module>jamaica-common</module>
         <module>jamaica-android-client</module>
         <module>jamaica-client</module>
+        <module>javaml</module>
         <module>jamaica-www</module>
         <module>jamaica-examples</module>
     </modules>

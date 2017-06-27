@@ -95,4 +95,9 @@ public class ClassifConfigDTO {
     public void setContextBrokerServicePath(String contextBrokerServicePath) {
         this.contextBrokerServicePath = contextBrokerServicePath;
     }
+    
+    @Override
+    public String toString() {
+        return "ClassifConfigDTO{" + "id=" + id + '}';
+    }
 }
