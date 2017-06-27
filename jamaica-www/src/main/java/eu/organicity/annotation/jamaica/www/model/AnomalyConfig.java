@@ -31,6 +31,7 @@ public class AnomalyConfig implements Serializable {
     private String contextBrokerServicePath;
     private String jubatusConfig;
     private String subscriptionId;
+    private String user;
     private long lastSubscription;
     private boolean enable;
 
@@ -183,7 +184,15 @@ public class AnomalyConfig implements Serializable {
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
-
+    
+    public String getUser() {
+        return user;
+    }
+    
+    public void setUser(String user) {
+        this.user = user;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
