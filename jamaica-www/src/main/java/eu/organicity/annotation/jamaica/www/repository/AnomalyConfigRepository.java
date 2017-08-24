@@ -24,4 +24,7 @@ public interface AnomalyConfigRepository extends CrudRepository<AnomalyConfig, L
 
     AnomalyConfig findBySubscriptionId(String subscriptionId);
     AnomalyConfig findByUrlOrion(String urlOrion);
+
+    List<AnomalyConfig> findByUser(String user);
+
 }

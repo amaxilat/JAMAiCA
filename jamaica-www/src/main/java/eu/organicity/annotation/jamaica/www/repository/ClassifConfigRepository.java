@@ -18,4 +18,6 @@ public interface ClassifConfigRepository extends CrudRepository<ClassifConfig, L
     ClassifConfig findBySubscriptionId(String subscriptionId);
     ClassifConfig findByUrlOrion(String urlOrion);
 
+    List<ClassifConfig> findByUser(String user);
+
 }

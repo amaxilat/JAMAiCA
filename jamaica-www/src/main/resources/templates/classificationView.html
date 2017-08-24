@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>JAMAiCA</title>
+
+    <th:block th:include="base :: js"/>
+    <th:block th:include="base :: css"/>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <th:block th:include="navbar :: navbar"/>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"> Classification Job #<span th:text="${classification.id}"></span> </h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Classification Job #<span th:text="${classification.id}"></span>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <label>typePat</label>
+                                        <input class="form-control" th:value="${classification.typePat}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>idPat</label>
+                                        <input class="form-control" th:value="${classification.idPat}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>attribute</label>
+                                        <input class="form-control" th:value="${classification.attribute}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>tags</label>
+                                        <input class="form-control" th:value="${classification.tags}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <!--<div class="form-group">-->
+                                        <!--<label>urlExt</label>-->
+                                        <!--<input class="form-control" th:value="${classification.urlExt}"/>-->
+                                        <!--<p class="help-block"></p>-->
+                                    <!--</div>-->
+                                    <div class="form-group">
+                                        <label>contextBrokerUrl</label>
+                                        <input class="form-control" th:value="${classification.contextBrokerUrl}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>contextBrokerService</label>
+                                        <input class="form-control" th:value="${classification.contextBrokerService}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>contextBrokerServicePath</label>
+                                        <input class="form-control" th:value="${classification.contextBrokerServicePath}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>subscriptionId</label>
+                                        <input class="form-control" th:value="${classification.subscriptionId}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>lastSubscription</label>
+                                        <input class="form-control" th:value="${classification.lastSubscription}"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <!--<button type="submit" class="btn btn-default">Submit Button</button>-->
+                                    <!--<button type="reset" class="btn btn-default">Reset Button</button>-->
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-6 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+</body>
+
+</html>

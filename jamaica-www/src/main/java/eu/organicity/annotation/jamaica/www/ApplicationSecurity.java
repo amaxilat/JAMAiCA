@@ -42,8 +42,11 @@ public class ApplicationSecurity extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.authorizeRequests().antMatchers("/sso/**").permitAll().antMatchers("/swagger-ui.html").permitAll()
+        http.authorizeRequests().antMatchers("/sso/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v1/**").permitAll()
+                .antMatchers("/OrganicityProfile").authenticated()
+                .antMatchers("/web/**").authenticated()
                 .and().csrf().disable();
     }
     

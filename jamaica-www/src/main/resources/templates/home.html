@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>JAMAiCA</title>
+
+    <th:block th:include="base :: js"/>
+    <th:block th:include="base :: css"/>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <th:block th:include="navbar :: navbar"/>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Dashboard</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <th:block th:include="element :: element" th:with="items=${anomaly},name='Anomaly Detection Jobs'"></th:block>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <th:block th:include="element :: element" th:with="items=${classifications},name='Classification Jobs'"></th:block>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+</body>
+
+</html>
