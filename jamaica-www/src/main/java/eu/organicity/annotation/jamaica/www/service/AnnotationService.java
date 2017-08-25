@@ -32,6 +32,8 @@ public class AnnotationService {
     ClassificationRepository classificationRepository;
     @Autowired
     AnomalyConfigRepository anomalyConfigRepository;
+    @Autowired
+    WsService wsService;
     
     @Value("${application.env}")
     private String env;
@@ -94,6 +96,7 @@ public class AnnotationService {
     }
     
     public void storeClassification(String entityId, String attribute, String value, long classificationConfigId, String tag, double score, long diff) {
+        wsService.notifyClassification(entityId, attribute, value, classificationConfigId, tag, score);
         storeClassificationLocaly(entityId, attribute, value, classificationConfigId, tag, score, diff);
         try {
             storeClassification2Annotation(entityId, attribute, value, classificationConfigId, tag, score);
@@ -127,6 +130,5 @@ public class AnnotationService {
         classification.setProcessingTime(diff);
         classificationRepository.save(classification);
     }
-    
     
 }

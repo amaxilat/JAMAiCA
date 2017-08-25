@@ -30,9 +30,14 @@ public class SubscriptionService {
     @Autowired
     OrionService orionService;
     
+    @Value("${application.env}")
+    private String env;
     
     @Scheduled(cron = "0 * * * * ?")
     void checkSubscriptions() {
+        if (!env.equals("production")) {
+            return;
+        }
         LOGGER.info("Checking subscriptions...");
         for (final ClassifConfig classifConfig : classifConfigRepository.findAll()) {
             if (!classifConfig.isEnable())
