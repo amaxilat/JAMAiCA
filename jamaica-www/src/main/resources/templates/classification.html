@@ -72,10 +72,10 @@
                                                 </td>
                                                 <td>
                                                     <th:block th:if="${item.enable}">
-                                                        <button th:onclick="'return enable('+${item.id}+',false)'"  class="btn btn-sm btn-success">Enabled</button>
+                                                        <button th:onclick="'enableClassification('+${item.id}+',false)'"  class="btn btn-sm btn-success">Enabled</button>
                                                     </th:block>
                                                     <th:block th:unless="${item.enable}">
-                                                        <button th:onclick="'return enable('+${item.id}+',true)'" class="btn btn-sm btn-warning">Disabled</button>
+                                                        <button th:onclick="'enableClassification('+${item.id}+',true)'" class="btn btn-sm btn-warning">Disabled</button>
                                                     </th:block>
                                                 </td>
                                             </tr>
