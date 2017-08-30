@@ -3,7 +3,7 @@ package eu.organicity.annotation.jamaica.www.service;
 
 import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
-import eu.organicity.annotation.jamaica.www.repository.ClassificationRepository;
+import eu.organicity.annotation.jamaica.www.repository.ClassifConfigRepository;
 import eu.organicity.annotation.jamaica.www.utils.WsMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class WsService {
     @Autowired
     AnomalyRepository anomalyRepository;
     @Autowired
-    ClassificationRepository classificationRepository;
+    ClassifConfigRepository classifConfigRepository;
     @Autowired
     AnomalyConfigRepository anomalyConfigRepository;
     
@@ -35,11 +35,16 @@ public class WsService {
     }
     
     public void greeting(String entityId, String attribute, String value, long classificationConfigId, String tag, double score) {
-        WsMessage dto = new WsMessage();
-        dto.setAssetUrn(entityId);
-        dto.setTagUrn(tag);
-        dto.setClassificationConfig(classificationConfigId);
-        messagingTemplate.convertAndSend("/topic/classification", dto);
+        String user = classifConfigRepository.findById(classificationConfigId).getUser();
+        if (user != null) {
+            WsMessage dto = new WsMessage();
+            dto.setAssetUrn(entityId);
+            dto.setTagUrn(tag);
+            dto.setClassificationConfig(classificationConfigId);
+            //messagingTemplate.convertAndSendToUser(user, "/topic/classification", dto);
+            messagingTemplate.convertAndSend("/topic/classification", dto);
+            LOGGER.info("Send to ws :" + user + " dto:" + dto);
+        }
         
     }
 }

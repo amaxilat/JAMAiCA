@@ -28,28 +28,6 @@ function connect() {
         });
     });
 }
-
-function showGreeting(message) {
-    console.log(message);
-    $.notify(
-        {
-            assetUrn: message.assetUrn,
-            tagUrn: message.tagUrn,
-            classificationConfig: message.classificationConfig,
-        },
-        {
-            style: 'foo',
-            //className: 'info',
-            position: "bottom right",  // whether to hide the notification on click
-            clickToHide: false,
-            // whether to auto-hide the notification
-            autoHide: true,
-            // if autoHide, hide after milliseconds
-            autoHideDelay: 5000
-        }
-    );
-}
-
 $(document).ready(function () {
     connect();
 });

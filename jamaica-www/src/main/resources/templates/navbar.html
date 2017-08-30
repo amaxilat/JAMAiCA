@@ -40,6 +40,12 @@
             /*]]>*/
             $("#oc-nav").organicityNavigation("/oauth/", "/logout", principal.credentials.tokenString);
         });
+
+        $(document).ready(function () {
+            $(document).ready(function(){
+                $('.table').DataTable();
+            });
+        });
     </script>
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top yamm" style="margin-bottom: 0" >

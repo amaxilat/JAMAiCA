@@ -33,7 +33,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i> Classification Jobs
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Classification Results
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
@@ -54,7 +54,9 @@
                                         <tbody>
                                         <th:block th:each="item : ${results}">
                                             <tr>
-                                                <td th:text="${item.entityId}">entityId</td>
+                                                <td>
+                                                    <a target="_blank" th:href="@{'https://observatory.organicity.eu/assets/'+${item.entityId}}" th:text="${item.entityId}"></a>
+                                                </td>
                                                 <td th:text="${item.entityAttribute}">entityAttribute</td>
                                                 <td th:text="${item.attributeValue}">attributeValue</td>
                                                 <td th:text="${item.tag}">tag</td>

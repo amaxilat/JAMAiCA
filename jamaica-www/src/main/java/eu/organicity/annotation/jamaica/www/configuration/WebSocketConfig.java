@@ -18,7 +18,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gs-guide-websocket").setAllowedOrigins("https://jamaica.organicity.eu").withSockJS();
+        registry.addEndpoint("/gs-guide-websocket").setAllowedOrigins("*").withSockJS();
     }
     
 }
