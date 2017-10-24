@@ -26,7 +26,7 @@
             <div class="col-lg-12">
                 <h1 class="page-header"> Classification Job #<span th:text="${classification.id}"></span>
                     <small>(<a th:href="@{${classification.id}}+'/results'">View Results</a>)</small>
-                    <small>(<a th:href="@{${classification.id}}+'/results/download'">&nbsp;All</a>)</small>
+                    <small>(<a th:href="@{${classification.id}}+'/results/download'"><i class="fa fa-download" aria-hidden="true"></i>&nbsp;All</a>)</small>
                 </h1>
             </div>
             <!-- /.col-lg-12 -->
@@ -82,7 +82,8 @@
                                         </pre>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 ">
+                                    <div class="hidden">
                                     <div class="form-group">
                                         <label>contextBrokerUrl</label>
                                         <input class="form-control" th:value="${classification.contextBrokerUrl}"/>
@@ -98,6 +99,7 @@
                                         <input class="form-control"
                                                th:value="${classification.contextBrokerServicePath}"/>
                                         <p class="help-block"></p>
+                                    </div>
                                     </div>
                                     <!--<div class="form-group">-->
                                         <!--<label>subscriptionId</label>-->
@@ -259,7 +261,7 @@
 
             $("#tags-pre").text(JSON.stringify(ids, null, 2));
         })
-        $.get("https://discovery.organicity.eu/v0/assets/metadata/search?page=1&per=20&query=" + $("#typePat").val()).success(function (e) {
+        $.get("https://dev.discovery.organicity.eu/v0/assets/metadata/search?page=1&per=20&query=" + $("#typePat").val()).success(function (e) {
             var ids = $.map(e, function (a, i) {
                 return a.id;
             });
