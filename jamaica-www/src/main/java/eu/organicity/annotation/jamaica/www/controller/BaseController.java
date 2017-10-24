@@ -25,6 +25,7 @@ public class BaseController {
     protected static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
     protected static final String APPLICATION_JSON = "application/json";
     protected static final String TEXT_PLAIN = "text/plain";
+    protected static final String TEXT_CSV = "text/csv";
 
     @Autowired
     AnomalyConfigRepository anomalyConfigRepository;

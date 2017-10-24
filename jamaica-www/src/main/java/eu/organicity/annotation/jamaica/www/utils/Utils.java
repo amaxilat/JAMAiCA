@@ -74,6 +74,7 @@ public class Utils {
         dto.setContextBrokerUrl(storedConfig.getContextBrokerUrl());
         dto.setContextBrokerService(storedConfig.getContextBrokerService());
         dto.setContextBrokerServicePath(storedConfig.getContextBrokerServicePath());
+        dto.setUser(storedConfig.getUser());
         return dto;
     }
 }

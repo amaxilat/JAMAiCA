@@ -55,6 +55,8 @@ public class ClassificationService {
     
     @Autowired
     OrionService orionService;
+    @Autowired
+    SecurityService securityService;
     
     @Value("${application.baseUrl}")
     protected String baseUrl;
@@ -221,7 +223,7 @@ public class ClassificationService {
         return storedConfig;
     }
     
-    public TrainDataListDTO train(long id, String tag, TrainDataListDTO trainDataDTO) {
+    public TrainDataListDTO train(final long id, final String tag, final TrainDataListDTO trainDataDTO) {
         final List<ClassificationTrainData> trainDataList = new ArrayList<>();
         for (final TrainDataDTO singleTrainData : trainDataDTO.getData()) {
             
@@ -238,11 +240,17 @@ public class ClassificationService {
         return trainDataDTO;
     }
     
-    public ClassifConfigListDTO findByUser(final Principal principal) {
+    public ClassifConfigListDTO findByUser() {
         final ClassifConfigListDTO dto = new ClassifConfigListDTO();
         dto.setClassificationConfigurations(new ArrayList<>());
-        for (ClassifConfig classifConfig : classifConfigRepository.findByUser(principal.getName())) {
-            dto.getClassificationConfigurations().add(Utils.newClassifConfigDTO(classifConfig));
+        if (securityService.isAdmin()) {
+            for (final ClassifConfig classifConfig : classifConfigRepository.findAll()) {
+                dto.getClassificationConfigurations().add(Utils.newClassifConfigDTO(classifConfig));
+            }
+        } else {
+            for (final ClassifConfig classifConfig : classifConfigRepository.findByUser(securityService.getUser())) {
+                dto.getClassificationConfigurations().add(Utils.newClassifConfigDTO(classifConfig));
+            }
         }
         return dto;
     }

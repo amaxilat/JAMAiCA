@@ -50,6 +50,8 @@
                                             <th>tags</th>
                                             <!--<th>urlExt</th>-->
                                             <th>contextBroker</th>
+                                            <th>user</th>
+                                            <th>count</th>
                                             <th>Status</th>
                                         </tr>
                                         </thead>
@@ -65,17 +67,30 @@
                                                 <td th:text="${item.tagDomain}">tags</td>
                                                 <!--<td><a th:href="${item.urlExt}">link</a></td>-->
                                                 <td>
-                                                    <span th:text="${item.contextBrokerUrl}">contextBrokerUrl</span>
-                                                    [<span
-                                                        th:text="${item.contextBrokerService}">contextBrokerService</span>:<span
-                                                        th:text="${item.contextBrokerServicePath}">contextBrokerServicePath</span>]
+                                                    <small>
+                                                        <span th:text="${item.contextBrokerUrl}">contextBrokerUrl</span>
+                                                        [<span
+                                                            th:text="${item.contextBrokerService}">contextBrokerService</span>:<span
+                                                            th:text="${item.contextBrokerServicePath}">contextBrokerServicePath</span>]
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <small th:text="${item.user}"></small>
+                                                </td>
+                                                <td>
+                                                    <span th:class="'a-count a-count-'+${item.id}"
+                                                          th:attr="id=${item.id}"/>
                                                 </td>
                                                 <td>
                                                     <th:block th:if="${item.enable}">
-                                                        <button th:onclick="'enableClassification('+${item.id}+',false)'"  class="btn btn-sm btn-success">Enabled</button>
+                                                        <button th:onclick="'enableClassification('+${item.id}+',false)'"
+                                                                class="btn btn-sm btn-success">Enabled
+                                                        </button>
                                                     </th:block>
                                                     <th:block th:unless="${item.enable}">
-                                                        <button th:onclick="'enableClassification('+${item.id}+',true)'" class="btn btn-sm btn-warning">Disabled</button>
+                                                        <button th:onclick="'enableClassification('+${item.id}+',true)'"
+                                                                class="btn btn-sm btn-warning">Disabled
+                                                        </button>
                                                     </th:block>
                                                 </td>
                                             </tr>
@@ -100,7 +115,22 @@
 
 </div>
 <!-- /#wrapper -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        doUpdate();
+    });
 
+    function doUpdate() {
+        $(".a-count").each(function (e, a) {
+            var id = $(a).attr("id");
+            $.get("/web/classification/" + id + "/count").success(function (e) {
+                $(".a-count-" + e.id).text(e.count);
+            });
+        })
+    }
+
+    /*]]>*/
+</script>
 </body>
-
 </html>

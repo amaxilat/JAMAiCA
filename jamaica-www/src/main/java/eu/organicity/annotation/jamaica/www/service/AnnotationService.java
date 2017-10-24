@@ -3,6 +3,7 @@ package eu.organicity.annotation.jamaica.www.service;
 
 import eu.organicity.annotation.client.AnnotationServiceClient;
 import eu.organicity.annotation.common.dto.AnnotationDTO;
+import eu.organicity.annotation.common.dto.CreateAnnotationDTO;
 import eu.organicity.annotation.common.dto.TagDomainDTO;
 import eu.organicity.annotation.jamaica.www.model.Anomaly;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
@@ -78,8 +79,7 @@ public class AnnotationService {
         
         final TagDomainDTO domain = annotation.getTagDomain(anomalyConfig.getTags());
         
-        final AnnotationDTO annotationDTO = new AnnotationDTO();
-        annotationDTO.setAnnotationId(null);
+        final CreateAnnotationDTO annotationDTO = new CreateAnnotationDTO();
         annotationDTO.setApplication("jamaica");
         annotationDTO.setAssetUrn(entityId);
         annotationDTO.setTextValue(String.valueOf(score));
@@ -90,7 +90,7 @@ public class AnnotationService {
     }
     
     
-    public AnnotationDTO postAnnotation(final AnnotationDTO annotationDTO) {
+    public AnnotationDTO postAnnotation(final CreateAnnotationDTO annotationDTO) {
         LOGGER.info(annotationUrl + "annotations/" + annotationDTO.getAssetUrn());
         return annotation.postAnnotation(annotationDTO);
     }
@@ -107,9 +107,8 @@ public class AnnotationService {
     
     public AnnotationDTO storeClassification2Annotation(final String entityId, final String attribute, final String value, final long classificationConfigId, final String tag, final double score) {
         
-        final AnnotationDTO annotationDTO = new AnnotationDTO();
-        annotationDTO.setAnnotationId(null);
-        annotationDTO.setApplication("jamaica");
+        final CreateAnnotationDTO annotationDTO = new CreateAnnotationDTO();
+         annotationDTO.setApplication("jamaica");
         annotationDTO.setAssetUrn(entityId);
         annotationDTO.setTextValue(String.valueOf(score));
         annotationDTO.setTagUrn(tag);

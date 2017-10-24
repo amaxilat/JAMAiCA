@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OrganicityUserDetailsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrganicityUserDetailsService.class);
     
@@ -16,6 +18,7 @@ public class OrganicityUserDetailsService {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             try {
+                LOGGER.info("Principal : " + ((KeycloakPrincipal) authentication.getPrincipal()).getName());
                 OrganicityAccount oa = new OrganicityAccount((KeycloakPrincipal) authentication.getPrincipal(), authentication.getAuthorities());
                 oa.parse();
                 return oa;

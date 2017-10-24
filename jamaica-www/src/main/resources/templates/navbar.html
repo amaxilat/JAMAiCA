@@ -37,8 +37,9 @@
 
             /*<![CDATA[*/
             var principal = /*[[${principal}]]*/ '';
+            console.log(principal);
             /*]]>*/
-            $("#oc-nav").organicityNavigation("/oauth/", "/logout", principal.credentials.tokenString);
+            $("#oc-nav").organicityNavigation("/oauth/", "/logout", principal.keycloakSecurityContext.tokenString);
         });
 
         $(document).ready(function () {

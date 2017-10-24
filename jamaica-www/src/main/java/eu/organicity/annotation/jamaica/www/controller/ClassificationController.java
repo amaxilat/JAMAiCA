@@ -38,7 +38,7 @@ public class ClassificationController extends BaseController {
     ClassifConfigListDTO listClassificationConfigs(final Principal principal) {
         LOGGER.debug("[call] listClassificationConfigs");
         if (principal != null) {
-            return classificationService.findByUser(principal);
+            return classificationService.findByUser();
         } else {
             throw new AccessDeniedException("");
         }
@@ -72,10 +72,10 @@ public class ClassificationController extends BaseController {
      * @return the added {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classify/{id}", method = RequestMethod.POST, produces = APPLICATION_JSON)
-    String classifyData(final Principal principal, final @PathVariable("id") Long id, final @RequestBody TrainDataDTO trainDataDTO) {
+    String classifyData(final @PathVariable("id") Long id, final @RequestBody TrainDataDTO trainDataDTO) {
         LOGGER.debug("[call] classifyData");
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             return classificationService.classify(id, trainDataDTO);
         } else {
             throw new AccessDeniedException("");
@@ -90,10 +90,10 @@ public class ClassificationController extends BaseController {
      * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    ClassifConfigDTO getClassificationConfig(final Principal principal, final HttpServletResponse response, @PathVariable("id") long id) {
+    ClassifConfigDTO getClassificationConfig(final HttpServletResponse response, @PathVariable("id") long id) {
         LOGGER.debug("[call] getClassificationConfig");
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             return Utils.newClassifConfigDTO(config);
         } else {
             throw new AccessDeniedException("");
@@ -107,10 +107,10 @@ public class ClassificationController extends BaseController {
      * @return the used {@link AnomalyConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/subscribe", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    ClassifConfigDTO subscribeClassif(final Principal principal, @PathVariable("id") long id) {
+    ClassifConfigDTO subscribeClassif(@PathVariable("id") long id) {
         LOGGER.debug("[call] subscribeClassif");
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             final ClassifConfig storedConfig = classificationService.subscribe(id);
             return Utils.newClassifConfigDTO(storedConfig);
         } else {
@@ -126,10 +126,10 @@ public class ClassificationController extends BaseController {
      * @return the used {@link TrainDataListDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/{tag}/train", method = RequestMethod.POST, produces = APPLICATION_JSON)
-    TrainDataListDTO trainClassification(final Principal principal, final @RequestBody TrainDataListDTO trainDataDTO, final @PathVariable("id") long id, final @PathVariable("tag") String tag) {
+    TrainDataListDTO trainClassification(final @RequestBody TrainDataListDTO trainDataDTO, final @PathVariable("id") long id, final @PathVariable("tag") String tag) {
         LOGGER.debug("[call] trainClassification");
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             return classificationService.train(id, tag, trainDataDTO);
         } else {
             throw new AccessDeniedException("");
@@ -143,10 +143,10 @@ public class ClassificationController extends BaseController {
      * @return the used {@link TrainDataListDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/train", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    List<ClassificationTrainData> doTrainClassification(final Principal principal, @PathVariable("id") long id) {
+    List<ClassificationTrainData> doTrainClassification(@PathVariable("id") long id) {
         LOGGER.debug("[call] doTrainClassification");
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             Collection<Instance> data = classificationService.train(id);
             return new ArrayList<>();
         } else {
@@ -161,10 +161,10 @@ public class ClassificationController extends BaseController {
      * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}", method = RequestMethod.DELETE, produces = APPLICATION_JSON)
-    ClassifConfigDTO deleteClassificationConfig(final Principal principal, @PathVariable("id") long id) {
+    ClassifConfigDTO deleteClassificationConfig(@PathVariable("id") long id) {
         LOGGER.debug("[call] getClassificationConfig");
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             classifConfigRepository.delete(id);
             return Utils.newClassifConfigDTO(config);
         } else {
@@ -179,10 +179,10 @@ public class ClassificationController extends BaseController {
      * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/enable", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    ClassifConfigDTO enableClassificationConfig(final Principal principal, @PathVariable("id") long id) {
+    ClassifConfigDTO enableClassificationConfig(@PathVariable("id") long id) {
         LOGGER.debug("[call] enableClassificationConfig");
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             ClassifConfig storedConfig = classificationService.enable(id);
             return Utils.newClassifConfigDTO(storedConfig);
         } else {
@@ -197,11 +197,11 @@ public class ClassificationController extends BaseController {
      * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/stats", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    ClassifStatsDTO statsClassificationConfig(final Principal principal, @PathVariable("id") long id) {
+    ClassifStatsDTO statsClassificationConfig(@PathVariable("id") long id) {
         LOGGER.info("[call] statsClassificationConfig ");
         
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             ClassifStatsDTO dto = new ClassifStatsDTO();
             dto.setClassifConfigDTO(Utils.newClassifConfigDTO(config));
             dto.setClassifications((int) classificationRepository.countByClassificationConfigId(id));
@@ -219,11 +219,11 @@ public class ClassificationController extends BaseController {
      * @return the existing {@link ClassifConfigDTO}.
      */
     @RequestMapping(value = "/v1/config/classification/{id}/disable", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    ClassifConfigDTO disableClassificationConfig(final Principal principal, @PathVariable("id") long id) {
+    ClassifConfigDTO disableClassificationConfig(@PathVariable("id") long id) {
         LOGGER.debug("[call] enableClassificationConfig");
         
         final ClassifConfig config = classifConfigRepository.findById(id);
-        if (securityService.canManage(principal, config)) {
+        if (securityService.canManageClassifConfig(config)) {
             config.setEnable(false);
             ClassifConfig storedConfig = classifConfigRepository.save(config);
             return Utils.newClassifConfigDTO(storedConfig);
