@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
@@ -164,12 +165,16 @@ public class RestController extends BaseController {
             response.addHeader(CONTENT_DISPOSITION_HEADER, String.format(ATTACHMENT_PATTERN, id));
             response.setContentType(TEXT_CSV);
             response.setStatus(200);
-            
+            ServletOutputStream output = null;
             try {
-                response.getOutputStream().println(CSV_HEADER_TEXT);
+                output = response.getOutputStream();
+                if (output != null) {
+                    output.println(CSV_HEADER_TEXT);
+                }
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }
+            
             
             final PageRequest page = new PageRequest(0, 2000);
             Page<Classification> results = classificationRepository.findByClassificationConfigId(id, page);
@@ -177,8 +182,10 @@ public class RestController extends BaseController {
                 for (final Classification result : results) {
                     try {
                         final String resultString = String.format(CSV_CONTENT_PATTERN, result.getEntityId(), result.getEntityAttribute(), result.getAttributeValue(), result.getTag(), result.getStartTime());
-                        response.getOutputStream().println(resultString);
-                        response.flushBuffer();
+                        if (output != null) {
+                            output.println(resultString);
+                            output.flush();
+                        }
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage(), e);
                     }
