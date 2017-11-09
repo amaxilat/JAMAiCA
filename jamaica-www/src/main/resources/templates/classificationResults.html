@@ -62,7 +62,7 @@
                                                 <td th:text="${item.entityAttribute}">entityAttribute</td>
                                                 <td th:text="${item.attributeValue}">attributeValue</td>
                                                 <td th:text="${item.tag}">tag</td>
-                                                <td th:text="${item.startTime}">startTime</td>
+                                                <td th:text="${#dates.format(item.startTime)}">startTime</td>
                                                 <td th:text="${item.processingTime}">processingTime</td>
                                             </tr>
                                         </th:block>
