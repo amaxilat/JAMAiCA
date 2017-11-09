@@ -261,7 +261,7 @@
 
             $("#tags-pre").text(JSON.stringify(ids, null, 2));
         })
-        $.get("https://dev.discovery.organicity.eu/v0/assets/metadata/search?page=1&per=20&query=" + $("#typePat").val()).success(function (e) {
+        $.get("https://discovery.organicity.eu/v0/assets/metadata/search?page=1&per=20&query=" + $("#typePat").val()).success(function (e) {
             var ids = $.map(e, function (a, i) {
                 return a.id;
             });

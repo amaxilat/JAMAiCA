@@ -48,7 +48,7 @@ function updateTags() {
 
 function updateEntities() {
     $("#entities-pre").text("");
-    $.get("https://dev.discovery.organicity.eu/v0/assets?type=" + $("#typePat").val()).success(function (e) {
+    $.get("https://discovery.organicity.eu/v0/assets?type=" + $("#typePat").val()).success(function (e) {
         var ids = $.map(e, function (a, i) {
             return a.id;
         });
