@@ -46,6 +46,10 @@ public class RestController extends BaseController {
     
     @Value("${orion.serverUrl}")
     private String orionServerUrl;
+    @Value("${application.discoveryUrl}")
+    private String discoveryUrl;
+    @Value("${application.annotationUrl}")
+    private String annotationUrl;
     
     @Autowired
     AnomalyConfigRepository anomalyConfigRepository;
@@ -132,6 +136,8 @@ public class RestController extends BaseController {
         final ClassifConfig classification = classifConfigRepository.findById(id);
         if (securityService.canViewClassifConfig(classification)) {
             model.addAttribute("principal", securityService.getPrincipal());
+            model.addAttribute("discoveryUrl", discoveryUrl);
+            model.addAttribute("annotationUrl", annotationUrl);
             model.addAttribute("classifications", classificationService.findByUser());
             model.addAttribute("classification", classificationService.findById(id));
             model.addAttribute("trainData", classificationTrainDataRepository.findByClassificationConfigId(id));

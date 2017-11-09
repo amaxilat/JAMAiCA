@@ -249,8 +249,11 @@
 <!-- /#wrapper -->
 <script th:inline="javascript">
     /*<![CDATA[*/
+    var discoveryUrl = /*[[${discoveryUrl}]]*/ '';
+    var annotationUrl = /*[[${annotationUrl}]]*/ '';
+
     $(document).ready(function () {
-        $.get("https://annotations.organicity.eu/tagDomains/" + $("#tags").val()).success(function (e) {
+        $.get(annotationUrl + "/tagDomains/" + $("#tags").val()).success(function (e) {
             var ids = $.map(e.tags, function (a, i) {
                 $('#tag').append($('<option>', {
                     value: a.urn,
@@ -261,7 +264,7 @@
 
             $("#tags-pre").text(JSON.stringify(ids, null, 2));
         })
-        $.get("https://discovery.organicity.eu/v0/assets/metadata/search?page=1&per=20&query=" + $("#typePat").val()).success(function (e) {
+        $.get(discoveryUrl + "/assets/metadata/search?per=5&query=" + $("#typePat").val()).success(function (e) {
             var ids = $.map(e, function (a, i) {
                 return a.id;
             });
