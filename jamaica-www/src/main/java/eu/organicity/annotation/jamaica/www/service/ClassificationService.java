@@ -14,6 +14,8 @@ import eu.organicity.annotation.jamaica.www.model.ClassificationTrainData;
 import eu.organicity.annotation.jamaica.www.repository.ClassifConfigRepository;
 import eu.organicity.annotation.jamaica.www.repository.ClassificationRepository;
 import eu.organicity.annotation.jamaica.www.repository.ClassificationTrainDataRepository;
+import eu.organicity.annotation.jamaica.www.repository.EntitiesRepository;
+import eu.organicity.annotation.jamaica.www.repository.TagsRepository;
 import eu.organicity.annotation.jamaica.www.utils.RandomStringGenerator;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
 import libsvm.LibSVM;
@@ -50,6 +52,10 @@ public class ClassificationService {
     ClassifConfigRepository classifConfigRepository;
     @Autowired
     ClassificationRepository classificationRepository;
+    @Autowired
+    EntitiesRepository entitiesRepository;
+    @Autowired
+    TagsRepository tagsRepository;
     @Autowired
     ClassificationTrainDataRepository classificationTrainDataRepository;
     

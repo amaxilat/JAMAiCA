@@ -7,10 +7,14 @@ import eu.organicity.annotation.common.dto.CreateAnnotationDTO;
 import eu.organicity.annotation.common.dto.TagDomainDTO;
 import eu.organicity.annotation.jamaica.www.model.Anomaly;
 import eu.organicity.annotation.jamaica.www.model.AnomalyConfig;
+import eu.organicity.annotation.jamaica.www.model.CEntity;
+import eu.organicity.annotation.jamaica.www.model.CTag;
 import eu.organicity.annotation.jamaica.www.model.Classification;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
 import eu.organicity.annotation.jamaica.www.repository.ClassificationRepository;
+import eu.organicity.annotation.jamaica.www.repository.EntitiesRepository;
+import eu.organicity.annotation.jamaica.www.repository.TagsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,10 @@ public class AnnotationService {
     
     @Autowired
     AnomalyRepository anomalyRepository;
+    @Autowired
+    EntitiesRepository entitiesRepository;
+    @Autowired
+    TagsRepository tagsRepository;
     @Autowired
     ClassificationRepository classificationRepository;
     @Autowired
@@ -108,7 +116,7 @@ public class AnnotationService {
     public AnnotationDTO storeClassification2Annotation(final String entityId, final String attribute, final String value, final long classificationConfigId, final String tag, final double score) {
         
         final CreateAnnotationDTO annotationDTO = new CreateAnnotationDTO();
-         annotationDTO.setApplication("jamaica");
+        annotationDTO.setApplication("jamaica");
         annotationDTO.setAssetUrn(entityId);
         annotationDTO.setTextValue(String.valueOf(score));
         annotationDTO.setTagUrn(tag);
@@ -118,11 +126,19 @@ public class AnnotationService {
     }
     
     public void storeClassificationLocaly(final String entityId, final String attribute, final String value, final long classificationConfigId, final String tag, final double score, long diff) {
+        CEntity entity = entitiesRepository.findByUrn(entityId);
+        if (entity == null) {
+            entity = entitiesRepository.save(new CEntity(null, entityId));
+        }
+        CTag ctag = tagsRepository.findByUrn(tag);
+        if (ctag == null) {
+            ctag = tagsRepository.save(new CTag(null, tag));
+        }
         final Classification classification = new Classification();
-        classification.setEntityId(entityId);
+        classification.setEntity(entity);
         classification.setEntityAttribute(attribute);
         classification.setAttributeValue(value);
-        classification.setTag(tag);
+        classification.setTag(ctag);
         classification.setScore(score);
         classification.setClassificationConfigId(classificationConfigId);
         classification.setStartTime(System.currentTimeMillis());

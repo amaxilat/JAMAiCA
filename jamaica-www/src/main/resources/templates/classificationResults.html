@@ -57,11 +57,11 @@
                                         <th:block th:each="item : ${results}">
                                             <tr>
                                                 <td>
-                                                    <a target="_blank" th:href="@{'https://observatory.organicity.eu/assets/'+${item.entityId}}" th:text="${item.entityId}"></a>
+                                                    <a target="_blank" th:href="@{'https://observatory.organicity.eu/assets/'+${item.entity.urn}}" th:text="${item.entity.urn}"></a>
                                                 </td>
                                                 <td th:text="${item.entityAttribute}">entityAttribute</td>
                                                 <td th:text="${item.attributeValue}">attributeValue</td>
-                                                <td th:text="${item.tag}">tag</td>
+                                                <td th:text="${item.tag.urn}">tag</td>
                                                 <td th:text="${#dates.format(item.startTime)}">startTime</td>
                                                 <td th:text="${item.processingTime}">processingTime</td>
                                             </tr>

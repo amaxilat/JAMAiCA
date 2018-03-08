@@ -20,16 +20,11 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity
-public class Anomaly {
-
+@Entity(name = "entities")
+public class CEntity {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private String entityId;
-    private String entityAttribute;
-    private String attributeValue;
-    private double score;
-    private long anomalyConfigId;
-    private long startTime;
+    private Long id;
+    private String urn;
 }

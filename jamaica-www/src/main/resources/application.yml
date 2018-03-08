@@ -25,7 +25,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: false
     generate-ddl: true
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: none
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/oc_jamaica_${user.name}
@@ -49,11 +49,11 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: false
-    generate-ddl: true
-    hibernate.ddl-auto: update
+    generate-ddl: false
+    hibernate.ddl-auto: none
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/oc_jamaica_${user.name}
+    url: jdbc:mariadb://mariadb_jamaica:3306/jamaica
     test-on-borrow: true
     validation-query: "select 1"
 log.path: "logs/"
@@ -62,7 +62,7 @@ application:
   annotationUrl: "https://annotations.organicity.eu/"
   discoveryUrl: "https://discovery.organicity.eu/v0/"
   env: production
-  keycloak.file: "/opt/jamaica/keycloak.json"
+  keycloak.file: "/keycloak.json"
 orion:
   serverUrl: "http://orion.organicity.eu:1026/"
   token: ""
@@ -73,7 +73,7 @@ orion:
 spring:
   profiles: local
   datasource.url: jdbc:hsqldb:file:hsqldb/hsqldb
-  jpa.hibernate.ddl-auto: update
+  jpa.hibernate.ddl-auto: none
 
 hibernate:
   dialect: org.hibernate.dialect.HSQLDialect

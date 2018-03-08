@@ -3,6 +3,7 @@ package eu.organicity.annotation.jamaica.www.controller;
 import eu.organicity.annotation.jamaica.dto.VersionDTO;
 import eu.organicity.annotation.jamaica.www.WebClassificationTrainDataDTO;
 import eu.organicity.annotation.jamaica.www.WebCreateClassificationDTO;
+import eu.organicity.annotation.jamaica.www.model.CEntity;
 import eu.organicity.annotation.jamaica.www.model.ClassifConfig;
 import eu.organicity.annotation.jamaica.www.model.Classification;
 import eu.organicity.annotation.jamaica.www.model.ClassificationTrainData;
@@ -10,6 +11,7 @@ import eu.organicity.annotation.jamaica.www.repository.AnomalyConfigRepository;
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
 import eu.organicity.annotation.jamaica.www.repository.ClassifConfigRepository;
 import eu.organicity.annotation.jamaica.www.repository.ClassificationRepository;
+import eu.organicity.annotation.jamaica.www.repository.EntitiesRepository;
 import eu.organicity.annotation.jamaica.www.service.SecurityService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,6 +33,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class RestController extends BaseController {
@@ -51,6 +55,8 @@ public class RestController extends BaseController {
     @Value("${application.annotationUrl}")
     private String annotationUrl;
     
+    @Autowired
+    EntitiesRepository entitiesRepository;
     @Autowired
     AnomalyConfigRepository anomalyConfigRepository;
     @Autowired
@@ -165,7 +171,7 @@ public class RestController extends BaseController {
     }
     
     @RequestMapping(value = "/web/classification/{id}/results/download", method = RequestMethod.GET)
-    String classificationResultsDownload(@PathVariable("id") final int id, HttpServletResponse response) {
+    void classificationResultsDownload(@PathVariable("id") final int id, HttpServletResponse response) {
         final ClassifConfig classification = classifConfigRepository.findById(id);
         if (securityService.canViewClassifConfig(classification)) {
             response.addHeader(CONTENT_DISPOSITION_HEADER, String.format(ATTACHMENT_PATTERN, id));
@@ -181,13 +187,12 @@ public class RestController extends BaseController {
                 LOGGER.error(e.getMessage(), e);
             }
             
-            
             final PageRequest page = new PageRequest(0, 2000);
             Page<Classification> results = classificationRepository.findByClassificationConfigId(id, page);
             while (page.getPageNumber() < results.getTotalPages()) {
                 for (final Classification result : results) {
                     try {
-                        final String resultString = String.format(CSV_CONTENT_PATTERN, result.getEntityId(), result.getEntityAttribute(), result.getAttributeValue(), result.getTag(), result.getStartTime());
+                        final String resultString = String.format(CSV_CONTENT_PATTERN, result.getEntity().getUrn(), result.getEntityAttribute(), result.getAttributeValue(), result.getTag().getUrn(), result.getStartTime());
                         if (output != null) {
                             output.println(resultString);
                             output.flush();
@@ -201,9 +206,11 @@ public class RestController extends BaseController {
                 }
                 results = classificationRepository.findByClassificationConfigId(id, results.nextPageable());
             }
-            return "";
-        } else {
-            return "redirect:/web/home/";
+            try {
+                response.flushBuffer();
+            } catch (IOException e) {
+                LOGGER.error(e.getLocalizedMessage(), e);
+            }
         }
     }
     

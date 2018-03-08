@@ -64,7 +64,7 @@
 
     </springProfile>
 
-    <springProfile name="develop,local">
+    <springProfile name="develop,local,production">
         <property name="CONSOLE_LOG_PATTERN" value="[%d{ISO8601}] %p %t %c{1}:%L - %m%n"/>
         <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
         <root level="INFO">
