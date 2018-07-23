@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>JAMAiCA</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/webjars/startbootstrap-sb-admin-2/1.0.2/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- MetisMenu CSS -->
+    <link href="/webjars/startbootstrap-sb-admin-2/1.0.2/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet"/>
+
+    <!-- Timeline CSS -->
+    <link href="/webjars/startbootstrap-sb-admin-2/1.0.2/css/plugins/timeline.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link href="/webjars/startbootstrap-sb-admin-2/1.0.2/css/sb-admin-2.css" rel="stylesheet"/>
+
+    <!-- Morris Charts CSS -->
+    <link href="/webjars/startbootstrap-sb-admin-2/1.0.2/css/plugins/morris.css" rel="stylesheet"/>
+
+    <!-- Custom Fonts -->
+    <link href="/webjars/startbootstrap-sb-admin-2/1.0.2/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css"/>
+</head>
+
+<body>
+
+<div th:fragment="sidebar">
+
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li>
+                    <a th:href="@{/web/anomaly}"><i class="fa fa-dashboard fa-fw"></i>Anomaly Detection</a>
+                </li>
+                <li>
+                    <a th:href="@{/web/classification}"><i class="fa fa-dashboard fa-fw"></i>Classification</a>
+                </li>
+                <li>
+                    <ul class="nav nav-second-level collapse in">
+                        <th:block th:if="${classifications}">
+                            <th:block th:each="item : ${classifications.classificationConfigurations}">
+                                <li>
+                                    <a th:href="@{'/web/classification/'+${item.id}}"
+                                       th:text="'Job #'+${item.id}">id</a>
+                                </li>
+                            </th:block>
+                        </th:block>
+                        <li>
+                            <a href="/web/classification/add">Add new</a>
+                        </li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
+    <!-- /.navbar-static-side -->
+
+    <script th:inline="javascript">
+
+        Notification.requestPermission().then(function (result) {
+        });
+
+        window.lastNotification = [];
+
+        /*<![CDATA[*/
+        window.classificationIds = $.map(/*[[${classifications.classificationConfigurations}]]*/ [], function (a, i) {
+            return a.id;
+        });
+
+        function showGreeting(message) {
+
+            // Let's check if the browser supports notifications
+            if (!("Notification" in window)) {
+                return;
+            }
+
+            // Finally, if the user has denied notifications and you
+            // want to be respectful there is no need to bother them any more.
+            if (window.classificationIds.indexOf(message.classificationConfig) > -1) {
+                // Let's check whether notification permissions have already been granted
+                if (Notification.permission === "granted") {
+
+                    if (window.lastNotification[message.assetUrn] === undefined || window.lastNotification[message.assetUrn] < (new Date().getTime() - 60000)) {
+                        // If it's okay let's create a notification
+                        var options = {
+                            body: message.assetUrn + "\n" + message.tagUrn,
+                            icon: "/images/oc_notification_logo.png"
+                        };
+                        theTitle = "New annotation for Job " + message.classificationConfig;
+                        var n = new Notification(theTitle, options);
+                        setTimeout(n.close.bind(n), 2000);
+                        window.lastNotification[message.assetUrn] = new Date().getTime();
+                    }
+                }
+            }
+        }
+
+        /*]]>*/
+
+    </script>
+</div>
+<!-- /#wrapper -->
+
+<!-- jQuery -->
+<script src="/webjars/startbootstrap-sb-admin-2/1.0.2/js/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/webjars/startbootstrap-sb-admin-2/1.0.2/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/webjars/startbootstrap-sb-admin-2/1.0.2/js/plugins/metisMenu/metisMenu.min.js"></script>
+
+<!-- Morris Charts JavaScript -->
+<script src="/webjars/startbootstrap-sb-admin-2/1.0.2/js/plugins/morris/raphael.min.js"></script>
+<script src="/webjars/startbootstrap-sb-admin-2/1.0.2/js/plugins/morris/morris.min.js"></script>
+<script src="/webjars/startbootstrap-sb-admin-2/1.0.2/js/plugins/morris/morris-data.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/webjars/startbootstrap-sb-admin-2/1.0.2/js/sb-admin-2.js"></script>
+
+</body>
+
+</html>

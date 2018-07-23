@@ -3,7 +3,8 @@ package eu.organicity.annotation.jamaica.www.service;
 
 import eu.organicity.annotation.jamaica.www.repository.AnomalyRepository;
 import eu.organicity.annotation.jamaica.www.utils.Utils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -11,10 +12,8 @@ import org.springframework.stereotype.Service;
 import us.jubat.anomaly.AnomalyClient;
 import us.jubat.classifier.ClassifierClient;
 import us.jubat.classifier.EstimateResult;
-import us.jubat.common.Datum;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,7 +21,7 @@ public class JubatusService {
     /**
      * a log4j logger to print messages.
      */
-    protected static final Logger LOGGER = Logger.getLogger(JubatusService.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(JubatusService.class);
 
     @Autowired
     AnomalyRepository anomalyRepository;
@@ -49,7 +48,7 @@ public class JubatusService {
             try {
                 return Runtime.getRuntime().exec("source /opt/jubatus/profile ; jubaclassifier -p " + port + " -f /home/amaxilatis/classification.json");
             } catch (Exception e) {
-                LOGGER.error(e, e);
+                LOGGER.error(e.getLocalizedMessage(), e);
                 return null;
             }
         } else {
@@ -69,7 +68,7 @@ public class JubatusService {
                 LOGGER.info("launching jubatus...");
                 return Runtime.getRuntime().exec("jubaanomaly -p " + port + " -f /home/amaxilatis/anomaly.json");
             } catch (Exception e) {
-                LOGGER.error(e, e);
+                LOGGER.error(e.getLocalizedMessage(), e);
                 return null;
             }
         } else {
@@ -106,7 +105,8 @@ public class JubatusService {
      * @param classificationConfigId the id of the classification job performed.
      */
     public void calcScore(final ClassifierClient classificationClient, final String value, final String entityId, final String attribute, final long classificationConfigId) {
-
+    
+        long start = System.nanoTime();
         final List<List<EstimateResult>> score = classificationClient.classify(Utils.makeDatumList(Double.parseDouble(value)));
         double maxVal = 0;
         String maxLabel = "";
@@ -118,9 +118,10 @@ public class JubatusService {
                 }
             }
         }
+        long diff = System.nanoTime() - start;
         LOGGER.info("Value is " + maxLabel + ", score: " + maxVal);
 
-        annotationService.storeClassification(entityId, attribute, value, classificationConfigId, maxLabel, maxVal);
+        annotationService.storeClassification(entityId, attribute, value, classificationConfigId, maxLabel, maxVal, diff);
     }
 
     /**

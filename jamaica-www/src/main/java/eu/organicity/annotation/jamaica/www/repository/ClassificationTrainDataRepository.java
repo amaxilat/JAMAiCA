@@ -11,4 +11,6 @@ public interface ClassificationTrainDataRepository extends CrudRepository<Classi
     ClassificationTrainData findById(long id);
 
     List<ClassificationTrainData> findByClassificationConfigId(long classificationConfigId);
+    
+    long countByClassificationConfigId(long classificationConfigId);
 }

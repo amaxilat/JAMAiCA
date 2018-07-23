@@ -11,23 +11,35 @@ jubatus:
   host: "localhost"
   basePort: 9000
 
+spring:
+  thymeleaf:
+    enabled: true
+    cache: false
+
+log.path: "logs/"
+
 ---
 spring:
   profiles: develop
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: false
     generate-ddl: true
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: none
   datasource:
-    driverClassName: org.postgresql.Driver
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/oc_jamaica_${user.name}
+    test-on-borrow: true
+    validation-query: "select 1"
 server.port: 8080
 application:
-  baseUrl: "http://150.140.5.27:8080/"
+  baseUrl: "http://jamaica.organicity.eu/"
   annotationUrl: "https://annotations.organicity.eu/"
+  discoveryUrl: "https://discovery.organicity.eu/v0/"
   env: dev
+  keycloak.file: "keycloak.json"
 orion:
-  serverUrl: "http://dev.server.organicity.eu:1026/"
+  serverUrl: "http://orion.organicity.eu:1026/"
   token: ""
   service: "organicity"
   servicePath: "/"
@@ -35,18 +47,24 @@ orion:
 spring:
   profiles: production
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: false
-    generate-ddl: true
-    hibernate.ddl-auto: update
+    generate-ddl: false
+    hibernate.ddl-auto: none
   datasource:
-    driverClassName: org.postgresql.Driver
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb_jamaica:3306/jamaica
+    test-on-borrow: true
+    validation-query: "select 1"
+log.path: "logs/"
 application:
-  baseUrl: "http://150.140.5.27:8080/"
+  baseUrl: "http://jamaica.organicity.eu/"
   annotationUrl: "https://annotations.organicity.eu/"
+  discoveryUrl: "https://discovery.organicity.eu/v0/"
   env: production
+  keycloak.file: "/keycloak.json"
 orion:
-  serverUrl: "http://dev.server.organicity.eu:1026/"
+  serverUrl: "http://orion.organicity.eu:1026/"
   token: ""
   service: "organicity"
   servicePath: "/"
@@ -55,7 +73,7 @@ orion:
 spring:
   profiles: local
   datasource.url: jdbc:hsqldb:file:hsqldb/hsqldb
-  jpa.hibernate.ddl-auto: update
+  jpa.hibernate.ddl-auto: none
 
 hibernate:
   dialect: org.hibernate.dialect.HSQLDialect

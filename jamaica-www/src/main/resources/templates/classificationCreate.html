@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>JAMAiCA</title>
+
+    <th:block th:include="base :: js"/>
+    <th:block th:include="base :: css"/>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <th:block th:include="navbar :: navbar"/>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"> Create Classification Job </h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Create Classification
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="row">
+                            <form role="form" method="post" action="/web/classification/add">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Asset Type</label>
+                                        <input class="form-control" id="typePat" name="typePat"
+                                               value="urn:oc:entityType:iotdevice:magneticLoop" onchange="updateEntities()"
+                                               placeholder="type pattern" required="required"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Asset Urn Pattern</label>
+                                        <input class="form-control" id="idPat" name="idPat"
+                                               value="urn:oc:entity:santander:traffic:magneticLoop:" onchange="updateEntities()"
+                                               placeholder="id pattern" required="required"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Asset Attribute</label>
+                                        <input class="form-control" id="attribute" name="attribute"
+                                               value="roadOccupancy"
+                                               placeholder="attribute" required="required"/>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Entities Example</label>
+                                        <pre id="entities-pre">
+
+                                        </pre>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Tags</label>
+                                        <select class="form-control" id="tags" name="tags" onchange="updateTags()"
+                                                required="required">
+
+                                        </select>
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tags of selected TagDomain</label>
+                                        <pre id="tags-pre">
+
+                                        </pre>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+
+                                </div>
+                                <div class="col-lg-12">
+                                    <button class="btn btn-default">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-6 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        getTagDomains();
+        updateTags();
+        updateEntities();
+    });
+    /*]]>*/
+</script>
+</body>
+
+</html>

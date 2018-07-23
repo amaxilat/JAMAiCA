@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <springProfile name="default,production">
+        <property name="FILE_LOG_PATTERN" value="[%d{ISO8601}] %p %t %c{1}:%L - %m%n"/>
+
+        <springProperty scope="context" name="LOG_PATH" source="log.path"/>
+
+        <appender name="CS_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/jamaica-server-all.log</file>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/jamaica-server-all.log.%i</fileNamePattern>
+                <minIndex>1</minIndex>
+                <maxIndex>5</maxIndex>
+            </rollingPolicy>
+            <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                <maxFileSize>5MB</maxFileSize>
+            </triggeringPolicy>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>INFO</level>
+            </filter>
+        </appender>
+        <appender name="CS_KEYCLOAK" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/jamaica-server-keycloak.log</file>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/jamaica-server-keycloak.log.%i</fileNamePattern>
+                <minIndex>1</minIndex>
+                <maxIndex>5</maxIndex>
+            </rollingPolicy>
+            <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                <maxFileSize>5MB</maxFileSize>
+            </triggeringPolicy>
+        </appender>
+        <appender name="CS_WS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/jamaica-server-ws.log</file>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/jamaica-server-ws.log.%i</fileNamePattern>
+                <minIndex>1</minIndex>
+                <maxIndex>5</maxIndex>
+            </rollingPolicy>
+            <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                <maxFileSize>5MB</maxFileSize>
+            </triggeringPolicy>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CS_ALL"/>
+        </root>
+        <logger name="org.keycloak" level="TRACE">
+            <appender-ref ref="CS_KEYCLOAK"/>
+        </logger>
+        <logger name="org.springframework.web.socket" level="TRACE">
+            <appender-ref ref="CS_WS"/>
+        </logger>
+
+    </springProfile>
+
+    <springProfile name="develop,local,production">
+        <property name="CONSOLE_LOG_PATTERN" value="[%d{ISO8601}] %p %t %c{1}:%L - %m%n"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+</configuration>

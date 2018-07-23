@@ -12,6 +12,7 @@ public class ClassifConfigDTO {
     private String contextBrokerUrl;
     private String contextBrokerService;
     private String contextBrokerServicePath;
+    private String user;
 
     public ClassifConfigDTO() {
     }
@@ -94,5 +95,18 @@ public class ClassifConfigDTO {
 
     public void setContextBrokerServicePath(String contextBrokerServicePath) {
         this.contextBrokerServicePath = contextBrokerServicePath;
+    }
+    
+    public String getUser() {
+        return user;
+    }
+    
+    public void setUser(String user) {
+        this.user = user;
+    }
+    
+    @Override
+    public String toString() {
+        return "ClassifConfigDTO{" + "id=" + id + '}';
     }
 }
